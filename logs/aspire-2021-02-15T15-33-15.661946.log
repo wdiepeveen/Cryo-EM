@@ -1,0 +1,31 @@
+2021-02-15 15:33:16,245 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 15:33:16,457 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 15:33:16,466 DEBUG Corresponding type is already real float32.
+2021-02-15 15:33:16,466 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:33:16,466 INFO Trying NFFT backend finufft
+2021-02-15 15:33:16,472 INFO NFFT backend finufft usable.
+2021-02-15 15:33:16,472 INFO Trying NFFT backend cufinufft
+2021-02-15 15:33:16,473 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 15:33:16,473 INFO Trying NFFT backend pynfft
+2021-02-15 15:33:16,473 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 15:33:16,473 INFO Selected NFFT backend = finufft.
+2021-02-15 15:33:16,477 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:33:16,638 INFO Applying forward transformations in pipeline
+2021-02-15 15:33:16,638 INFO All forward transformations applied
+2021-02-15 15:33:16,638 INFO Loaded 128 images
+2021-02-15 15:33:16,656 DEBUG Corresponding type is already real float32.
+2021-02-15 15:33:16,656 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:33:16,660 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:33:18,580 CRITICAL shape mismatch: value array of shape (128,33,33) could not be broadcast to indexing result of shape (128,8,8)
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 38, in <module>
+    print(data_fidelity_l2(prob))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/cost_functions.py", line 10, in data_fidelity_l2
+    Au = src.forward()  # here we should have an Image object of size n x L x L
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 130, in forward
+    im = self.projections(start=start, num=num, indices=indices)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 122, in projections
+    im[idx_k, :, :] = im_k.asnumpy()
+

@@ -1,0 +1,43 @@
+2021-03-01 18:35:55,843 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-03-01 18:35:56,190 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-03-01 18:35:56,481 INFO Results folder is results/pd_vol_rot_reconstruction_21-03-01_18-35-56
+2021-03-01 18:35:56,483 INFO Start Experiment
+2021-03-01 18:35:56,483 INFO Running Experiment for SNR = 0.5 and 512 images
+2021-03-01 18:35:56,483 INFO This experiment illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-03-01 18:35:56,683 DEBUG Corresponding type is already real float32.
+2021-03-01 18:35:56,683 DEBUG nufft passed real_type for signal, converting
+2021-03-01 18:35:56,684 INFO Trying NFFT backend finufft
+2021-03-01 18:35:56,692 INFO NFFT backend finufft usable.
+2021-03-01 18:35:56,692 INFO Trying NFFT backend cufinufft
+2021-03-01 18:35:56,693 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-03-01 18:35:56,693 INFO Trying NFFT backend pynfft
+2021-03-01 18:35:56,693 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-03-01 18:35:56,693 INFO Selected NFFT backend = finufft.
+2021-03-01 18:35:56,752 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-03-01 18:35:57,490 INFO Applying forward transformations in pipeline
+2021-03-01 18:35:57,491 INFO All forward transformations applied
+2021-03-01 18:35:57,491 INFO Loaded 512 images
+2021-03-01 18:35:57,515 INFO ========= Iteration 1 =========
+2021-03-01 18:35:57,515 INFO Iteration 1 | descent step u
+2021-03-01 18:35:57,676 DEBUG Corresponding type is already real float32.
+2021-03-01 18:35:57,677 DEBUG nufft passed real_type for signal, converting
+2021-03-01 18:35:57,743 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-03-01 18:35:58,683 DEBUG Corresponding type is already complex complex64.
+2021-03-01 18:35:58,747 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-03-01 18:35:59,046 INFO Determined adjoint mappings. Shape = (65, 65, 65)
+2021-03-01 18:35:59,071 INFO Iteration 1 | primal-dual step g
+2021-03-01 18:36:01,119 CRITICAL 'numpy.ndarray' object has no attribute 'asnumpy'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/main.py", line 4, in <module>
+    run_experiment()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/__init__.py", line 76, in run_experiment
+    results_folder=results_folder
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/experiment.py", line 88, in experiment
+    solver.solve(return_result=False)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 111, in solve
+    self.primal_dual_step_g()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 140, in primal_dual_step_g
+    print("xi_={}".format(self.xi_.asnumpy()[0]))
+

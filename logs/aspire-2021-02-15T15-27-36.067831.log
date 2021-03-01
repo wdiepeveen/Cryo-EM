@@ -1,0 +1,32 @@
+2021-02-15 15:27:36,660 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 15:27:36,873 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 15:27:36,883 DEBUG Corresponding type is already real float32.
+2021-02-15 15:27:36,883 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:27:36,883 INFO Trying NFFT backend finufft
+2021-02-15 15:27:36,889 INFO NFFT backend finufft usable.
+2021-02-15 15:27:36,890 INFO Trying NFFT backend cufinufft
+2021-02-15 15:27:36,890 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 15:27:36,890 INFO Trying NFFT backend pynfft
+2021-02-15 15:27:36,890 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 15:27:36,890 INFO Selected NFFT backend = finufft.
+2021-02-15 15:27:36,894 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:27:37,068 INFO Applying forward transformations in pipeline
+2021-02-15 15:27:37,069 INFO All forward transformations applied
+2021-02-15 15:27:37,069 INFO Loaded 128 images
+2021-02-15 15:27:38,986 CRITICAL Missing columns and no default value provided
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 38, in <module>
+    print(data_fidelity_l2(prob))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/cost_functions.py", line 10, in data_fidelity_l2
+    Au = src.forward()  # here we should have an Image object of size n x L x L
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 129, in forward
+    im = self.projections(start=start, num=num, indices=indices)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 113, in projections
+    states = self.states[indices]
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 119, in states
+    return self.get_metadata("_rlnClassNumber")
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 293, in get_metadata
+    raise RuntimeError("Missing columns and no default value provided")
+

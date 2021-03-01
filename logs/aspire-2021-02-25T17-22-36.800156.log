@@ -1,0 +1,29 @@
+2021-02-25 17:22:37,469 INFO This script illustrates images at different SNR levels
+2021-02-25 17:22:37,475 INFO Initialize simulation object and CTF filters.
+2021-02-25 17:22:37,476 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-25 17:22:38,175 INFO Use downsampled map to creat simulation object.
+2021-02-25 17:22:38,191 DEBUG Corresponding type is already real float32.
+2021-02-25 17:22:38,192 DEBUG nufft passed real_type for signal, converting
+2021-02-25 17:22:38,192 INFO Trying NFFT backend finufft
+2021-02-25 17:22:38,221 INFO NFFT backend finufft usable.
+2021-02-25 17:22:38,221 INFO Trying NFFT backend cufinufft
+2021-02-25 17:22:38,222 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-25 17:22:38,222 INFO Trying NFFT backend pynfft
+2021-02-25 17:22:38,222 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-25 17:22:38,222 INFO Selected NFFT backend = finufft.
+2021-02-25 17:22:38,222 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 17:22:41,655 CRITICAL 'numpy.ndarray' object has no attribute 'asnumpy'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/SNR_test.py", line 84, in <module>
+    images = sim.images(0,num_plts,enable_noise=True)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 367, in images
+    im = self._images(indices=indices, *args, **kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/simulation.py", line 188, in _images
+    im = self.noise_adder.forward(im, indices=indices)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/image/xform.py", line 67, in forward
+    return self._forward(im, indices=indices)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/noise/noise.py", line 33, in _forward
+    im_var = np.var(im[i].asnumpy())
+

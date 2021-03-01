@@ -1,0 +1,32 @@
+2021-02-25 13:34:53,645 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-02-25 13:34:53,648 INFO Initialize simulation object and CTF filters.
+2021-02-25 13:34:53,648 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-25 13:34:54,587 INFO Use downsampled map to creat simulation object.
+2021-02-25 13:34:54,606 DEBUG Corresponding type is already real float32.
+2021-02-25 13:34:54,606 DEBUG nufft passed real_type for signal, converting
+2021-02-25 13:34:54,606 INFO Trying NFFT backend finufft
+2021-02-25 13:34:54,625 INFO NFFT backend finufft usable.
+2021-02-25 13:34:54,625 INFO Trying NFFT backend cufinufft
+2021-02-25 13:34:54,625 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-25 13:34:54,626 INFO Trying NFFT backend pynfft
+2021-02-25 13:34:54,626 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-25 13:34:54,626 INFO Selected NFFT backend = finufft.
+2021-02-25 13:34:54,626 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 13:34:54,754 INFO Applying forward transformations in pipeline
+2021-02-25 13:34:54,754 INFO All forward transformations applied
+2021-02-25 13:34:54,754 INFO Loaded 1 images
+2021-02-25 13:34:57,108 CRITICAL Invalid shape (1, 33, 33) for image data
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/orient3d_and_reconstruction_simulation.py", line 84, in <module>
+    plt.imshow(image.asnumpy())
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/pyplot.py", line 2730, in imshow
+    **kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/__init__.py", line 1447, in inner
+    return func(ax, *map(sanitize_sequence, args), **kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/axes/_axes.py", line 5523, in imshow
+    im.set_data(X)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/image.py", line 712, in set_data
+    .format(self._A.shape))
+

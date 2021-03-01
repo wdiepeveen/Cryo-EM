@@ -1,0 +1,42 @@
+2021-02-16 10:35:30,661 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 10:35:30,852 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 10:35:30,859 DEBUG Corresponding type is already real float32.
+2021-02-16 10:35:30,859 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:35:30,860 INFO Trying NFFT backend finufft
+2021-02-16 10:35:30,865 INFO NFFT backend finufft usable.
+2021-02-16 10:35:30,866 INFO Trying NFFT backend cufinufft
+2021-02-16 10:35:30,866 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 10:35:30,866 INFO Trying NFFT backend pynfft
+2021-02-16 10:35:30,866 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 10:35:30,866 INFO Selected NFFT backend = finufft.
+2021-02-16 10:35:30,869 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 10:35:31,039 INFO Applying forward transformations in pipeline
+2021-02-16 10:35:31,040 INFO All forward transformations applied
+2021-02-16 10:35:31,040 INFO Loaded 128 images
+2021-02-16 10:35:31,041 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-16 10:35:31,060 INFO Testing data fidelity
+2021-02-16 10:35:31,062 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 10:35:31,067 DEBUG Corresponding type is already real float64.
+2021-02-16 10:35:31,067 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 10:35:31,067 DEBUG Corresponding type is already real float64.
+2021-02-16 10:35:31,069 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:35:31,209 INFO Testing grad norm fidelity
+2021-02-16 10:35:31,212 INFO Testing rotation fidelity
+2021-02-16 10:35:31,410 INFO Testing differential
+2021-02-16 10:35:33,269 CRITICAL 'InnerProductOperator' object has no attribute 'dtype'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 62, in <module>
+    print(differential_forward_rot(prob, eta))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 37, in differential_forward_rot
+    differential = src.forward(vol=new_vol)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 131, in forward
+    im = self.projections(start=start, num=num, indices=indices, vol=vol)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 123, in projections
+    im = vol.project(vol_idx=0, rot_matrices=self.rots).asnumpy()
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/volume/__init__.py", line 152, in project
+    im_f = nufft(data, pts_rot) / self.resolution
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/nufft/__init__.py", line 198, in nufft
+    if fourier_pts.dtype != real_type(sig_f.dtype):
+

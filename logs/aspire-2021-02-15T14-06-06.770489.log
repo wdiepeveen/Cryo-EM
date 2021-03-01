@@ -1,0 +1,7 @@
+2021-02-15 14:06:07,424 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 14:06:07,644 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 14:06:09,621 CRITICAL images() missing 2 required positional arguments: 'start' and 'num'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 34, in <module>
+    prob = PrimalDualProblem(vols=vol, data=sim.images(), rots=sim.rots)
+

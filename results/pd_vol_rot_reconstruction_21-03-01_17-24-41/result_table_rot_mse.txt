@@ -1,0 +1,8 @@
+\begin{tabular}{c|c|c}
+\hline\hline
+SNR & N = 100 & N = 500\hline
+SNR & N = 100 & N = 500\hline
+1/2 & 2.72839832329 & 3.53184122807\hline
+1/4 & 3.9323415844 & 4.23611433635\hline
+\hline\hline
+\end{tabular}

@@ -1,0 +1,38 @@
+2021-02-17 16:16:10,157 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 16:16:10,365 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 16:16:10,373 DEBUG Corresponding type is already real float32.
+2021-02-17 16:16:10,373 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:16:10,373 INFO Trying NFFT backend finufft
+2021-02-17 16:16:10,379 INFO NFFT backend finufft usable.
+2021-02-17 16:16:10,379 INFO Trying NFFT backend cufinufft
+2021-02-17 16:16:10,379 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 16:16:10,380 INFO Trying NFFT backend pynfft
+2021-02-17 16:16:10,380 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 16:16:10,380 INFO Selected NFFT backend = finufft.
+2021-02-17 16:16:10,384 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:16:10,556 INFO Applying forward transformations in pipeline
+2021-02-17 16:16:10,556 INFO All forward transformations applied
+2021-02-17 16:16:10,556 INFO Loaded 128 images
+2021-02-17 16:16:10,578 INFO ========= Iteration 1 =========
+2021-02-17 16:16:10,579 INFO Iteration 1 | descent step u
+2021-02-17 16:16:10,586 DEBUG Corresponding type is already real float32.
+2021-02-17 16:16:10,586 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:16:10,591 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:16:10,731 DEBUG Corresponding type is already complex complex64.
+2021-02-17 16:16:10,735 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:16:10,759 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 16:16:12,675 CRITICAL 'DiscreteLpElement' object has no attribute 'asnumpy'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 66, in <module>
+    volume = solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 109, in solve
+    self.gradient_descent_step_u()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 127, in gradient_descent_step_u
+    gradient = self.alpha * self.gradient_u(self.problem)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 49, in gradient_u
+    gradient = gradient_l2_data_fidelity(src) + lam1*gradient_l2_grad_norm(src)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/gradients.py", line 16, in gradient_l2_grad_norm
+    res = grad.adjoint(vol_grad).asnumpy
+

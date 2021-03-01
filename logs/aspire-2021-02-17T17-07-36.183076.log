@@ -1,0 +1,352 @@
+2021-02-17 17:07:36,769 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 17:07:36,998 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 17:07:37,007 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:37,007 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,008 INFO Trying NFFT backend finufft
+2021-02-17 17:07:37,015 INFO NFFT backend finufft usable.
+2021-02-17 17:07:37,015 INFO Trying NFFT backend cufinufft
+2021-02-17 17:07:37,016 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 17:07:37,016 INFO Trying NFFT backend pynfft
+2021-02-17 17:07:37,016 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 17:07:37,016 INFO Selected NFFT backend = finufft.
+2021-02-17 17:07:37,020 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:37,182 INFO Applying forward transformations in pipeline
+2021-02-17 17:07:37,182 INFO All forward transformations applied
+2021-02-17 17:07:37,183 INFO Loaded 128 images
+2021-02-17 17:07:37,200 INFO ========= Iteration 1 =========
+2021-02-17 17:07:37,200 INFO Iteration 1 | descent step u
+2021-02-17 17:07:37,207 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:37,208 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,212 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:37,337 DEBUG Corresponding type is already complex complex64.
+2021-02-17 17:07:37,342 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:37,365 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 17:07:37,369 INFO Iteration 1 | primal-dual step g
+2021-02-17 17:07:37,373 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:37,373 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:37,378 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,378 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:37,378 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,380 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,569 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:37,570 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:37,574 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,574 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:37,574 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,576 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,686 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:37,687 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:37,691 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,691 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:37,691 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,693 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,820 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:37,820 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:37,824 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,825 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:37,825 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,826 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:37,945 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:37,946 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:37,950 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,950 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:37,950 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:37,951 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:38,070 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:38,071 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:38,075 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:38,075 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:38,075 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:38,076 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:38,771 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:38,771 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:38,774 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:38,860 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:38,860 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:38,864 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:38,951 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:38,951 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:38,956 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,046 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:39,046 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,051 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,140 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:39,140 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,145 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,241 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:39,241 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,249 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,357 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:39,358 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,362 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,641 INFO Iteration 1 | Cost = 3.085437279120814e-10 | Relative Error = 1.0
+2021-02-17 17:07:39,641 INFO ========= Iteration 2 =========
+2021-02-17 17:07:39,641 INFO Iteration 2 | descent step u
+2021-02-17 17:07:39,646 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:39,646 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,649 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,783 DEBUG Corresponding type is already complex complex64.
+2021-02-17 17:07:39,787 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:39,813 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 17:07:39,817 INFO Iteration 2 | primal-dual step g
+2021-02-17 17:07:39,822 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:39,822 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:39,827 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:39,827 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:39,827 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:39,830 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:39,959 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:39,959 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:39,964 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:39,964 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:39,964 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:39,966 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:40,089 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:40,090 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:40,094 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,094 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:40,094 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,096 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:40,227 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:40,227 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:40,232 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,232 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:40,232 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,233 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:40,368 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:40,368 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:40,373 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,373 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:40,373 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,374 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:40,510 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:40,510 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:40,515 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,515 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:40,515 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:40,517 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,321 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,321 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,323 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,411 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,412 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,417 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,504 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,504 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,508 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,600 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,600 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,604 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,693 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,693 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,697 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,792 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,792 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,797 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:41,906 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:41,906 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:41,910 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:42,186 INFO Iteration 2 | Cost = 2.423877715118432e-10 | Relative Error = 0.8414875103992662
+2021-02-17 17:07:42,186 INFO ========= Iteration 3 =========
+2021-02-17 17:07:42,186 INFO Iteration 3 | descent step u
+2021-02-17 17:07:42,191 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:42,191 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,195 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:42,327 DEBUG Corresponding type is already complex complex64.
+2021-02-17 17:07:42,332 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:42,358 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 17:07:42,361 INFO Iteration 3 | primal-dual step g
+2021-02-17 17:07:42,366 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,367 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,371 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,371 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,371 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,373 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,491 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,491 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,495 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,496 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,496 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,497 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,611 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,611 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,616 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,616 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,616 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,618 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,732 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,733 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,737 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,737 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,737 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,738 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,858 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,858 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,862 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,863 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,863 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,863 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:42,979 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:42,980 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:42,984 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,984 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:42,984 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:42,985 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:43,742 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:43,742 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:43,748 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:43,848 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:43,849 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:43,853 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:43,941 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:43,941 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:43,947 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,027 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:44,027 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,032 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,117 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:44,117 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,122 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,209 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:44,209 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,214 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,311 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:44,311 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,315 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,575 INFO Iteration 3 | Cost = 1.9560649469607036e-10 | Relative Error = 0.7165107848876457
+2021-02-17 17:07:44,575 INFO ========= Iteration 4 =========
+2021-02-17 17:07:44,575 INFO Iteration 4 | descent step u
+2021-02-17 17:07:44,580 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:44,580 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,584 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,734 DEBUG Corresponding type is already complex complex64.
+2021-02-17 17:07:44,740 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:44,771 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 17:07:44,775 INFO Iteration 4 | primal-dual step g
+2021-02-17 17:07:44,780 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:44,780 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:44,786 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:44,787 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:44,787 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:44,789 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:44,934 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:44,935 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:44,939 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:44,940 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:44,940 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:44,943 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:45,073 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:45,074 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:45,078 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,078 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:45,078 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,080 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:45,193 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:45,193 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:45,197 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,197 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:45,197 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,198 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:45,312 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:45,312 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:45,316 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,316 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:45,316 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,316 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:45,430 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:45,430 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:45,434 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,435 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:45,435 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:45,435 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,183 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,184 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,186 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,274 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,274 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,278 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,376 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,376 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,381 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,479 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,479 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,484 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,580 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,580 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,586 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,682 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,682 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,687 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:46,807 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:46,807 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:46,812 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:47,090 INFO Iteration 4 | Cost = 1.6209156429244056e-10 | Relative Error = 0.6162129969713696
+2021-02-17 17:07:47,090 INFO ========= Iteration 5 =========
+2021-02-17 17:07:47,090 INFO Iteration 5 | descent step u
+2021-02-17 17:07:47,095 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:47,095 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:47,100 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:47,235 DEBUG Corresponding type is already complex complex64.
+2021-02-17 17:07:47,242 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:47,274 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 17:07:47,278 INFO Iteration 5 | primal-dual step g
+2021-02-17 17:07:47,284 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:47,284 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:47,290 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,290 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:47,290 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,295 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:47,446 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:47,446 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:47,452 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,452 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:47,452 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,454 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:47,580 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:47,581 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:47,585 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,585 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:47,585 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,587 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:47,705 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:47,705 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:47,712 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,712 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:47,712 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,713 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:47,854 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:47,854 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:47,860 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,861 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:47,861 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:47,862 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:48,008 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 17:07:48,008 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 17:07:48,014 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:48,015 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 17:07:48,015 DEBUG Corresponding type is already real float64.
+2021-02-17 17:07:48,015 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,046 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,046 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,049 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,155 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,155 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,163 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,263 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,263 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,271 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,358 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,359 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,364 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,449 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,449 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,453 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,537 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,537 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,541 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,630 DEBUG Corresponding type is already real float32.
+2021-02-17 17:07:49,630 DEBUG nufft passed real_type for signal, converting
+2021-02-17 17:07:49,634 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 17:07:49,905 INFO Iteration 5 | Cost = 1.3783526253939926e-10 | Relative Error = 0.5347247507534997

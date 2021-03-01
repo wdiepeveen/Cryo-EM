@@ -1,0 +1,20 @@
+2021-02-25 14:41:58,752 INFO This script illustrates images at different SNR levels
+2021-02-25 14:41:58,754 INFO Initialize simulation object and CTF filters.
+2021-02-25 14:41:58,754 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-25 14:41:59,454 INFO Use downsampled map to creat simulation object.
+2021-02-25 14:41:59,470 INFO Appending a NoiseAdder to generation pipeline
+2021-02-25 14:41:59,472 DEBUG Corresponding type is already real float32.
+2021-02-25 14:41:59,472 DEBUG nufft passed real_type for signal, converting
+2021-02-25 14:41:59,472 INFO Trying NFFT backend finufft
+2021-02-25 14:41:59,478 INFO NFFT backend finufft usable.
+2021-02-25 14:41:59,479 INFO Trying NFFT backend cufinufft
+2021-02-25 14:41:59,479 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-25 14:41:59,479 INFO Trying NFFT backend pynfft
+2021-02-25 14:41:59,479 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-25 14:41:59,479 INFO Selected NFFT backend = finufft.
+2021-02-25 14:41:59,480 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 14:41:59,792 INFO Applying forward transformations in pipeline
+2021-02-25 14:41:59,792 INFO All forward transformations applied
+2021-02-25 14:41:59,792 INFO Loaded 3 images

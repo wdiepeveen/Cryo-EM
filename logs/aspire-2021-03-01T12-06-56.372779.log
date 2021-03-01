@@ -1,0 +1,4 @@
+2021-03-01 12:06:56,675 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-03-01 12:06:57,014 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-03-01 12:06:57,273 INFO Initialize simulation object and CTF filters.
+2021-03-01 12:06:57,273 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.

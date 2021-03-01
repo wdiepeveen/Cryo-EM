@@ -1,0 +1,8 @@
+2021-02-25 11:09:03,299 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-25 11:09:03,669 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-02-25 11:09:04,421 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-25 11:09:06,274 CRITICAL 'Exp' object has no attribute 'open'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 39, in <module>
+    sim = exp.open(os.path.join(DATA_DIR, "sim_up.pkl")) # Load simulator
+

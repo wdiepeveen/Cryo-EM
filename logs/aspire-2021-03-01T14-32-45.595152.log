@@ -1,0 +1,16 @@
+2021-03-01 14:32:45,944 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-03-01 14:32:46,339 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-03-01 14:32:46,616 INFO Results folder is results/pd_vol_rot_reconstruction_21-03-01_14-32-46
+2021-03-01 14:32:46,618 INFO Start Preprocessing
+2021-03-01 14:32:46,618 INFO Start Experiment
+2021-03-01 14:32:46,618 INFO Start Postprocessing
+2021-03-01 14:32:46,618 INFO Postprocessing started
+2021-03-01 14:32:48,652 CRITICAL data type not understood
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/main.py", line 4, in <module>
+    run_experiment()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/__init__.py", line 82, in run_experiment
+    results_folder=results_folder
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/postprocessing.py", line 29, in postprocessing
+    vol_fsc = np.zeros(len(snr_range), len(nums_imgs))
+

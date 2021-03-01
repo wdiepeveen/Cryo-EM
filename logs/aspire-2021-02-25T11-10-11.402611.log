@@ -1,0 +1,10 @@
+2021-02-25 11:10:11,526 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-25 11:10:11,858 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-02-25 11:10:12,314 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-25 11:10:14,266 CRITICAL [Errno 2] No such file or directory: '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/results/sim_up.pkl.pkl'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 39, in <module>
+    sim = exp.open_pkl(DATA_DIR, "sim_up.pkl") # Load simulator
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/exp_tools.py", line 99, in open_pkl
+    with open(os.path.join(dir, filename + ".pkl"), 'rb') as input:
+

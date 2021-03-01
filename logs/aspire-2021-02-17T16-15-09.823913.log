@@ -1,0 +1,79 @@
+2021-02-17 16:15:10,382 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 16:15:10,625 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 16:15:10,633 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:10,633 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:10,634 INFO Trying NFFT backend finufft
+2021-02-17 16:15:10,639 INFO NFFT backend finufft usable.
+2021-02-17 16:15:10,640 INFO Trying NFFT backend cufinufft
+2021-02-17 16:15:10,640 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 16:15:10,640 INFO Trying NFFT backend pynfft
+2021-02-17 16:15:10,640 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 16:15:10,640 INFO Selected NFFT backend = finufft.
+2021-02-17 16:15:10,644 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:10,801 INFO Applying forward transformations in pipeline
+2021-02-17 16:15:10,801 INFO All forward transformations applied
+2021-02-17 16:15:10,801 INFO Loaded 128 images
+2021-02-17 16:15:10,818 INFO ========= Iteration 1 =========
+2021-02-17 16:15:10,818 INFO Iteration 1 | descent step u
+2021-02-17 16:15:10,823 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:10,824 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:10,828 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:10,957 DEBUG Corresponding type is already complex complex64.
+2021-02-17 16:15:10,961 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:10,983 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 16:15:10,988 INFO Iteration 1 | primal-dual step g
+2021-02-17 16:15:10,995 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:10,996 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:10,999 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:11,092 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:11,092 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:11,097 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:11,184 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:11,184 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:11,188 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:11,272 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:11,272 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:11,276 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:11,356 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:11,356 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:11,360 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:11,446 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:11,446 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:11,451 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,127 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,127 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,130 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,219 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,219 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,223 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,317 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,317 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,322 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,416 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,416 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,421 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,501 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,501 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,506 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:12,588 DEBUG Corresponding type is already real float32.
+2021-02-17 16:15:12,588 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:15:12,593 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:15:14,553 CRITICAL 'InnerProductOperator' object has no attribute 'dtype'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 66, in <module>
+    volume = solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 115, in solve
+    cost = self.get_cost(self.problem)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 45, in cost_function
+    cost = l2_data_fidelity(src) + lam1*l2_grad_norm(src) + lam2*so3_distance(src)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/cost_functions.py", line 14, in l2_data_fidelity
+    res = src.vol_forward(src.vols, 0, np.inf) - src.data
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 523, in vol_forward
+    im = vol.project(0, self.rots[all_idx, :, :])
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/volume/__init__.py", line 152, in project
+    im_f = nufft(data, pts_rot) / self.resolution
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/nufft/__init__.py", line 198, in nufft
+    if fourier_pts.dtype != real_type(sig_f.dtype):
+

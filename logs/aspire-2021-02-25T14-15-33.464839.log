@@ -1,0 +1,31 @@
+2021-02-25 14:15:33,747 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-02-25 14:15:33,750 INFO Initialize simulation object and CTF filters.
+2021-02-25 14:15:33,750 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-25 14:15:34,502 INFO Use downsampled map to creat simulation object.
+2021-02-25 14:15:34,526 DEBUG Corresponding type is already real float32.
+2021-02-25 14:15:34,526 DEBUG nufft passed real_type for signal, converting
+2021-02-25 14:15:34,526 INFO Trying NFFT backend finufft
+2021-02-25 14:15:34,533 INFO NFFT backend finufft usable.
+2021-02-25 14:15:34,533 INFO Trying NFFT backend cufinufft
+2021-02-25 14:15:34,533 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-25 14:15:34,533 INFO Trying NFFT backend pynfft
+2021-02-25 14:15:34,533 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-25 14:15:34,533 INFO Selected NFFT backend = finufft.
+2021-02-25 14:15:34,534 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 14:15:34,843 INFO Applying forward transformations in pipeline
+2021-02-25 14:15:34,843 INFO All forward transformations applied
+2021-02-25 14:15:34,843 INFO Loaded 3 images
+2021-02-25 14:15:35,006 INFO Get true rotation angles generated randomly by the simulation object.
+2021-02-25 14:15:35,006 INFO Estimate rotation angles using synchronization matrix and voting method.
+2021-02-25 14:15:35,012 DEBUG Corresponding type is already real float32.
+2021-02-25 14:15:35,012 DEBUG nufft passed real_type for signal, converting
+2021-02-25 14:15:35,016 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 14:15:35,508 INFO Applying forward transformations in pipeline
+2021-02-25 14:15:35,508 INFO All forward transformations applied
+2021-02-25 14:15:35,508 INFO Loaded 128 images
+2021-02-25 14:15:35,508 INFO Represent 2D image in a polar Fourier grid
+2021-02-25 14:15:35,508 DEBUG Corresponding type is already real float32.
+2021-02-25 14:15:35,508 DEBUG nufft passed real_type for signal, converting
+2021-02-25 14:15:35,509 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.

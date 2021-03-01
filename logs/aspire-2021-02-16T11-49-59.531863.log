@@ -1,0 +1,62 @@
+2021-02-16 11:50:00,214 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 11:50:00,471 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 11:50:00,480 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:00,480 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:00,480 INFO Trying NFFT backend finufft
+2021-02-16 11:50:00,487 INFO NFFT backend finufft usable.
+2021-02-16 11:50:00,487 INFO Trying NFFT backend cufinufft
+2021-02-16 11:50:00,487 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 11:50:00,487 INFO Trying NFFT backend pynfft
+2021-02-16 11:50:00,487 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 11:50:00,488 INFO Selected NFFT backend = finufft.
+2021-02-16 11:50:00,492 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:00,669 INFO Applying forward transformations in pipeline
+2021-02-16 11:50:00,669 INFO All forward transformations applied
+2021-02-16 11:50:00,669 INFO Loaded 128 images
+2021-02-16 11:50:00,670 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-16 11:50:00,701 INFO Testing data fidelity
+2021-02-16 11:50:00,703 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 11:50:00,708 DEBUG Corresponding type is already real float64.
+2021-02-16 11:50:00,708 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 11:50:00,708 DEBUG Corresponding type is already real float64.
+2021-02-16 11:50:00,710 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:00,865 INFO Testing grad norm fidelity
+2021-02-16 11:50:00,867 INFO Testing rotation fidelity
+2021-02-16 11:50:01,073 INFO Testing differential
+2021-02-16 11:50:01,081 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,081 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,084 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,178 INFO Testing adjoint differential
+2021-02-16 11:50:01,187 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,187 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,193 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,290 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,290 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,295 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,376 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,376 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,380 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,463 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,463 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,468 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,548 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,548 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,554 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:01,637 DEBUG Corresponding type is already real float32.
+2021-02-16 11:50:01,637 DEBUG nufft passed real_type for signal, converting
+2021-02-16 11:50:01,642 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 11:50:03,691 CRITICAL axis 1 is out of bounds for array of dimension 0
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 70, in <module>
+    print(adjoint_differential_forward_rot(prob,xi))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 77, in adjoint_differential_forward_rot
+    K12 = -1 / (src.L ** 2) * ainner(xi, im12, axes=(1, 2))
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/utils/matrix.py", line 345, in ainner
+    return np.sum(x * y, axis=axes)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 2076, in sum
+    initial=initial)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/core/fromnumeric.py", line 86, in _wrapreduction
+    return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+

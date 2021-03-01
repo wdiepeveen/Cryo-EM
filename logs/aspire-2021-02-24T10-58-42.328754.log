@@ -1,0 +1,272 @@
+2021-02-24 10:58:46,082 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-24 10:58:46,729 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-24 10:58:46,739 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:46,739 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:46,740 INFO Trying NFFT backend finufft
+2021-02-24 10:58:46,862 INFO NFFT backend finufft usable.
+2021-02-24 10:58:46,863 INFO Trying NFFT backend cufinufft
+2021-02-24 10:58:46,864 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-24 10:58:46,864 INFO Trying NFFT backend pynfft
+2021-02-24 10:58:46,864 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-24 10:58:46,864 INFO Selected NFFT backend = finufft.
+2021-02-24 10:58:46,873 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,054 INFO Applying forward transformations in pipeline
+2021-02-24 10:58:47,054 INFO All forward transformations applied
+2021-02-24 10:58:47,054 INFO Loaded 128 images
+2021-02-24 10:58:47,084 INFO ========= Iteration 1 =========
+2021-02-24 10:58:47,084 INFO Iteration 1 | descent step u
+2021-02-24 10:58:47,090 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,091 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,095 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,245 DEBUG Corresponding type is already complex complex64.
+2021-02-24 10:58:47,249 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,281 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-24 10:58:47,286 INFO Iteration 1 | primal-dual step g
+2021-02-24 10:58:47,295 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,295 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,299 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,395 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,395 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,400 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,488 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,489 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,494 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,582 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,582 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,586 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,671 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,671 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,676 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:47,760 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:47,760 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:47,764 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,463 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,463 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,466 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,565 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,565 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,571 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,669 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,669 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,673 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,763 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,763 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,768 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,856 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,856 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,860 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:48,949 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:48,949 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:48,953 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,046 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,047 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,051 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,303 INFO Iteration 1 | Cost = 7.567032237064031e-10 | Relative Error = 1.0
+2021-02-24 10:58:49,303 INFO Iteration 1 | Relative Error u = 1.0 | Relative Error g = 1.0
+2021-02-24 10:58:49,303 INFO ========= Iteration 2 =========
+2021-02-24 10:58:49,303 INFO Iteration 2 | descent step u
+2021-02-24 10:58:49,308 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,308 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,311 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,459 DEBUG Corresponding type is already complex complex64.
+2021-02-24 10:58:49,463 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,486 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-24 10:58:49,490 INFO Iteration 2 | primal-dual step g
+2021-02-24 10:58:49,498 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,498 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,502 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,589 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,589 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,594 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,680 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,680 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,685 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,772 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,772 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,777 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,859 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,859 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,864 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:49,947 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:49,947 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:49,952 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:50,642 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:50,642 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:50,645 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:50,737 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:50,737 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:50,743 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:50,836 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:50,836 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:50,841 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:50,925 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:50,926 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:50,930 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,015 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,016 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,020 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,105 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,105 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,111 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,211 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,211 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,215 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,485 INFO Iteration 2 | Cost = 7.102193997113969e-10 | Relative Error = 0.9509512628927275
+2021-02-24 10:58:51,485 INFO Iteration 2 | Relative Error u = 0.9599603414535522 | Relative Error g = 0.015596113680848234
+2021-02-24 10:58:51,486 INFO ========= Iteration 3 =========
+2021-02-24 10:58:51,486 INFO Iteration 3 | descent step u
+2021-02-24 10:58:51,491 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,491 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,494 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,653 DEBUG Corresponding type is already complex complex64.
+2021-02-24 10:58:51,658 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,681 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-24 10:58:51,685 INFO Iteration 3 | primal-dual step g
+2021-02-24 10:58:51,693 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,693 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,696 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,782 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,782 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,786 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,870 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,870 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,875 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:51,959 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:51,959 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:51,964 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:52,049 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:52,049 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:52,055 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:52,141 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:52,141 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:52,145 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:52,834 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:52,834 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:52,837 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:52,930 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:52,930 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:52,935 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,031 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,031 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,035 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,120 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,121 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,125 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,209 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,209 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,213 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,297 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,298 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,302 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,394 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,394 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,399 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,651 INFO Iteration 3 | Cost = 6.677565776351128e-10 | Relative Error = 0.9133877380604818
+2021-02-24 10:58:53,651 INFO Iteration 3 | Relative Error u = 0.9220432043075562 | Relative Error g = 0.0025809723744916495
+2021-02-24 10:58:53,651 INFO ========= Iteration 4 =========
+2021-02-24 10:58:53,651 INFO Iteration 4 | descent step u
+2021-02-24 10:58:53,656 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,656 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,660 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,808 DEBUG Corresponding type is already complex complex64.
+2021-02-24 10:58:53,813 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,838 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-24 10:58:53,841 INFO Iteration 4 | primal-dual step g
+2021-02-24 10:58:53,848 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,848 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,852 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:53,937 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:53,938 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:53,942 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:54,027 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:54,027 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:54,031 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:54,124 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:54,124 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:54,128 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:54,210 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:54,210 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:54,214 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:54,298 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:54,298 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:54,302 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:54,994 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:54,994 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:54,997 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,095 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,095 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,100 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,192 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,192 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,196 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,280 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,280 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,284 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,368 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,368 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,372 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,458 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,458 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,463 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,558 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,558 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,562 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,818 INFO Iteration 4 | Cost = 6.289491321321972e-10 | Relative Error = 0.8777947176791555
+2021-02-24 10:58:55,818 INFO Iteration 4 | Relative Error u = 0.8861128687858582 | Relative Error g = 0.0026004224829663546
+2021-02-24 10:58:55,818 INFO ========= Iteration 5 =========
+2021-02-24 10:58:55,818 INFO Iteration 5 | descent step u
+2021-02-24 10:58:55,823 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:55,823 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:55,826 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:55,979 DEBUG Corresponding type is already complex complex64.
+2021-02-24 10:58:55,984 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,011 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-24 10:58:56,015 INFO Iteration 5 | primal-dual step g
+2021-02-24 10:58:56,024 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,024 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,029 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,124 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,124 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,129 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,220 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,221 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,227 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,321 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,322 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,327 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,419 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,419 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,424 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:56,515 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:56,516 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:56,520 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,222 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,222 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,225 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,324 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,324 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,328 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,417 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,417 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,423 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,508 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,508 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,514 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,600 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,600 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,604 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,690 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,690 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,694 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:57,786 DEBUG Corresponding type is already real float32.
+2021-02-24 10:58:57,787 DEBUG nufft passed real_type for signal, converting
+2021-02-24 10:58:57,792 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-24 10:58:58,046 INFO Iteration 5 | Cost = 5.934673393177918e-10 | Relative Error = 0.8440428075696528
+2021-02-24 10:58:58,046 INFO Iteration 5 | Relative Error u = 0.8520411252975464 | Relative Error g = 0.0026223662300660206
+2021-02-24 10:59:04,706 CRITICAL 'numpy.ndarray' object has no attribute 'asnumpy'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 75, in <module>
+    mrc.set_data(volume.asnumpy())
+

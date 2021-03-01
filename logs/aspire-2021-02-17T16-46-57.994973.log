@@ -1,0 +1,55 @@
+2021-02-17 16:46:58,688 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 16:46:58,913 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 16:46:58,922 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:58,922 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:58,922 INFO Trying NFFT backend finufft
+2021-02-17 16:46:58,931 INFO NFFT backend finufft usable.
+2021-02-17 16:46:58,931 INFO Trying NFFT backend cufinufft
+2021-02-17 16:46:58,932 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 16:46:58,932 INFO Trying NFFT backend pynfft
+2021-02-17 16:46:58,932 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 16:46:58,933 INFO Selected NFFT backend = finufft.
+2021-02-17 16:46:58,936 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,144 INFO Applying forward transformations in pipeline
+2021-02-17 16:46:59,144 INFO All forward transformations applied
+2021-02-17 16:46:59,144 INFO Loaded 128 images
+2021-02-17 16:46:59,169 INFO ========= Iteration 1 =========
+2021-02-17 16:46:59,169 INFO Iteration 1 | descent step u
+2021-02-17 16:46:59,175 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,175 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,180 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,317 DEBUG Corresponding type is already complex complex64.
+2021-02-17 16:46:59,322 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,351 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 16:46:59,357 INFO Iteration 1 | primal-dual step g
+2021-02-17 16:46:59,369 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,370 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,374 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,519 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,519 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,525 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,623 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,623 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,627 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,727 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,727 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,733 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,824 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,825 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,829 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:46:59,915 DEBUG Corresponding type is already real float32.
+2021-02-17 16:46:59,915 DEBUG nufft passed real_type for signal, converting
+2021-02-17 16:46:59,919 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 16:47:03,484 CRITICAL 'list' object has no attribute 'astype'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 67, in <module>
+    volume = solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 111, in solve
+    self.primal_dual_step_g()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 149, in primal_dual_step_g
+    manifold.log(m, new_rots))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 28, in differential_forward_rot
+    x1, x2, x3 = np.meshgrid(grid, grid, grid).astype(src.dtype)
+

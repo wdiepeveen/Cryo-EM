@@ -1,0 +1,16 @@
+2021-02-27 14:35:04,057 INFO This script illustrates images at different SNR levels
+2021-02-27 14:35:04,059 INFO Initialize simulation object and CTF filters.
+2021-02-27 14:35:04,059 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-27 14:35:04,774 INFO Use downsampled map to creat simulation object.
+2021-02-27 14:35:04,797 INFO Appending a NoiseAdder to generation pipeline
+2021-02-27 14:35:06,726 CRITICAL 'SnrNoiseAdder' object has no attribute 'dim'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/SNR_test.py", line 76, in <module>
+    noise_filter=SnrNoiseAdder(snr=snr_level))
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/simulation.py", line 93, in __init__
+    self.noise_adder = NoiseAdder(seed=self.seed, noise_filter=noise_filter)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/image/xform.py", line 300, in __init__
+    self.noise_filter = PowerFilter(noise_filter, power=0.5)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/operators/filters.py", line 151, in __init__
+    super().__init__(dim=filter.dim, radial=filter.radial)
+

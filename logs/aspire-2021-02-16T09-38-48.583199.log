@@ -1,0 +1,27 @@
+2021-02-16 09:38:49,194 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 09:38:49,390 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 09:38:49,400 DEBUG Corresponding type is already real float32.
+2021-02-16 09:38:49,400 DEBUG nufft passed real_type for signal, converting
+2021-02-16 09:38:49,401 INFO Trying NFFT backend finufft
+2021-02-16 09:38:49,407 INFO NFFT backend finufft usable.
+2021-02-16 09:38:49,407 INFO Trying NFFT backend cufinufft
+2021-02-16 09:38:49,408 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 09:38:49,408 INFO Trying NFFT backend pynfft
+2021-02-16 09:38:49,408 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 09:38:49,408 INFO Selected NFFT backend = finufft.
+2021-02-16 09:38:49,412 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 09:38:49,590 INFO Applying forward transformations in pipeline
+2021-02-16 09:38:49,590 INFO All forward transformations applied
+2021-02-16 09:38:49,590 INFO Loaded 128 images
+2021-02-16 09:38:49,591 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-16 09:38:49,613 INFO Testing data fidelity
+2021-02-16 09:38:49,615 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 09:38:49,621 DEBUG Corresponding type is already real float64.
+2021-02-16 09:38:49,621 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 09:38:49,622 DEBUG Corresponding type is already real float64.
+2021-02-16 09:38:49,623 DEBUG nufft passed real_type for signal, converting
+2021-02-16 09:38:49,766 INFO Testing grad norm fidelity
+2021-02-16 09:38:49,769 INFO Testing rotation fidelity
+2021-02-16 09:38:49,964 INFO Testing differential

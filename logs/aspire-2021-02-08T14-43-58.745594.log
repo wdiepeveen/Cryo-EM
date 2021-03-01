@@ -1,0 +1,7 @@
+2021-02-08 14:43:58,967 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-08 14:43:59,303 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-08 14:44:02,015 CRITICAL 'function' object has no attribute 'shape'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 41, in <module>
+    num_images = f.shape[0]
+

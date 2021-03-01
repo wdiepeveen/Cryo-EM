@@ -1,0 +1,34 @@
+2021-02-16 10:18:58,110 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 10:18:58,423 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 10:18:58,433 DEBUG Corresponding type is already real float32.
+2021-02-16 10:18:58,433 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:18:58,433 INFO Trying NFFT backend finufft
+2021-02-16 10:18:58,442 INFO NFFT backend finufft usable.
+2021-02-16 10:18:58,442 INFO Trying NFFT backend cufinufft
+2021-02-16 10:18:58,443 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 10:18:58,443 INFO Trying NFFT backend pynfft
+2021-02-16 10:18:58,443 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 10:18:58,443 INFO Selected NFFT backend = finufft.
+2021-02-16 10:18:58,447 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 10:18:58,605 INFO Applying forward transformations in pipeline
+2021-02-16 10:18:58,605 INFO All forward transformations applied
+2021-02-16 10:18:58,606 INFO Loaded 128 images
+2021-02-16 10:18:58,606 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-16 10:18:58,623 INFO Testing data fidelity
+2021-02-16 10:18:58,625 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 10:18:58,629 DEBUG Corresponding type is already real float64.
+2021-02-16 10:18:58,629 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 10:18:58,630 DEBUG Corresponding type is already real float64.
+2021-02-16 10:18:58,631 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:18:58,781 INFO Testing grad norm fidelity
+2021-02-16 10:18:58,785 INFO Testing rotation fidelity
+2021-02-16 10:18:58,993 INFO Testing differential
+2021-02-16 10:19:01,290 CRITICAL eta is not 3-by-3
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 62, in <module>
+    print(differential_forward_rot(prob, eta))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 9, in differential_forward_rot
+    raise RuntimeError("eta is not 3-by-3")
+

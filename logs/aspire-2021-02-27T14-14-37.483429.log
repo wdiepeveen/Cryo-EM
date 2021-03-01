@@ -1,0 +1,31 @@
+2021-02-27 14:14:37,790 INFO This script illustrates images at different SNR levels
+2021-02-27 14:14:37,793 INFO Initialize simulation object and CTF filters.
+2021-02-27 14:14:37,793 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-27 14:14:38,523 INFO Use downsampled map to creat simulation object.
+2021-02-27 14:14:38,544 DEBUG Corresponding type is already real float32.
+2021-02-27 14:14:38,544 DEBUG nufft passed real_type for signal, converting
+2021-02-27 14:14:38,544 INFO Trying NFFT backend finufft
+2021-02-27 14:14:38,549 INFO NFFT backend finufft usable.
+2021-02-27 14:14:38,550 INFO Trying NFFT backend cufinufft
+2021-02-27 14:14:38,550 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-27 14:14:38,550 INFO Trying NFFT backend pynfft
+2021-02-27 14:14:38,550 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-27 14:14:38,550 INFO Selected NFFT backend = finufft.
+2021-02-27 14:14:38,554 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-27 14:14:38,709 DEBUG Corresponding type is already real float32.
+2021-02-27 14:14:38,709 DEBUG nufft passed real_type for signal, converting
+2021-02-27 14:14:38,714 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-27 14:14:39,253 INFO Applying forward transformations in pipeline
+2021-02-27 14:14:39,254 INFO All forward transformations applied
+2021-02-27 14:14:39,254 INFO Loaded 128 images
+2021-02-27 14:14:39,258 DEBUG Corresponding type is already real float32.
+2021-02-27 14:14:39,258 DEBUG nufft passed real_type for signal, converting
+2021-02-27 14:14:39,261 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-27 14:14:39,343 DEBUG Corresponding type is already real float32.
+2021-02-27 14:14:39,343 DEBUG nufft passed real_type for signal, converting
+2021-02-27 14:14:39,343 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-27 14:14:39,536 INFO Applying forward transformations in pipeline
+2021-02-27 14:14:39,537 INFO All forward transformations applied
+2021-02-27 14:14:39,537 INFO Loaded 3 images

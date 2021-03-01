@@ -1,0 +1,35 @@
+2021-02-17 09:51:51,571 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 09:51:51,776 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 09:51:51,784 DEBUG Corresponding type is already real float32.
+2021-02-17 09:51:51,784 DEBUG nufft passed real_type for signal, converting
+2021-02-17 09:51:51,784 INFO Trying NFFT backend finufft
+2021-02-17 09:51:51,790 INFO NFFT backend finufft usable.
+2021-02-17 09:51:51,791 INFO Trying NFFT backend cufinufft
+2021-02-17 09:51:51,791 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 09:51:51,791 INFO Trying NFFT backend pynfft
+2021-02-17 09:51:51,791 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 09:51:51,791 INFO Selected NFFT backend = finufft.
+2021-02-17 09:51:51,795 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 09:51:51,961 INFO Applying forward transformations in pipeline
+2021-02-17 09:51:51,961 INFO All forward transformations applied
+2021-02-17 09:51:51,961 INFO Loaded 128 images
+2021-02-17 09:51:51,962 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-17 09:51:51,979 INFO Testing data fidelity
+2021-02-17 09:51:51,979 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 09:51:51,979 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 09:51:51,983 DEBUG Corresponding type is already real float64.
+2021-02-17 09:51:51,984 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 09:51:51,984 DEBUG Corresponding type is already real float64.
+2021-02-17 09:51:51,985 DEBUG nufft passed real_type for signal, converting
+2021-02-17 09:51:52,170 INFO Testing grad norm fidelity
+2021-02-17 09:51:52,173 INFO Testing rotation fidelity
+2021-02-17 09:51:52,357 INFO Testing differential
+2021-02-17 09:51:54,273 CRITICAL 'PrimalDualProblem' object has no attribute 'forward'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 63, in <module>
+    xi = differential_forward_rot(prob, eta)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 40, in differential_forward_rot
+    differential = -src.forward(vol=new_vol)
+

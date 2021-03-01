@@ -1,0 +1,28 @@
+2021-02-15 16:24:49,919 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 16:24:50,143 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 16:24:50,152 DEBUG Corresponding type is already real float32.
+2021-02-15 16:24:50,152 DEBUG nufft passed real_type for signal, converting
+2021-02-15 16:24:50,152 INFO Trying NFFT backend finufft
+2021-02-15 16:24:50,158 INFO NFFT backend finufft usable.
+2021-02-15 16:24:50,158 INFO Trying NFFT backend cufinufft
+2021-02-15 16:24:50,159 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 16:24:50,159 INFO Trying NFFT backend pynfft
+2021-02-15 16:24:50,159 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 16:24:50,159 INFO Selected NFFT backend = finufft.
+2021-02-15 16:24:50,163 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 16:24:50,330 INFO Applying forward transformations in pipeline
+2021-02-15 16:24:50,330 INFO All forward transformations applied
+2021-02-15 16:24:50,331 INFO Loaded 128 images
+2021-02-15 16:24:50,349 INFO Testing data fidelity
+2021-02-15 16:24:50,359 DEBUG Corresponding type is already real float32.
+2021-02-15 16:24:50,359 DEBUG nufft passed real_type for signal, converting
+2021-02-15 16:24:50,364 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 16:24:52,296 CRITICAL 'Image' object has no attribute 'value'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 40, in <module>
+    print(data_fidelity_l2(prob))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/cost_functions.py", line 15, in data_fidelity_l2
+    cost = 1 / (2 * src.n * src.L ** 4) * norm(res.value) ** 2
+

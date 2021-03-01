@@ -1,0 +1,110 @@
+2021-02-08 14:11:05,186 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-08 14:11:05,651 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-02-08 14:11:05,651 INFO Initialize simulation object and CTF filters.
+2021-02-08 14:11:05,651 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-08 14:11:06,261 INFO Use downsampled map to creat simulation object.
+2021-02-08 14:11:06,275 INFO Get true rotation angles generated randomly by the simulation object.
+2021-02-08 14:11:06,276 INFO Estimate rotation angles using synchronization matrix and voting method.
+2021-02-08 14:11:06,280 DEBUG Corresponding type is already real float32.
+2021-02-08 14:11:06,280 DEBUG nufft passed real_type for signal, converting
+2021-02-08 14:11:06,281 INFO Trying NFFT backend finufft
+2021-02-08 14:11:06,326 INFO NFFT backend finufft usable.
+2021-02-08 14:11:06,326 INFO Trying NFFT backend cufinufft
+2021-02-08 14:11:06,327 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-08 14:11:06,327 INFO Trying NFFT backend pynfft
+2021-02-08 14:11:06,327 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-08 14:11:06,327 INFO Selected NFFT backend = finufft.
+2021-02-08 14:11:06,331 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:11:06,473 INFO Applying forward transformations in pipeline
+2021-02-08 14:11:06,473 INFO All forward transformations applied
+2021-02-08 14:11:06,473 INFO Loaded 128 images
+2021-02-08 14:11:06,473 INFO Represent 2D image in a polar Fourier grid
+2021-02-08 14:11:06,474 DEBUG Corresponding type is already real float32.
+2021-02-08 14:11:06,474 DEBUG nufft passed real_type for signal, converting
+2021-02-08 14:11:06,474 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:11:12,183 INFO Top 10 eigenvalues from synchronization voting matrix: [ 71.54754   66.33838   63.705856  19.602924  15.250185  14.751359
+  13.775312  12.423205  12.283918 -12.384874]
+2021-02-08 14:11:12,187 INFO MSE deviation of the estimated rotations using register_rotations : 0.0542492913676143
+2021-02-08 14:11:12,189 INFO Expanding 3D map in a spatial-domain Fourier–Bessel basis using the direct method.
+2021-02-08 14:11:25,099 DEBUG Corresponding type is already real float32.
+2021-02-08 14:11:25,099 DEBUG nufft passed real_type for signal, converting
+2021-02-08 14:11:25,103 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:11:25,184 INFO Applying forward transformations in pipeline
+2021-02-08 14:11:25,185 INFO All forward transformations applied
+2021-02-08 14:11:25,185 INFO Loaded 128 images
+2021-02-08 14:11:25,234 DEBUG Corresponding type is already complex complex64.
+2021-02-08 14:11:25,239 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:11:26,508 INFO Determined adjoint mappings. Shape = (9269,)
+2021-02-08 14:11:26,509 INFO Computing kernel
+2021-02-08 14:11:26,526 DEBUG Corresponding type is already real float32.
+2021-02-08 14:11:26,527 DEBUG anufft passed real_type for signal, converting
+2021-02-08 14:11:26,530 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:11:26,603 INFO Computing non-centered Fourier Transform
+2021-02-08 14:11:26,615 INFO Computing Preconditioner kernel
+2021-02-08 14:11:26,615 INFO Circularizing kernel
+2021-02-08 14:11:26,626 INFO Circularizing dimension 0
+2021-02-08 14:11:26,626 INFO Circularizing dimension 1
+2021-02-08 14:11:26,627 INFO Circularizing dimension 2
+2021-02-08 14:11:35,258 INFO Delta 6.094093350839103e-06 (target 2.86335689452244e-10)
+2021-02-08 14:11:43,725 INFO Delta 3.367749059179914e-06 (target 2.86335689452244e-10)
+2021-02-08 14:11:52,155 INFO Delta 1.49038635299803e-06 (target 2.86335689452244e-10)
+2021-02-08 14:12:00,681 INFO Delta 8.100137165456545e-07 (target 2.86335689452244e-10)
+2021-02-08 14:12:09,172 INFO Delta 4.100150476915587e-07 (target 2.86335689452244e-10)
+2021-02-08 14:12:17,721 INFO Delta 2.343388274539393e-07 (target 2.86335689452244e-10)
+2021-02-08 14:12:26,269 INFO Delta 1.3430073408926546e-07 (target 2.86335689452244e-10)
+2021-02-08 14:12:34,814 INFO Delta 7.292523918067673e-08 (target 2.86335689452244e-10)
+2021-02-08 14:12:43,388 INFO Delta 4.542057752132678e-08 (target 2.86335689452244e-10)
+2021-02-08 14:12:51,952 INFO Delta 2.6366295813318175e-08 (target 2.86335689452244e-10)
+2021-02-08 14:13:00,562 INFO Delta 1.5694084254391782e-08 (target 2.86335689452244e-10)
+2021-02-08 14:13:09,172 INFO Delta 9.077179008443181e-09 (target 2.86335689452244e-10)
+2021-02-08 14:13:17,850 INFO Delta 5.155646576326944e-09 (target 2.86335689452244e-10)
+2021-02-08 14:13:26,467 INFO Delta 3.3513036790111528e-09 (target 2.86335689452244e-10)
+2021-02-08 14:13:35,041 INFO Delta 2.2816633027389344e-09 (target 2.86335689452244e-10)
+2021-02-08 14:13:43,619 INFO Delta 1.5393148977693727e-09 (target 2.86335689452244e-10)
+2021-02-08 14:13:52,275 INFO Delta 1.0787413184942807e-09 (target 2.86335689452244e-10)
+2021-02-08 14:14:00,851 INFO Delta 6.956013542946948e-10 (target 2.86335689452244e-10)
+2021-02-08 14:14:09,443 INFO Delta 4.5909553936240854e-10 (target 2.86335689452244e-10)
+2021-02-08 14:14:18,026 INFO Delta 3.0222055413808846e-10 (target 2.86335689452244e-10)
+2021-02-08 14:14:29,431 INFO Delta 1.9525787930962935e-10 (target 2.86335689452244e-10)
+2021-02-08 14:14:30,925 DEBUG Corresponding type is already real float32.
+2021-02-08 14:14:30,925 DEBUG nufft passed real_type for signal, converting
+2021-02-08 14:14:30,928 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:14:31,007 INFO Applying forward transformations in pipeline
+2021-02-08 14:14:31,007 INFO All forward transformations applied
+2021-02-08 14:14:31,007 INFO Loaded 128 images
+2021-02-08 14:14:31,056 DEBUG Corresponding type is already complex complex64.
+2021-02-08 14:14:31,061 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:14:32,351 INFO Determined adjoint mappings. Shape = (9269,)
+2021-02-08 14:14:32,352 INFO Computing kernel
+2021-02-08 14:14:32,368 DEBUG Corresponding type is already real float32.
+2021-02-08 14:14:32,368 DEBUG anufft passed real_type for signal, converting
+2021-02-08 14:14:32,372 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-08 14:14:32,432 INFO Computing non-centered Fourier Transform
+2021-02-08 14:14:32,441 INFO Computing Preconditioner kernel
+2021-02-08 14:14:32,441 INFO Circularizing kernel
+2021-02-08 14:14:32,452 INFO Circularizing dimension 0
+2021-02-08 14:14:32,452 INFO Circularizing dimension 1
+2021-02-08 14:14:32,453 INFO Circularizing dimension 2
+2021-02-08 14:14:41,060 INFO Delta 6.0941060837649275e-06 (target 2.8633570764213803e-10)
+2021-02-08 14:14:49,556 INFO Delta 3.3677811188681517e-06 (target 2.8633570764213803e-10)
+2021-02-08 14:14:58,075 INFO Delta 1.490403860771039e-06 (target 2.8633570764213803e-10)
+2021-02-08 14:15:06,549 INFO Delta 8.100250852294266e-07 (target 2.8633570764213803e-10)
+2021-02-08 14:15:15,166 INFO Delta 4.100211015156674e-07 (target 2.8633570764213803e-10)
+2021-02-08 14:15:23,688 INFO Delta 2.3434408547018393e-07 (target 2.8633570764213803e-10)
+2021-02-08 14:15:32,210 INFO Delta 1.343021693855917e-07 (target 2.8633570764213803e-10)
+2021-02-08 14:15:40,737 INFO Delta 7.29281595113207e-08 (target 2.8633570764213803e-10)
+2021-02-08 14:15:49,769 INFO Delta 4.542249953942701e-08 (target 2.8633570764213803e-10)
+2021-02-08 14:15:58,453 INFO Delta 2.6367096950252744e-08 (target 2.8633570764213803e-10)
+2021-02-08 14:16:06,970 INFO Delta 1.5695052368869256e-08 (target 2.8633570764213803e-10)
+2021-02-08 14:16:15,505 INFO Delta 9.077840701365858e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:16:23,933 INFO Delta 5.156900684255561e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:16:32,400 INFO Delta 3.351057653588896e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:16:40,864 INFO Delta 2.28117214007284e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:16:49,263 INFO Delta 1.539272709294437e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:16:57,699 INFO Delta 1.0781485704214333e-09 (target 2.8633570764213803e-10)
+2021-02-08 14:17:06,148 INFO Delta 6.957306397659124e-10 (target 2.8633570764213803e-10)
+2021-02-08 14:17:14,635 INFO Delta 4.596596991923718e-10 (target 2.8633570764213803e-10)
+2021-02-08 14:17:23,140 INFO Delta 3.028672590499326e-10 (target 2.8633570764213803e-10)
+2021-02-08 14:17:34,381 INFO Delta 1.959287593278347e-10 (target 2.8633570764213803e-10)

@@ -1,0 +1,29 @@
+2021-02-15 15:40:15,929 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 15:40:16,152 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 15:40:16,160 DEBUG Corresponding type is already real float32.
+2021-02-15 15:40:16,160 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:40:16,160 INFO Trying NFFT backend finufft
+2021-02-15 15:40:16,165 INFO NFFT backend finufft usable.
+2021-02-15 15:40:16,165 INFO Trying NFFT backend cufinufft
+2021-02-15 15:40:16,166 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 15:40:16,166 INFO Trying NFFT backend pynfft
+2021-02-15 15:40:16,166 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 15:40:16,166 INFO Selected NFFT backend = finufft.
+2021-02-15 15:40:16,170 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:40:16,336 INFO Applying forward transformations in pipeline
+2021-02-15 15:40:16,337 INFO All forward transformations applied
+2021-02-15 15:40:16,337 INFO Loaded 128 images
+2021-02-15 15:40:16,363 DEBUG Corresponding type is already real float32.
+2021-02-15 15:40:16,363 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:40:16,368 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:40:18,418 CRITICAL unable to cast 128 images of size 33x33 to an element of the domain uniform_discr([ 0.,  0.,  0.], [ 33.,  33.,  33.], (128, 33, 33))
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 40, in <module>
+    print(grad_norm(prob))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/cost_functions.py", line 22, in grad_norm
+    data_grad = grad(src.data)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/odl/operator/operator.py", line 666, in __call__
+    'the domain {!r}'.format(x, self.domain))
+

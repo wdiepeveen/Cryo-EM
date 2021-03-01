@@ -1,0 +1,26 @@
+2021-02-15 15:32:31,792 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 15:32:32,003 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 15:32:32,011 DEBUG Corresponding type is already real float32.
+2021-02-15 15:32:32,012 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:32:32,012 INFO Trying NFFT backend finufft
+2021-02-15 15:32:32,018 INFO NFFT backend finufft usable.
+2021-02-15 15:32:32,018 INFO Trying NFFT backend cufinufft
+2021-02-15 15:32:32,018 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 15:32:32,018 INFO Trying NFFT backend pynfft
+2021-02-15 15:32:32,018 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 15:32:32,018 INFO Selected NFFT backend = finufft.
+2021-02-15 15:32:32,023 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:32:32,201 INFO Applying forward transformations in pipeline
+2021-02-15 15:32:32,201 INFO All forward transformations applied
+2021-02-15 15:32:32,201 INFO Loaded 128 images
+2021-02-15 15:32:34,019 CRITICAL Missing columns and no default value provided
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 36, in <module>
+    print(prob.states[1:5])
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 119, in states
+    return self.get_metadata("_rlnClassNumber")
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/__init__.py", line 293, in get_metadata
+    raise RuntimeError("Missing columns and no default value provided")
+

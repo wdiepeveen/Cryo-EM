@@ -1,0 +1,34 @@
+2021-02-25 23:21:59,391 INFO This script illustrates images at different SNR levels
+2021-02-25 23:21:59,393 INFO Initialize simulation object and CTF filters.
+2021-02-25 23:21:59,393 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-02-25 23:22:00,142 INFO Use downsampled map to creat simulation object.
+2021-02-25 23:22:00,167 DEBUG Corresponding type is already real float32.
+2021-02-25 23:22:00,167 DEBUG nufft passed real_type for signal, converting
+2021-02-25 23:22:00,167 INFO Trying NFFT backend finufft
+2021-02-25 23:22:00,173 INFO NFFT backend finufft usable.
+2021-02-25 23:22:00,173 INFO Trying NFFT backend cufinufft
+2021-02-25 23:22:00,174 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-25 23:22:00,174 INFO Trying NFFT backend pynfft
+2021-02-25 23:22:00,174 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-25 23:22:00,174 INFO Selected NFFT backend = finufft.
+2021-02-25 23:22:00,178 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 23:22:00,746 INFO Applying forward transformations in pipeline
+2021-02-25 23:22:00,746 INFO All forward transformations applied
+2021-02-25 23:22:00,746 INFO Loaded 128 images
+2021-02-25 23:22:00,753 DEBUG Corresponding type is already real float32.
+2021-02-25 23:22:00,753 DEBUG nufft passed real_type for signal, converting
+2021-02-25 23:22:00,757 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 23:22:01,161 INFO Applying forward transformations in pipeline
+2021-02-25 23:22:01,161 INFO All forward transformations applied
+2021-02-25 23:22:01,161 INFO Loaded 128 images
+2021-02-25 23:22:01,166 DEBUG Corresponding type is already real float32.
+2021-02-25 23:22:01,166 DEBUG nufft passed real_type for signal, converting
+2021-02-25 23:22:01,170 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 23:22:01,255 DEBUG Corresponding type is already real float32.
+2021-02-25 23:22:01,255 DEBUG nufft passed real_type for signal, converting
+2021-02-25 23:22:01,256 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-25 23:22:01,446 INFO Applying forward transformations in pipeline
+2021-02-25 23:22:01,446 INFO All forward transformations applied
+2021-02-25 23:22:01,446 INFO Loaded 3 images

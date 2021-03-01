@@ -1,0 +1,6 @@
+2021-02-25 11:58:12,609 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-25 11:58:14,600 CRITICAL The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 51, in <module>
+    assert sim.rots == rots_gt
+

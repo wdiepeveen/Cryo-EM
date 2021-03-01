@@ -1,0 +1,66 @@
+2021-02-17 10:04:25,093 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 10:04:25,319 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 10:04:25,328 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:25,328 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:25,328 INFO Trying NFFT backend finufft
+2021-02-17 10:04:25,334 INFO NFFT backend finufft usable.
+2021-02-17 10:04:25,334 INFO Trying NFFT backend cufinufft
+2021-02-17 10:04:25,335 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 10:04:25,335 INFO Trying NFFT backend pynfft
+2021-02-17 10:04:25,335 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 10:04:25,335 INFO Selected NFFT backend = finufft.
+2021-02-17 10:04:25,339 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:25,505 INFO Applying forward transformations in pipeline
+2021-02-17 10:04:25,506 INFO All forward transformations applied
+2021-02-17 10:04:25,506 INFO Loaded 128 images
+2021-02-17 10:04:25,506 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-17 10:04:25,524 INFO Testing data fidelity
+2021-02-17 10:04:25,524 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 10:04:25,524 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 10:04:25,528 DEBUG Corresponding type is already real float64.
+2021-02-17 10:04:25,529 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 10:04:25,529 DEBUG Corresponding type is already real float64.
+2021-02-17 10:04:25,531 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:25,709 INFO Testing grad norm fidelity
+2021-02-17 10:04:25,712 INFO Testing rotation fidelity
+2021-02-17 10:04:25,907 INFO Testing differential
+2021-02-17 10:04:25,914 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:25,914 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:25,916 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,007 INFO Testing adjoint differential
+2021-02-17 10:04:26,016 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,016 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,022 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,119 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,119 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,124 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,204 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,205 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,209 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,304 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,304 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,308 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,400 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,401 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,405 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,491 DEBUG Corresponding type is already real float32.
+2021-02-17 10:04:26,491 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:26,496 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 10:04:26,582 INFO Testing gradient
+2021-02-17 10:04:26,582 WARNING Volume.dtype float64 inconsistent with float32
+2021-02-17 10:04:26,583 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-17 10:04:26,589 DEBUG Corresponding type is already real float64.
+2021-02-17 10:04:26,589 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-17 10:04:26,589 DEBUG Corresponding type is already real float64.
+2021-02-17 10:04:26,591 DEBUG nufft passed real_type for signal, converting
+2021-02-17 10:04:28,566 CRITICAL 'PrimalDualProblem' object has no attribute 'src'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 77, in <module>
+    print(gradient_l2_data_fidelity(prob))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/gradients.py", line 6, in gradient_l2_data_fidelity
+    res = src.im_adjoint_forward(im)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 149, in im_adjoint_forward
+    batch_mean_b = self.src.im_backward(im, 0) / self.n
+

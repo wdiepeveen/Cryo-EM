@@ -1,0 +1,38 @@
+2021-03-01 17:15:06,677 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-03-01 17:15:07,281 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-03-01 17:15:07,677 INFO Results folder is results/pd_vol_rot_reconstruction_21-03-01_17-15-07
+2021-03-01 17:15:07,683 INFO Start Postprocessing
+2021-03-01 17:15:07,683 INFO Postprocessing started
+2021-03-01 17:15:07,692 DEBUG Corresponding type is already real float32.
+2021-03-01 17:15:07,692 DEBUG nufft passed real_type for signal, converting
+2021-03-01 17:15:07,692 INFO Trying NFFT backend finufft
+2021-03-01 17:15:07,710 INFO NFFT backend finufft usable.
+2021-03-01 17:15:07,710 INFO Trying NFFT backend cufinufft
+2021-03-01 17:15:07,711 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-03-01 17:15:07,712 INFO Trying NFFT backend pynfft
+2021-03-01 17:15:07,712 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-03-01 17:15:07,712 INFO Selected NFFT backend = finufft.
+2021-03-01 17:15:07,712 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-03-01 17:15:07,848 INFO Applying forward transformations in pipeline
+2021-03-01 17:15:07,848 INFO All forward transformations applied
+2021-03-01 17:15:07,848 INFO Loaded 1 images
+2021-03-01 17:15:07,863 DEBUG Corresponding type is already real float32.
+2021-03-01 17:15:07,863 DEBUG nufft passed real_type for signal, converting
+2021-03-01 17:15:07,863 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-03-01 17:15:07,964 INFO Applying forward transformations in pipeline
+2021-03-01 17:15:07,964 INFO All forward transformations applied
+2021-03-01 17:15:07,964 INFO Loaded 1 images
+2021-03-01 17:15:07,971 INFO MSE deviation of the estimated rotations using register_rotations : 2.7283983232920304
+2021-03-01 17:15:10,940 CRITICAL index 2 is out of bounds for axis 0 with size 2
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/main.py", line 4, in <module>
+    run_experiment()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/__init__.py", line 82, in run_experiment
+    results_folder=results_folder
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/experiments/primal_dual_volume_and_rotation_reconstruction/postprocessing.py", line 88, in postprocessing
+    exp.save_table("result_table_rot_mse", rot_mse_values, headers=rot_mse_headers)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/exp_tools.py", line 164, in save_table
+    table_data += "{}".format(values[col])
+

@@ -1,0 +1,37 @@
+2021-02-17 14:09:19,984 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 14:09:20,191 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 14:09:20,200 DEBUG Corresponding type is already real float32.
+2021-02-17 14:09:20,200 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:09:20,200 INFO Trying NFFT backend finufft
+2021-02-17 14:09:20,206 INFO NFFT backend finufft usable.
+2021-02-17 14:09:20,206 INFO Trying NFFT backend cufinufft
+2021-02-17 14:09:20,207 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 14:09:20,207 INFO Trying NFFT backend pynfft
+2021-02-17 14:09:20,207 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 14:09:20,207 INFO Selected NFFT backend = finufft.
+2021-02-17 14:09:20,210 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:09:20,374 INFO Applying forward transformations in pipeline
+2021-02-17 14:09:20,374 INFO All forward transformations applied
+2021-02-17 14:09:20,374 INFO Loaded 128 images
+2021-02-17 14:09:20,398 INFO ========= Iteration 1 =========
+2021-02-17 14:09:20,398 INFO Iteration 1 | descent step u
+2021-02-17 14:09:20,405 DEBUG Corresponding type is already real float32.
+2021-02-17 14:09:20,405 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:09:20,410 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:09:20,550 DEBUG Corresponding type is already complex complex64.
+2021-02-17 14:09:20,556 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:09:20,580 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 14:09:20,580 INFO Iteration 1 | primal-dual step g
+2021-02-17 14:09:22,443 CRITICAL eta is not 3-by-3
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 55, in <module>
+    volume = solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 110, in solve
+    self.primal_dual_step_g()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 138, in primal_dual_step_g
+    self.differential_g(self.problem, self.xi_)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/functions/differentials.py", line 10, in differential_forward_rot
+    raise RuntimeError("eta is not 3-by-3")
+

@@ -1,0 +1,71 @@
+2021-02-17 14:52:05,040 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-17 14:52:05,252 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-17 14:52:05,261 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,261 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,261 INFO Trying NFFT backend finufft
+2021-02-17 14:52:05,268 INFO NFFT backend finufft usable.
+2021-02-17 14:52:05,269 INFO Trying NFFT backend cufinufft
+2021-02-17 14:52:05,269 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-17 14:52:05,269 INFO Trying NFFT backend pynfft
+2021-02-17 14:52:05,269 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-17 14:52:05,270 INFO Selected NFFT backend = finufft.
+2021-02-17 14:52:05,273 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,467 INFO Applying forward transformations in pipeline
+2021-02-17 14:52:05,467 INFO All forward transformations applied
+2021-02-17 14:52:05,467 INFO Loaded 128 images
+2021-02-17 14:52:05,498 INFO ========= Iteration 1 =========
+2021-02-17 14:52:05,498 INFO Iteration 1 | descent step u
+2021-02-17 14:52:05,506 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,506 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,513 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,663 DEBUG Corresponding type is already complex complex64.
+2021-02-17 14:52:05,668 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,695 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-02-17 14:52:05,695 INFO Iteration 1 | primal-dual step g
+2021-02-17 14:52:05,704 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,704 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,708 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,801 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,801 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,807 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,893 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,893 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,898 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:05,984 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:05,984 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:05,988 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:06,071 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:06,071 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:06,076 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:06,161 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:06,161 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:06,165 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:06,954 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:06,955 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:06,958 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:07,051 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:07,051 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:07,055 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:07,141 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:07,141 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:07,147 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:07,233 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:07,234 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:07,238 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:07,322 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:07,322 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:07,327 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:07,418 DEBUG Corresponding type is already real float32.
+2021-02-17 14:52:07,418 DEBUG nufft passed real_type for signal, converting
+2021-02-17 14:52:07,423 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-17 14:52:09,336 CRITICAL unsupported operand type(s) for *: 'float' and 'Image'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 56, in <module>
+    volume = solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 110, in solve
+    self.primal_dual_step_g()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/primal_dual_solver.py", line 145, in primal_dual_step_g
+    print(5.*self.differential_g(self.problem,manifold.log(m, new_rots)))
+

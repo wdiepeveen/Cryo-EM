@@ -1,0 +1,8 @@
+2021-02-25 11:31:54,509 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-25 11:31:56,504 CRITICAL 
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 48, in <module>
+    unique_filters=old_sim.unique_filters, dtype=dtype)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/source/simulation.py", line 61, in __init__
+    assert isinstance(vols, Volume)
+

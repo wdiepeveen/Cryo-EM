@@ -1,0 +1,32 @@
+2021-02-16 10:44:27,474 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 10:44:27,671 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 10:44:27,681 DEBUG Corresponding type is already real float32.
+2021-02-16 10:44:27,681 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:44:27,682 INFO Trying NFFT backend finufft
+2021-02-16 10:44:27,689 INFO NFFT backend finufft usable.
+2021-02-16 10:44:27,689 INFO Trying NFFT backend cufinufft
+2021-02-16 10:44:27,690 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 10:44:27,690 INFO Trying NFFT backend pynfft
+2021-02-16 10:44:27,690 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 10:44:27,690 INFO Selected NFFT backend = finufft.
+2021-02-16 10:44:27,695 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 10:44:27,865 INFO Applying forward transformations in pipeline
+2021-02-16 10:44:27,865 INFO All forward transformations applied
+2021-02-16 10:44:27,865 INFO Loaded 128 images
+2021-02-16 10:44:27,866 WARNING PrimalDualProblem vols.dtype float64 != self.dtype float32. In the future this will raise an error.
+2021-02-16 10:44:27,887 INFO Testing data fidelity
+2021-02-16 10:44:27,889 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 10:44:27,894 DEBUG Corresponding type is already real float64.
+2021-02-16 10:44:27,894 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 10:44:27,894 DEBUG Corresponding type is already real float64.
+2021-02-16 10:44:27,896 DEBUG nufft passed real_type for signal, converting
+2021-02-16 10:44:28,035 INFO Testing grad norm fidelity
+2021-02-16 10:44:28,040 INFO Testing rotation fidelity
+2021-02-16 10:44:28,219 INFO Testing differential
+2021-02-16 10:44:28,224 WARNING Volume rot_matrices.dtype float32 != self.dtype float64. In the future this will raise an error.
+2021-02-16 10:44:28,229 DEBUG Corresponding type is already real float64.
+2021-02-16 10:44:28,229 WARNING nufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: float64.
+2021-02-16 10:44:28,229 DEBUG Corresponding type is already real float64.
+2021-02-16 10:44:28,231 DEBUG nufft passed real_type for signal, converting

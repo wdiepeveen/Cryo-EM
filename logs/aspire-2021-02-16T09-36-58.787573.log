@@ -1,0 +1,29 @@
+2021-02-16 09:37:00,206 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-16 09:37:00,611 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-16 09:37:00,623 DEBUG Corresponding type is already real float32.
+2021-02-16 09:37:00,623 DEBUG nufft passed real_type for signal, converting
+2021-02-16 09:37:00,624 INFO Trying NFFT backend finufft
+2021-02-16 09:37:00,654 INFO NFFT backend finufft usable.
+2021-02-16 09:37:00,654 INFO Trying NFFT backend cufinufft
+2021-02-16 09:37:00,654 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-16 09:37:00,655 INFO Trying NFFT backend pynfft
+2021-02-16 09:37:00,655 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-16 09:37:00,655 INFO Selected NFFT backend = finufft.
+2021-02-16 09:37:00,659 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 09:37:00,817 INFO Applying forward transformations in pipeline
+2021-02-16 09:37:00,817 INFO All forward transformations applied
+2021-02-16 09:37:00,817 INFO Loaded 128 images
+2021-02-16 09:37:00,842 INFO Testing data fidelity
+2021-02-16 09:37:00,851 DEBUG Corresponding type is already real float32.
+2021-02-16 09:37:00,851 DEBUG nufft passed real_type for signal, converting
+2021-02-16 09:37:00,856 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-16 09:37:00,945 INFO Testing grad norm fidelity
+2021-02-16 09:37:00,948 INFO Testing rotation fidelity
+2021-02-16 09:37:01,145 INFO Testing differential
+2021-02-16 09:37:04,231 CRITICAL differential_forward_rot() missing 1 required positional argument: 'eta'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 61, in <module>
+    print(differential_forward_rot(prob))
+

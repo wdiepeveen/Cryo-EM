@@ -1,0 +1,24 @@
+2021-02-15 15:13:23,789 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-02-15 15:13:23,989 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
+2021-02-15 15:13:23,999 DEBUG Corresponding type is already real float32.
+2021-02-15 15:13:24,000 DEBUG nufft passed real_type for signal, converting
+2021-02-15 15:13:24,000 INFO Trying NFFT backend finufft
+2021-02-15 15:13:24,006 INFO NFFT backend finufft usable.
+2021-02-15 15:13:24,006 INFO Trying NFFT backend cufinufft
+2021-02-15 15:13:24,007 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-02-15 15:13:24,007 INFO Trying NFFT backend pynfft
+2021-02-15 15:13:24,007 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-02-15 15:13:24,007 INFO Selected NFFT backend = finufft.
+2021-02-15 15:13:24,011 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-02-15 15:13:24,186 INFO Applying forward transformations in pipeline
+2021-02-15 15:13:24,187 INFO All forward transformations applied
+2021-02-15 15:13:24,187 INFO Loaded 128 images
+2021-02-15 15:13:26,085 CRITICAL name 'n' is not defined
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 37, in <module>
+    prob = PrimalDualProblem(vols=vol, data=sim.images(0,np.inf), rots=sim.rots)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 53, in __init__
+    offsets = L / 16 * randn(2, n, seed=seed).astype(dtype).T
+
