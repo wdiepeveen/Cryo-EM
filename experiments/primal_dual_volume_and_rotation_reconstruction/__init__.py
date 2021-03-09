@@ -14,18 +14,20 @@ def run_experiment():
 
     exp = Exp()
 
-    exp.begin(prefix="pd_vol_rot_reconstruction")
+    exp.begin(prefix="primal_dual")  #, postfix="no_smudge")
     exp.dbglevel(4)
 
     # Set experiment parameters
-    img_size_init = 33
-    img_size = 65  # was 129 in rotation estimation paper
-    nums_imgs = [512]  # [100, 500]  #, 1000]
-    snr_range = [1/2]  # [1/2, 1/4]  #, 1/8, 1/16, 1/32, 1/64, 1/128, 1/256]
+    img_size = 65  # was 65 before and was 129 in rotation estimation paper
     max_it = 5
 
+    # Set experiment iterables
+    snr_range = [1 / 2]  # [1/2, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128, 1/256]
+    nums_imgs = [512]  # [100, 500, 1000]
+    init_vol_smudge = 0
+
     # Select which parts to run
-    skip_preprocessing = True
+    skip_preprocessing = False
     skip_main_experiment = False
 
     # Set data path
@@ -34,31 +36,23 @@ def run_experiment():
     data_path = os.path.join(data_dir, data_filename)
 
     # Set results folder if skip_preprocessing
-    results_folder = "results/pd_vol_rot_reconstruction_21-03-01_17-52-06"
-    if skip_preprocessing:
-        assert results_folder is not None
-    else:
-        results_folder = None
+    results_folder = "results/primal_dual_vol_rot_reconstruction_21-03-08_15-00-30"
 
     # Preprocessing
     if not skip_preprocessing:
+        results_folder = None
         logger.info("Start Preprocessing")
         for i, snr in enumerate(snr_range):
             for j, num_imgs in enumerate(nums_imgs):
 
-                if i == 0 and j == 0:
-                    save_gt = True
-                else:
-                    save_gt = False
-                    logger.info("Preprocessing for SNR = {} and {} images".format(snr, img_size))
+                logger.info("Preprocessing for SNR = {} and {} images".format(snr, img_size))
 
                 preprocessing(exp=exp,
                               num_imgs=num_imgs,
                               snr=snr,
-                              img_size_init=img_size_init,
                               img_size=img_size,
-                              data_path=data_path,
-                              save_gt=save_gt
+                              init_vol_smudge=init_vol_smudge,
+                              data_path=data_path
                               )
 
     # Experiments
@@ -75,6 +69,8 @@ def run_experiment():
                            max_it=max_it,
                            results_folder=results_folder
                            )
+
+        results_folder = None
 
     logger.info("Start Postprocessing")
     # Postprocessing

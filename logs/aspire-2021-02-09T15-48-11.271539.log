@@ -1,5 +1,0 @@
-2021-02-09 15:48:13,398 CRITICAL sum() got multiple values for argument 'axis'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 7, in <module>
-    print(np.sum(x,x,axis=0))
-

@@ -1,0 +1,7 @@
+mrcfile~=1.2.0
+numpy~=1.16.0
+aspire~=0.6.2
+matplotlib~=3.3.4
+scipy~=1.4.0
+odl~=0.7.0
+pymanopt~=0.2.5

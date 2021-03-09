@@ -1,6 +1,0 @@
-2021-02-25 11:38:00,254 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
-2021-02-25 11:38:03,346 CRITICAL 
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 55, in <module>
-    assert zoomed_vol_init.shape == (65,)*3
-

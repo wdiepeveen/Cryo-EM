@@ -1,9 +1,0 @@
-2021-02-15 14:03:57,387 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
-2021-02-15 14:03:57,834 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
-2021-02-15 14:04:00,817 CRITICAL 
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 34, in <module>
-    prob = PrimalDualProblem(vols=vol, data=sim.images, rots=sim.rots)
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/problems/primal_dual_problem.py", line 62, in __init__
-    assert isinstance(data, Image)
-

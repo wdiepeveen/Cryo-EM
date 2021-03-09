@@ -1,6 +1,0 @@
-\begin{tabular}{c}
-\hline\hline
-SNR & N = 512 \hline
-1/2 & 2.7811298578633674 \hline
-\hline\hline
-\end{tabular}

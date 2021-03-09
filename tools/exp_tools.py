@@ -144,9 +144,15 @@ class Exp:
 
         rows, columns = values.shape
         if columns > 1:
-            begin_table = r"\begin{tabular}"+ "{}".format("{"+ "c|"*(columns-1) + "c" +"}") + "\n"
+            if side_headers is None:
+                begin_table = r"\begin{tabular}"+ "{}".format("{"+ "c|"*(columns-1) + "c" +"}") + "\n"
+            else:
+                begin_table = r"\begin{tabular}" + "{}".format("{" + "c|" * columns + "c" + "}") + "\n"
         else:
-            begin_table = r"\begin{tabular}{c}" + "\n"
+            if side_headers is None:
+                begin_table = r"\begin{tabular}{c}" + "\n"
+            else:
+                begin_table = r"\begin{tabular}{c|c}" + "\n"
 
         double_hline = r"\hline\hline" + "\n"
 
@@ -159,7 +165,7 @@ class Exp:
             for col in range(columns):
                 table_data += "{}".format(headers[col])
                 if col == columns - 1:
-                    table_data += r" \hline" + "\n"
+                    table_data += r" \\ \hline" + "\n"
                 else:
                     table_data += " & "
 
@@ -170,7 +176,10 @@ class Exp:
 
                 table_data += "{}".format(values[row,col])
                 if col == columns - 1:
-                    table_data += r" \hline" + "\n"
+                    if row != rows-1:
+                        table_data += r" \\ \hline" + "\n"
+                    else:
+                        table_data += r" \\" + "\n"
                 else:
                     table_data += " & "
 
@@ -180,16 +189,6 @@ class Exp:
 
         with open(os.path.join(self.results_folder, filename + ".txt"), "w") as input:
             input.write(table)
-
-
-    # TODO exp_save_table
-    # function exp_savetable(table::String, filename::String) where K
-    # 	global results_folder
-    #
-    # 	io = open(results_prefix * filename * ".txt","w")
-    # 	write(io,table)
-    # 	close(io)
-    # end
 
     def dbg(self, level, message):
 

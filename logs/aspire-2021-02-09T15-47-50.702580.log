@@ -1,7 +1,0 @@
-2021-02-09 15:47:52,960 CRITICAL 'int' object is not iterable
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 7, in <module>
-    print(ainner(x,x,axes=0))
-  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/utils/matrix.py", line 343, in ainner
-    axes = tuple(axes)  # Unrolls any generators, like `range`.
-

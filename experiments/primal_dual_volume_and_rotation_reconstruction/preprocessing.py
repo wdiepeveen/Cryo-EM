@@ -9,17 +9,14 @@ import mrcfile
 import numpy as np
 
 from scipy.ndimage import zoom
+from scipy.ndimage.filters import gaussian_filter
 
 from aspire.abinitio import CLSyncVoting
 from aspire.basis import FBBasis3D
 from aspire.operators import RadialCTFFilter
 from aspire.reconstruction import MeanEstimator
 from aspire.source.simulation import Simulation
-from aspire.utils.coor_trans import (
-    get_aligned_rotations,
-    get_rots_mse,
-    register_rotations,
-)
+
 from aspire.volume import Volume
 
 from noise.noise import SnrNoiseAdder
@@ -27,16 +24,13 @@ from tools.exp_tools import Exp
 
 logger = logging.getLogger(__name__)
 
-normalize_volume = True
-
 
 def preprocessing(exp=None,
                   num_imgs=None,
                   snr=1.,
-                  img_size_init=33,
                   img_size=65,
-                  data_path=None,
-                  save_gt=False
+                  init_vol_smudge=2.,
+                  data_path=None
                   ):
 
     if not isinstance(exp, Exp):
@@ -70,19 +64,13 @@ def preprocessing(exp=None,
     # The downsampling should be done by the internal function of Volume object in future.
     logger.info(
         f"Load 3D map and downsample 3D map to desired grids "
-        f"of {img_size_init} x {img_size_init} x {img_size_init}."
+        f"of {img_size} x {img_size} x {img_size}."
     )
     infile = mrcfile.open(data_path)
-    if normalize_volume:
-        vol_gt = infile.data.astype(dtype)
-        vol_gt = Volume(vol_gt/np.mean(np.abs(vol_gt)))
-    else:
-        vol_gt = Volume(infile.data.astype(dtype))
+    vol_gt = Volume(infile.data.astype(dtype))
 
-    # TODO normalize volumes?
-    # Downsample data to correct size
-    vols = vol_gt.downsample((img_size_init,) * 3)
-
+    # # Downsample data to correct size
+    # vols = vol_gt.downsample((img_size,) * 3)
 
     # Up- or downsample data for experiment
     if img_size >= vol_gt.shape[1]:
@@ -97,9 +85,8 @@ def preprocessing(exp=None,
     # Create a simulation object with specified filters and the downsampled 3D map
     logger.info("Use downsampled map to creat simulation object.")
 
-    sim = Simulation(L=img_size_init, n=num_imgs, vols=vols, unique_filters=filters, dtype=dtype)
+    sim = Simulation(L=img_size, n=num_imgs, vols=exp_vol_gt, unique_filters=filters, dtype=dtype)
     sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
-
 
 
     logger.info("Get true rotation angles generated randomly by the simulation object.")
@@ -111,42 +98,37 @@ def preprocessing(exp=None,
     orient_est.estimate_rotations()
     rots_est = orient_est.rotations
 
-    # Get register rotations after performing global alignment
-    Q_mat, flag = register_rotations(rots_est, rots_gt)
-    regrot = get_aligned_rotations(rots_est, Q_mat, flag)
-    mse_reg = get_rots_mse(regrot, rots_gt)
-    logger.info(
-        f"MSE deviation of the estimated rotations using register_rotations : {mse_reg}"
-    )
 
     # Start reconstruction
-
-    prob = sim
+    rec_img_size = 33
+    vol_gt_ds = vol_gt.downsample((rec_img_size,) * 3)
+    prob = Simulation(L=rec_img_size, n=num_imgs, vols=vol_gt_ds, unique_filters=filters, dtype=dtype)
+    prob.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
     prob.rots = rots_est
 
     # Specify the normal FB basis method for expending the 2D images
-    basis = FBBasis3D((img_size_init, img_size_init, img_size_init))
+    basis = FBBasis3D((rec_img_size, rec_img_size, rec_img_size))
 
     # Estimate the mean. This uses conjugate gradient on the normal equations for
     # the least-squares estimator of the mean volume. The mean volume is represented internally
     # using the basis object, but the output is in the form of an
     # L-by-L-by-L array.
-
     mean_estimator = MeanEstimator(prob, basis)
-    mean_est = mean_estimator.estimate()
 
-    zoomed_mean_est = Volume(zoom(mean_est.asnumpy()[0], img_size/img_size_init, order=1))
-    # Save to output file
-    exp.save_mrc("vol_result_preprocessing_{}snr_{}n".format(int(1/snr), num_imgs), zoomed_mean_est.asnumpy())
-    if save_gt:
-        exp.save_mrc("vol_exp_gt_{}p".format(img_size), exp_vol_gt.asnumpy())
+    if init_vol_smudge == 0.:
+        mean_est = mean_estimator.estimate()
+        vol_init = mean_est
+    else:
+        mean_est = mean_estimator.estimate(tol=1e-2)
+        vol_init = Volume(gaussian_filter(mean_est.asnumpy(), init_vol_smudge))
+
+    vol_init = Volume(zoom(vol_init.asnumpy()[0], img_size/rec_img_size, order=1))
 
     # Save real vol and save vol from real rots
     exp.save("simulation_data_{}snr_{}n".format(int(1/snr), num_imgs),
              ("sim", sim),
-             ("vol_init", zoomed_mean_est),  # (img_size,)*3
-             ("rot_init", rots_est),
-             # ("vol_gt", vol_gt),
+             ("vol_init", vol_init),  # (img_size,)*3
+             ("rots_init", rots_est),
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
              ("rots_gt", rots_gt)
              )

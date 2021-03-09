@@ -1,6 +1,0 @@
-2021-02-25 11:31:27,690 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
-2021-02-25 11:31:29,724 CRITICAL 'mean_prob'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 41, in <module>
-    old_sim = sim_data["mean_prob"]  # Simulation
-

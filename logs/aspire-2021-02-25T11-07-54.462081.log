@@ -1,7 +1,0 @@
-2021-02-25 11:07:54,835 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
-2021-02-25 11:07:55,635 DEBUG Loaded backend module://backend_interagg version unknown.
-2021-02-25 11:07:58,988 CRITICAL cannot import name 'exp_open'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test.py", line 11, in <module>
-    from tools.exp_tools import exp_open
-

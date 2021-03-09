@@ -1,7 +1,0 @@
-\begin{tabular}{c|c}
-\hline\hline
-SNR & N = 100 & N = 500 \hline
-1/2 & 2.7283983232920304 & 3.5318412280739473 \hline
-1/4 & 3.932341584402654 & 4.2361143363543 \hline
-\hline\hline
-\end{tabular}

@@ -1,6 +1,0 @@
-2021-02-25 11:49:08,755 INFO This script illustrates orientation refinement using lRCPA as primal-dual splitting method
-2021-02-25 11:49:11,136 CRITICAL save_mrc() missing 1 required positional argument: 'volume'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/joint_volume_and_rotations.py", line 56, in <module>
-    exp.save_mrc("initialization_65p_128n")
-

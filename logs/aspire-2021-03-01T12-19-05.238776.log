@@ -1,6 +1,0 @@
-2021-03-01 12:19:05,529 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
-2021-03-01 12:19:05,864 DEBUG Loaded backend module://backend_interagg version unknown.
-2021-03-01 12:19:06,093 INFO Results folder is results/pd_vol_rot_reconstruction_21-03-01_12-19-06
-2021-03-01 12:19:06,095 INFO Initialize simulation object and CTF filters.
-2021-03-01 12:19:06,096 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
-2021-03-01 12:19:06,910 INFO [   0.8152] volume loaded

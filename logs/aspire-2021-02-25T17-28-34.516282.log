@@ -1,9 +1,0 @@
-2021-02-25 17:28:34,789 INFO This script illustrates images at different SNR levels
-2021-02-25 17:28:34,791 INFO Initialize simulation object and CTF filters.
-2021-02-25 17:28:34,791 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
-2021-02-25 17:28:35,552 INFO Use downsampled map to creat simulation object.
-2021-02-25 17:28:37,451 CRITICAL images() missing 2 required positional arguments: 'start' and 'num'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/SNR_test.py", line 83, in <module>
-    im_var = np.var(sim.images().asnumpy(),axis=(1,2))
-
