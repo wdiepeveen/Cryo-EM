@@ -1,6 +1,0 @@
-\begin{tabular}{c|c}
-\hline\hline
-SNR & N = 512 (init) & N = 512 (ours) \hline
-1/2 & 0.08658490155453456 & 0.08658574572924307 \hline
-\hline\hline
-\end{tabular}

@@ -1,7 +1,6 @@
 import logging
 
 import numpy as np
-import spherical_functions as sf
 
 from aspire.image import Image
 from aspire.source import ImageSource
