@@ -124,6 +124,14 @@ class LiftingProblem:
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res
 
+    def eval_filters(self, im, start, num):
+        # TODO
+        return im
+
+    def im_backward(self, im, param):
+        # TODO
+        return im
+
 
 
 

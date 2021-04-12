@@ -12,7 +12,7 @@ class Integrator:
         return self._points.as_euler().astype(self.dtype)
 
     @angles.setter
-    def points(self, values):
+    def angles(self, values):
         self._points = R.from_euler("ZYZ", values)
 
     @property

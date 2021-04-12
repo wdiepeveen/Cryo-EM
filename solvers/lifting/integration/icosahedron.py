@@ -47,9 +47,9 @@ class IcosahedronIntegrator(Integrator):
         # Compute points
         self.angles = angles
 
-    def integrate(self, values):
+    def integrate(self, values, weights):
         assert values.shape[0] == 60
-
+        # TODO multiply with weights
         res = np.sum(values.asnumpy(), axis=0) / 60
 
         return res
