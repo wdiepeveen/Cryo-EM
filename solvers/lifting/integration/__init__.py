@@ -3,8 +3,11 @@ from scipy.spatial.transform import Rotation as R
 
 
 class Integrator:
-    def __init__(self, dtype=np.float32):
+    def __init__(self, dtype=np.float32, n=None, ell=None):
         self.dtype = dtype
+        assert n is not None
+        self.n = n
+        self.ell = ell
         self._points = None  # must be rotation matrices
 
     @property
@@ -31,7 +34,12 @@ class Integrator:
     def quaternions(self, values):
         self._points = R.from_quat(values).astype(self.dtype)
 
-    def integrate(self, values):
+    def coeffs2weights(self, coeffs):
         raise NotImplementedError(
-            "Subclasses should implement this"
+            "Subclasses should implement this and return an 2D Array object"
+        )
+
+    def weights2coeffs(self, weights):
+        raise NotImplementedError(
+            "Subclasses should implement this and return an 2D Array object"
         )

@@ -1,0 +1,29 @@
+2021-04-14 15:24:00,996 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-14 15:24:00,997 INFO Initialize simulation object and CTF filters.
+2021-04-14 15:24:00,997 INFO Load 3D map and downsample 3D map to desired grids of 5 x 5 x 5.
+2021-04-14 15:24:01,462 INFO Use downsampled map to creat simulation object.
+2021-04-14 15:24:01,479 DEBUG Corresponding type is already real float32.
+2021-04-14 15:24:01,479 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:24:01,479 INFO Trying NFFT backend finufft
+2021-04-14 15:24:01,484 INFO NFFT backend finufft usable.
+2021-04-14 15:24:01,484 INFO Trying NFFT backend cufinufft
+2021-04-14 15:24:01,485 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-14 15:24:01,485 INFO Trying NFFT backend pynfft
+2021-04-14 15:24:01,485 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-14 15:24:01,485 INFO Selected NFFT backend = finufft.
+2021-04-14 15:24:01,485 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:24:01,536 INFO Applying forward transformations in pipeline
+2021-04-14 15:24:01,536 INFO All forward transformations applied
+2021-04-14 15:24:01,536 INFO Loaded 12 images
+2021-04-14 15:24:01,588 DEBUG Corresponding type is already real float32.
+2021-04-14 15:24:01,589 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:24:01,589 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:24:03,529 CRITICAL 'float' object is not subscriptable
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 92, in <module>
+    print(problem.vol_adjoint_forward(Im))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/problem.py", line 148, in vol_adjoint_forward
+    im_g *= self.amplitude[np.newaxis, np.newaxis, np.newaxis].astype(self.dtype)
+

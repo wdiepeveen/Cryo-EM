@@ -1,0 +1,26 @@
+2021-04-14 15:10:24,149 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-14 15:10:24,150 INFO Initialize simulation object and CTF filters.
+2021-04-14 15:10:24,150 INFO Load 3D map and downsample 3D map to desired grids of 5 x 5 x 5.
+2021-04-14 15:10:24,604 INFO Use downsampled map to creat simulation object.
+2021-04-14 15:10:24,623 DEBUG Corresponding type is already real float32.
+2021-04-14 15:10:24,624 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:10:24,624 INFO Trying NFFT backend finufft
+2021-04-14 15:10:24,632 INFO NFFT backend finufft usable.
+2021-04-14 15:10:24,632 INFO Trying NFFT backend cufinufft
+2021-04-14 15:10:24,633 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-14 15:10:24,633 INFO Trying NFFT backend pynfft
+2021-04-14 15:10:24,633 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-14 15:10:24,633 INFO Selected NFFT backend = finufft.
+2021-04-14 15:10:24,633 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:10:24,683 INFO Applying forward transformations in pipeline
+2021-04-14 15:10:24,683 INFO All forward transformations applied
+2021-04-14 15:10:24,683 INFO Loaded 12 images
+2021-04-14 15:10:26,707 CRITICAL real() got an unexpected keyword argument 'dtype'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 82, in <module>
+    integrator = IcosahedronIntegrator(ell_max=2)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/integration/icosahedron.py", line 80, in __init__
+    self.b2w = np.real(UV,dtype=self.dtype).T
+

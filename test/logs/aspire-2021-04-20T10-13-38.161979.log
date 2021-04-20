@@ -1,0 +1,32 @@
+2021-04-20 10:13:39,200 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-20 10:13:39,200 INFO Initialize simulation object and CTF filters.
+2021-04-20 10:13:39,200 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-04-20 10:13:39,797 INFO Use downsampled map to creat simulation object.
+2021-04-20 10:13:39,859 DEBUG Corresponding type is already real float32.
+2021-04-20 10:13:39,859 DEBUG nufft passed real_type for signal, converting
+2021-04-20 10:13:39,859 INFO Trying NFFT backend finufft
+2021-04-20 10:13:39,864 INFO NFFT backend finufft usable.
+2021-04-20 10:13:39,864 INFO Trying NFFT backend cufinufft
+2021-04-20 10:13:39,865 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-20 10:13:39,865 INFO Trying NFFT backend pynfft
+2021-04-20 10:13:39,865 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-20 10:13:39,865 INFO Selected NFFT backend = finufft.
+2021-04-20 10:13:39,867 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 10:13:40,232 INFO Applying forward transformations in pipeline
+2021-04-20 10:13:40,232 INFO All forward transformations applied
+2021-04-20 10:13:40,232 INFO Loaded 60 images
+2021-04-20 10:13:48,868 DEBUG Corresponding type is already real float32.
+2021-04-20 10:13:48,868 DEBUG nufft passed real_type for signal, converting
+2021-04-20 10:13:48,869 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 10:13:48,903 DEBUG Corresponding type is already real float32.
+2021-04-20 10:13:48,903 DEBUG nufft passed real_type for signal, converting
+2021-04-20 10:13:48,905 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 10:13:50,699 CRITICAL could not broadcast input array from shape (84) into shape (60)
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 131, in <module>
+    dens_update.update()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/update/density/qo.py", line 49, in update
+    beta[i] = self.quadprog_solve_qp(Q, q, G=G, h=h, A=A, b=b)
+

@@ -1,0 +1,36 @@
+2021-04-20 09:32:09,707 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-20 09:32:09,707 INFO Initialize simulation object and CTF filters.
+2021-04-20 09:32:09,707 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-04-20 09:32:10,679 INFO Use downsampled map to creat simulation object.
+2021-04-20 09:32:10,775 DEBUG Corresponding type is already real float32.
+2021-04-20 09:32:10,775 DEBUG nufft passed real_type for signal, converting
+2021-04-20 09:32:10,775 INFO Trying NFFT backend finufft
+2021-04-20 09:32:10,800 INFO NFFT backend finufft usable.
+2021-04-20 09:32:10,800 INFO Trying NFFT backend cufinufft
+2021-04-20 09:32:10,801 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-20 09:32:10,801 INFO Trying NFFT backend pynfft
+2021-04-20 09:32:10,801 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-20 09:32:10,802 INFO Selected NFFT backend = finufft.
+2021-04-20 09:32:10,805 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 09:32:11,174 INFO Applying forward transformations in pipeline
+2021-04-20 09:32:11,174 INFO All forward transformations applied
+2021-04-20 09:32:11,174 INFO Loaded 60 images
+2021-04-20 09:32:14,515 CRITICAL expected square array_like input
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 102, in <module>
+    rots_prior=rand_rots,
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/problem.py", line 81, in __init__
+    self.rots_prior_integrands = self.integrands_rots_prior(rots_prior)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/problem.py", line 179, in integrands_rots_prior
+    cost = 1 / power * manifold.dist(rot_i, self.integrator.rots) ** power
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/pymanopt/manifolds/rotations.py", line 192, in dist
+    return self.norm(x, self.log(x, y))
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/pymanopt/manifolds/rotations.py", line 163, in log
+    return multiskew(np.real(logm(U)))
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/scipy/linalg/matfuncs.py", line 195, in logm
+    A = _asarray_square(A)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/scipy/linalg/matfuncs.py", line 54, in _asarray_square
+    raise ValueError('expected square array_like input')
+

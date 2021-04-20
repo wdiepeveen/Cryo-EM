@@ -1,0 +1,143 @@
+2021-04-14 15:15:49,544 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-14 15:15:49,545 INFO Initialize simulation object and CTF filters.
+2021-04-14 15:15:49,545 INFO Load 3D map and downsample 3D map to desired grids of 5 x 5 x 5.
+2021-04-14 15:15:50,026 INFO Use downsampled map to creat simulation object.
+2021-04-14 15:15:50,042 DEBUG Corresponding type is already real float32.
+2021-04-14 15:15:50,042 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:15:50,042 INFO Trying NFFT backend finufft
+2021-04-14 15:15:50,048 INFO NFFT backend finufft usable.
+2021-04-14 15:15:50,048 INFO Trying NFFT backend cufinufft
+2021-04-14 15:15:50,048 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-14 15:15:50,048 INFO Trying NFFT backend pynfft
+2021-04-14 15:15:50,048 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-14 15:15:50,048 INFO Selected NFFT backend = finufft.
+2021-04-14 15:15:50,049 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:15:50,099 INFO Applying forward transformations in pipeline
+2021-04-14 15:15:50,099 INFO All forward transformations applied
+2021-04-14 15:15:50,099 INFO Loaded 12 images
+2021-04-14 15:15:50,147 DEBUG Corresponding type is already real float32.
+2021-04-14 15:15:50,147 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:15:50,147 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:15:50,173 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,173 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,200 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,201 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,214 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,214 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,228 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,228 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,243 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,243 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,260 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,260 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,279 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,279 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,296 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,296 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,314 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,315 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,333 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,334 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,353 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,354 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,373 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,373 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,394 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,394 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,408 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,408 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,422 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,422 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,437 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,437 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,451 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,451 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,465 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,465 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,479 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,479 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,493 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,494 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,509 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,509 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,522 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,523 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,537 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,537 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,552 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,552 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,568 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,568 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,583 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,583 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,597 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,597 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,611 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,612 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,626 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,627 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,640 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,640 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,651 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,652 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,664 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,664 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,677 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,677 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,690 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,690 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,702 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,703 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,716 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,716 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,729 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,729 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,741 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,742 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,756 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,756 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,771 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,771 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,785 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,785 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,800 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,800 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,813 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,813 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,827 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,827 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,841 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,842 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,855 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,855 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,868 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,868 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,884 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,884 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,899 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,899 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,913 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,914 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,929 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,929 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,943 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,943 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,957 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,957 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,972 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,973 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:50,986 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:50,987 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,001 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:51,001 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,014 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:51,014 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,025 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:51,025 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,035 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:51,035 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,046 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-14 15:15:51,046 DEBUG Corresponding type is already complex complex128.
+2021-04-14 15:15:51,054 INFO Determined adjoint mappings. Shape = (5, 5, 5)

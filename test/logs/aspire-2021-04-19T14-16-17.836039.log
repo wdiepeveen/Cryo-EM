@@ -1,0 +1,179 @@
+2021-04-19 14:16:18,983 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-19 14:16:18,983 INFO Initialize simulation object and CTF filters.
+2021-04-19 14:16:18,983 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-04-19 14:16:19,583 INFO Use downsampled map to creat simulation object.
+2021-04-19 14:16:19,641 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:19,641 DEBUG nufft passed real_type for signal, converting
+2021-04-19 14:16:19,641 INFO Trying NFFT backend finufft
+2021-04-19 14:16:19,647 INFO NFFT backend finufft usable.
+2021-04-19 14:16:19,647 INFO Trying NFFT backend cufinufft
+2021-04-19 14:16:19,647 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-19 14:16:19,647 INFO Trying NFFT backend pynfft
+2021-04-19 14:16:19,647 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-19 14:16:19,648 INFO Selected NFFT backend = finufft.
+2021-04-19 14:16:19,650 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:19,971 INFO Applying forward transformations in pipeline
+2021-04-19 14:16:19,971 INFO All forward transformations applied
+2021-04-19 14:16:19,971 INFO Loaded 60 images
+2021-04-19 14:16:19,973 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:19,973 DEBUG nufft passed real_type for signal, converting
+2021-04-19 14:16:19,974 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:20,004 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:20,004 DEBUG nufft passed real_type for signal, converting
+2021-04-19 14:16:20,006 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:20,033 INFO Expanding 3D map in a spatial-domain Fourier–Bessel basis using the direct method.
+2021-04-19 14:16:32,597 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,599 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,624 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,627 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,649 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,652 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,672 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,674 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,693 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,696 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,715 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,717 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,737 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,739 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,759 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,761 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,781 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,784 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,803 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,805 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,824 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,826 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,846 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,848 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,867 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,869 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,888 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,890 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,910 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,912 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,931 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,933 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,954 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,956 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,976 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:32,978 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:32,998 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,000 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,019 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,022 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,045 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,047 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,073 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,076 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,099 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,102 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,128 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,132 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,153 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,155 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,182 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,185 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,211 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,214 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,240 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,242 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,267 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,270 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,294 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,297 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,322 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,324 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,349 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,351 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,371 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,373 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,398 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,401 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,420 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,422 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,441 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,443 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,462 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,464 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,483 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,485 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,504 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,507 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,526 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,528 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,546 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,549 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,568 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,570 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,589 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,591 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,613 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,616 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,638 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,640 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,667 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,669 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,696 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,699 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,724 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,726 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,750 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,753 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,777 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,780 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,804 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,806 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,830 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,833 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,857 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,859 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,884 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,886 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,907 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,911 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,929 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,931 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,951 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,953 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,972 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,974 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:33,993 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:33,995 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:34,014 DEBUG Corresponding type is already complex complex64.
+2021-04-19 14:16:34,016 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:34,031 INFO Determined adjoint mappings. Shape = (33, 33, 33)
+2021-04-19 14:16:35,425 INFO Determined adjoint mappings. Shape = (9269,)
+2021-04-19 14:16:35,425 INFO Computing kernel
+2021-04-19 14:16:35,429 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:35,429 DEBUG anufft passed real_type for signal, converting
+2021-04-19 14:16:35,431 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:35,500 INFO Computing non-centered Fourier Transform
+2021-04-19 14:16:35,510 INFO Computing Preconditioner kernel
+2021-04-19 14:16:35,511 INFO Circularizing kernel
+2021-04-19 14:16:35,522 INFO Circularizing dimension 0
+2021-04-19 14:16:35,523 INFO Circularizing dimension 1
+2021-04-19 14:16:35,523 INFO Circularizing dimension 2
+2021-04-19 14:16:46,008 INFO Delta 1.811547190300189e-05 (target 2.242046002720599e-05)
+2021-04-19 14:16:47,541 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:47,542 DEBUG nufft passed real_type for signal, converting
+2021-04-19 14:16:47,543 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:47,776 INFO Applying forward transformations in pipeline
+2021-04-19 14:16:47,776 INFO All forward transformations applied
+2021-04-19 14:16:47,776 INFO Loaded 60 images
+2021-04-19 14:16:47,796 WARNING anufft passed inconsistent dtypes. fourier_pts: float32 forcing precision of signal data: complex128.
+2021-04-19 14:16:47,797 DEBUG Corresponding type is already complex complex128.
+2021-04-19 14:16:49,119 INFO Determined adjoint mappings. Shape = (9269,)
+2021-04-19 14:16:49,120 INFO Computing kernel
+2021-04-19 14:16:49,126 DEBUG Corresponding type is already real float32.
+2021-04-19 14:16:49,126 DEBUG anufft passed real_type for signal, converting
+2021-04-19 14:16:49,128 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-19 14:16:49,185 INFO Computing non-centered Fourier Transform
+2021-04-19 14:16:49,197 INFO Computing Preconditioner kernel
+2021-04-19 14:16:49,197 INFO Circularizing kernel
+2021-04-19 14:16:49,209 INFO Circularizing dimension 0
+2021-04-19 14:16:49,210 INFO Circularizing dimension 1
+2021-04-19 14:16:49,210 INFO Circularizing dimension 2
+2021-04-19 14:16:59,123 INFO Delta 1.858064570114948e-05 (target 2.3117207092582248e-05)

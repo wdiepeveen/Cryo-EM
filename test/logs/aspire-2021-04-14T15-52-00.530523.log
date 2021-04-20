@@ -1,0 +1,34 @@
+2021-04-14 15:52:01,534 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-14 15:52:01,534 INFO Initialize simulation object and CTF filters.
+2021-04-14 15:52:01,534 INFO Load 3D map and downsample 3D map to desired grids of 5 x 5 x 5.
+2021-04-14 15:52:02,016 INFO Use downsampled map to creat simulation object.
+2021-04-14 15:52:02,032 DEBUG Corresponding type is already real float32.
+2021-04-14 15:52:02,032 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:52:02,032 INFO Trying NFFT backend finufft
+2021-04-14 15:52:02,038 INFO NFFT backend finufft usable.
+2021-04-14 15:52:02,038 INFO Trying NFFT backend cufinufft
+2021-04-14 15:52:02,038 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-14 15:52:02,038 INFO Trying NFFT backend pynfft
+2021-04-14 15:52:02,038 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-14 15:52:02,038 INFO Selected NFFT backend = finufft.
+2021-04-14 15:52:02,039 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:52:02,089 INFO Applying forward transformations in pipeline
+2021-04-14 15:52:02,089 INFO All forward transformations applied
+2021-04-14 15:52:02,089 INFO Loaded 12 images
+2021-04-14 15:52:02,138 DEBUG Corresponding type is already real float32.
+2021-04-14 15:52:02,138 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:52:02,138 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:52:02,152 DEBUG Corresponding type is already real float32.
+2021-04-14 15:52:02,152 DEBUG nufft passed real_type for signal, converting
+2021-04-14 15:52:02,152 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-14 15:52:04,039 CRITICAL einstein sum subscripts string contains too many subscripts for operand 1
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 93, in <module>
+    print(problem.dens_adjoint_forward(Im))
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/problem.py", line 185, in dens_adjoint_forward
+    ex = np.einsum("ijk,ljk->il", integrands, im)  # TODO scale down with L**2?
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/core/einsumfunc.py", line 1346, in einsum
+    return c_einsum(*operands, **kwargs)
+

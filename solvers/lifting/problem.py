@@ -2,9 +2,9 @@ import logging
 
 import numpy as np
 
+from pymanopt.manifolds import Rotations
+
 from aspire.image import Image
-from aspire.source import ImageSource
-from aspire.utils.random import rand, randi
 from aspire.volume import Volume
 
 from solvers.lifting.integration import Integrator
@@ -17,23 +17,23 @@ class LiftingProblem:
             self,
             imgs=None,
             vol=None,
-            unique_filters=None,
-            filter_indices=None,
-            offsets=None,
-            amplitudes=None,
+            filter=None,
+            # offsets=None,
+            amplitude=None,
             dtype=np.float32,
             integrator=None,
-            lmax=5,
             rots_prior=None,
             seed=0,
             # memory=None, TODO Look into this once we get to larger data sets - use .npy files to save and load
     ):
         """
-        A Cryo-EM primal-dual problem
+        A Cryo-EM lifting problem
         Other than the base class attributes, it has:
         :param imgs: A n-by-L-by-L array of noisy projection images (should not be confused with the .image objects)
         :param rots: A n-by-3-by-3 array of rotation matrices
         """
+
+        self.dtype = dtype
 
         if imgs is None:
             raise RuntimeError("No data provided")
@@ -55,40 +55,54 @@ class LiftingProblem:
             )
 
         self.L = imgs.shape[1]
-        self.n = imgs.shape[0]
+        self.N = imgs.shape[0]
         self.dtype = np.dtype(dtype)
 
         self.seed = seed
 
-        self.unique_filters = unique_filters
-
-        # Create filter indices and fill the metadata based on unique filters
-        if unique_filters:
-            if filter_indices is None:
-                filter_indices = np.zeros(self.n)
-            self.filter_indices = filter_indices
+        self.filter = filter
 
         # TODO we want to do this ourselves in the end
-        if offsets is None:
-            offsets = np.zeros((2, self.n)).T
+        # if offsets is None:
+        #     offsets = np.zeros((2, self.n)).T
+        #
+        # self.offsets = offsets
 
-        self.offsets = offsets
+        if amplitude is None:
+            amplitude = 1.
 
-        if amplitudes is None:
-            amplitudes = np.ones(self.n)
-
-        self.amplitudes = amplitudes
+        self.amplitude = amplitude
 
         if not isinstance(integrator, Integrator):
             raise RuntimeError("integrator is not an Integrator object")
         self.integrator = integrator
 
-        self.rots_dcoef = None  # TODO make function that provides initial guess
+        self.n = self.integrator.n
+        self.ell = self.integrator.ell
 
         if rots_prior is not None:
-            self.rots_prior = rots_prior
+            self.rots_prior_integrands = self.integrands_rots_prior(rots_prior)
+        else:
+            self.rots_prior_integrands = None
 
-    def vol_forward(self, vol, rots, start=0, num=np.inf):
+        rot_dcoef = np.eye(1, self.integrator.ell)[0]
+        self.rots_dcoef = np.repeat(rot_dcoef[np.newaxis, :], self.N, axis=0)
+
+    def integrands_forward(self):
+        # TODO self.vol?
+        # assert vol.n_vols == 1, "vol_forward expects a single volume, not a stack"
+
+        # if vol.dtype != self.dtype:
+        #     logger.warning(f"Volume.dtype {vol.dtype} inconsistent with {self.dtype}")
+
+        im = self.vol.project(0, self.integrator.rots)
+        im = self.eval_filter(im)  # Here we only use 1 filter
+        # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
+        im *= self.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude
+
+        return im
+
+    def forward(self):
         """
         Apply forward image model to volume
         :param vol: A volume instance.
@@ -97,47 +111,76 @@ class LiftingProblem:
         :return: The images obtained from volume by projecting, applying CTFs, translating, and multiplying by the
             amplitude.
         """
-        all_idx = np.arange(start, min(start + num, self.n))
-        assert vol.n_vols == 1, "vol_forward expects a single volume, not a stack"
 
-        if vol.dtype != self.dtype:
-            logger.warning(f"Volume.dtype {vol.dtype} inconsistent with {self.dtype}")
+        weights = self.integrator.coeffs2weights(self.rots_dcoef)
+        integrands = self.integrands_forward().asnumpy()
 
-        im = vol.project(0, rots[all_idx, :, :])
-        im = self.eval_filters(im, start, num)
-        im = im.shift(self.offsets[all_idx, :])
-        im *= self.amplitudes[all_idx, np.newaxis, np.newaxis]
-        return im
+        im = np.einsum("ij,jkl->ikl", weights, integrands).astype(self.dtype)
 
-    def im_adjoint_forward(self, im):
+        # TODO use forward operator result from density iteration
+        return Image(im)
+
+    def adjoint_forward(self, im):
         """
-        Apply adjoint mapping to source
-
-        :return: The adjoint mapping applied to the images, averaged over the whole dataset and expressed
-                    as coefficients of `basis`.
+        Apply adjoint mapping to set of images
+        :param im: An Image instance to which we wish to apply the adjoint of the forward model.
+        :param start: Start index of image to consider
+        :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
+
         res = np.zeros((self.L, self.L, self.L), dtype=self.dtype)
 
-        batch_mean_b = self.im_backward(im, 0) / self.n
-        res += batch_mean_b.astype(self.dtype)
+        weights = self.integrator.coeffs2weights(self.rots_dcoef).T
+
+        for g in range(self.n):
+            weight_g = weights[g]
+            im_g = im * weight_g[:, np.newaxis, np.newaxis]
+            im_g *= self.amplitude
+            # im = im.shift(-self.offsets[all_idx, :])
+            im_g = self.eval_filter(im_g)
+
+            rot = self.integrator.rots[g]
+            rots = np.repeat(rot[np.newaxis, :, :], self.N, axis=0)
+            integrand = im_g.backproject(rots)[0]
+
+            res += integrand.astype(self.dtype)
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res
 
-    def eval_filters(self, im, start, num):
-        # TODO
+    def eval_filter(self, im_orig):
+        im = im_orig.copy()
+        im = Image(im.asnumpy()).filter(self.filter)
+
         return im
 
-    def im_backward(self, im, param):
-        # TODO
-        return im
+    # def dens_forward(self, coeff):
+    #     weights = self.integrator.coeffs2weights(coeff)
+    #     integrands = self.integrands_vol_forward(self.vol).asnumpy()
+    #
+    #     im = np.einsum("ij,jkl->ikl", weights, integrands).astype(self.dtype)
+    #
+    #     return Image(im)
+    #
+    # def dens_adjoint_forward(self, im):
+    #     integrands = self.integrands_vol_forward(self.vol).asnumpy()
+    #
+    #     weights = np.einsum("ijk,ljk->il", im.asnumpy(), integrands)  # TODO scale down with L**2?
+    #     coeffs = self.integrator.weights2coeffs(weights)
+    #
+    #     return coeffs
 
+    def integrands_rots_prior(self, rots, power=2):
+        # TODO test
+        manifold = Rotations(3)
 
+        costs = np.zeros((self.N, self.n))
 
+        for i in range(self.N):
+            rot_i = rots[i]
+            for g in range(self.n):
+                # rots_i = np.repeat(rot_i[np.newaxis, :, :], self.n, axis=0)  # TODO do we need this?
+                cost = 1 / power * manifold.dist(rot_i, self.integrator.rots[g]) ** power
+                costs[i, g] = cost
 
-
-
-
-
-
-
+        return costs

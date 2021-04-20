@@ -1,0 +1,11 @@
+2021-04-20 11:30:45,679 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-20 11:30:45,680 INFO Initialize simulation object and CTF filters.
+2021-04-20 11:30:45,680 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-04-20 11:30:46,236 INFO Use downsampled map to creat simulation object.
+2021-04-20 11:30:48,231 CRITICAL local variable 'index' referenced before assignment
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 84, in <module>
+    integrator = IcosahedronIntegrator(ell_max=1)
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/integration/icosahedron.py", line 66, in __init__
+    print(index)
+

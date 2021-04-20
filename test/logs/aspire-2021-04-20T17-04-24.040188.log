@@ -1,0 +1,25 @@
+2021-04-20 17:04:25,092 INFO This script illustrates orientation estimation using synchronization matrix and voting method
+2021-04-20 17:04:25,092 INFO Initialize simulation object and CTF filters.
+2021-04-20 17:04:25,092 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-04-20 17:04:25,644 INFO Use downsampled map to creat simulation object.
+2021-04-20 17:04:25,701 DEBUG Corresponding type is already real float32.
+2021-04-20 17:04:25,701 DEBUG nufft passed real_type for signal, converting
+2021-04-20 17:04:25,701 INFO Trying NFFT backend finufft
+2021-04-20 17:04:25,707 INFO NFFT backend finufft usable.
+2021-04-20 17:04:25,707 INFO Trying NFFT backend cufinufft
+2021-04-20 17:04:25,707 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-04-20 17:04:25,708 INFO Trying NFFT backend pynfft
+2021-04-20 17:04:25,708 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-04-20 17:04:25,708 INFO Selected NFFT backend = finufft.
+2021-04-20 17:04:25,710 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 17:04:26,039 INFO Applying forward transformations in pipeline
+2021-04-20 17:04:26,039 INFO All forward transformations applied
+2021-04-20 17:04:26,039 INFO Loaded 60 images
+2021-04-20 17:04:26,041 DEBUG Corresponding type is already real float32.
+2021-04-20 17:04:26,042 DEBUG nufft passed real_type for signal, converting
+2021-04-20 17:04:26,043 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-04-20 17:04:26,076 DEBUG Corresponding type is already real float32.
+2021-04-20 17:04:26,077 DEBUG nufft passed real_type for signal, converting
+2021-04-20 17:04:26,078 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
