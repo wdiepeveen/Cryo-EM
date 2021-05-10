@@ -46,7 +46,7 @@ dtype = np.float32
 img_size = 33
 
 # Set the total number of images generated from the 3D map
-num_imgs= 128
+num_imgs= 512
 
 exp = Exp()
 exp.begin(prefix="data_simulation", postfix="{}p_{}n".format(img_size,num_imgs))
@@ -80,7 +80,7 @@ vols = vol_gt.downsample((img_size,) * 3)
 
 # Create a simulation object with specified filters and the downsampled 3D map
 logger.info("Use downsampled map to creat simulation object.")
-snr = 1./64
+snr = 1./2
 sim = Simulation(L=img_size, n=num_imgs, vols=vols, unique_filters=filters, dtype=dtype)
 sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
 print(sim.noise_adder is None)
@@ -99,7 +99,7 @@ rots_gt = sim.rots
 
 # Initialize an orientation estimation object and perform view angle estimation
 logger.info("Estimate rotation angles using synchronization matrix and voting method.")
-orient_est = CLSyncVoting(sim, n_theta=36)
+orient_est = CLSyncVoting(sim, n_theta=72)
 orient_est.estimate_rotations()
 rots_est = orient_est.rotations
 
@@ -125,9 +125,11 @@ basis = FBBasis3D((img_size, img_size, img_size))
 # L-by-L-by-L array.
 
 mean_estimator_up = MeanEstimator(prob, basis)
-mean_est_up = mean_estimator_up.estimate(tol=1e-2)
+mean_est_up = mean_estimator_up.estimate()  # tol=1e-2
 
-filtered_mean_est = gaussian_filter(mean_est_up.asnumpy(), 5)
+filtered_mean_est = gaussian_filter(mean_est_up.asnumpy(), 2)
+
+# continue cg starting at filtered_mean_est
 
 # Save to output file
 exp.save_mrc("reconstructed70SRibosome_vol_{}p".format(img_size), mean_est_up.asnumpy())

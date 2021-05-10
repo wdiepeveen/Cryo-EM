@@ -1,4 +1,0 @@
-2021-04-14 14:01:49,373 INFO This script illustrates orientation estimation using synchronization matrix and voting method
-2021-04-14 14:01:49,373 INFO Initialize simulation object and CTF filters.
-2021-04-14 14:01:49,373 INFO Load 3D map and downsample 3D map to desired grids of 5 x 5 x 5.
-2021-04-14 14:01:49,815 INFO Use downsampled map to creat simulation object.

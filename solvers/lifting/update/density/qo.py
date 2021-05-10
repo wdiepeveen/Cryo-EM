@@ -21,11 +21,11 @@ def quadratic_optimisation_update(problem, sq_sigma=1., reg1=1., reg2=1.):
 
     dtype = problem.dtype
 
-    ell = problem.integrator.ell
-    n = problem.integrator.n
+    ell = problem.ell
+    n = problem.n
 
     L = problem.L
-    N = problem.n
+    N = problem.N
 
     # Compute Q:
     integrands = problem.integrands_forward().asnumpy()
@@ -36,9 +36,9 @@ def quadratic_optimisation_update(problem, sq_sigma=1., reg1=1., reg2=1.):
     # Compute q:
     integrands = problem.integrands_forward().asnumpy()
     im = problem.imgs.asnumpy()
-    qs = np.einsum("ijk,ljk->il", im, integrands) / (sq_sigma * L**2)
-    if problem.rots_prior_integrands is not None:
-        qs += reg2 * problem.rots_prior_integrands
+    qs = - np.einsum("ijk,ljk->il", im, integrands) / (sq_sigma * L**2)
+    # if problem.rots_prior_integrands is not None:
+    #     qs += reg2 * problem.rots_prior_integrands
 
     qq = qs @ problem.integrator.b2w.T
 

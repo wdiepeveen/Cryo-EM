@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 
-from solvers.lifting.problem import LiftingProblem
+from solvers.lifting.problems.inside_norm import LiftingProblem
 
 logger = logging.getLogger(__name__)
 
@@ -37,34 +37,34 @@ class LiftingSolver:
 
     def solve(self, return_result=True):
         k = 1
-        # TODO redefince error
+        # TODO redefince error: change in volume/volume norm
         running_error = 1.
+        cost = self.get_cost(self.problem)
+        self.cost.append(cost)
+
+        fvol = np.zeros((self.problem.L, self.problem.L, self.problem.L), dtype=self.problem.dtype)
+
+        logger.info(f"Starting solver | Cost = {cost}")
         while running_error > self.tol and k <= self.max_it:
             logger.info(f"================================ Iteration {k} ================================")
             logger.info(f"Iteration {k} | Orientation Density update")
-            self.dens_update()
-            # TODO compute cost in between as well
+
+            self.dens_update(self.problem)
+
+            cost = self.get_cost(self.problem)
+            self.cost.append(cost)
+            logger.info(f"Iteration {k} | Intermediate Cost = {cost}")
             logger.info(f"Iteration {k} | Volume update")
             if k==1:
-                fvol = self.vol_update(maxiter=5)  # TODO also make it work that we can use the result from the previous iteration + make sure that we find something so that we won't optimize too long
+                fvol = self.vol_update(self.problem)
             else:
-                fvol = self.vol_update(x0=fvol, maxiter=5)
+                fvol = self.vol_update(self.problem, x0=fvol)
 
             # update info
             cost = self.get_cost(self.problem)
             self.cost.append(cost)
 
-            # # TODO is below still relevant?
-            # error = np.sqrt(self.error_u[k - 1] ** 2 + self.error_g[k - 1] ** 2)
-            # self.error_tot.append(error)
-            # self.relerror_tot.append(error / self.error_tot[0])
-            # running_error = self.relerror_tot[-1]
-            # TODO we can look into change as criterion for convergence?
-
-
             logger.info(f"Iteration {k} | Cost = {cost}")
-            # logger.info(f"Iteration {k} | Cost = {cost} | Relative Error = {running_error}")
-            # logger.info(f"Iteration {k} | Relative Error u = {self.relerror_u[k-1]} | Relative Error g = {self.relerror_g[k-1]}")
             k += 1
 
         if return_result:

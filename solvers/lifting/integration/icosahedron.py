@@ -13,7 +13,7 @@ class IcosahedronIntegrator(Integrator):
                  dtype=np.float32,
                  ):
 
-        super().__init__(dtype=dtype, n=60, ell=int((2 * ell_max + 1) * (2 * ell_max + 2) * (2 * ell_max + 3) / 6))
+        super().__init__(dtype=dtype, n=60, ell=int((2 * ell_max + 1) * (2 * ell_max + 2) * (2 * ell_max + 3) / 6), t=5)
 
         # Compute Euler angles
         angles = np.zeros((60, 3))

@@ -3,16 +3,22 @@ from scipy.spatial.transform import Rotation as R
 
 
 class Integrator:
-    def __init__(self, dtype=np.float32, n=None, ell=None):
+    def __init__(self, dtype=np.float32, n=None, ell=None, t=None):
         self.dtype = dtype
         assert n is not None
         self.n = n
+        if not t == np.inf:
+            assert ell <= int((2 * t + 1) * (2 * t + 2) * (2 * t + 3) / 6)
+
         self.ell = ell
+        self.t = t
+
         self._points = None  # must be rotation matrices
+        self.b2w = None
 
     @property
     def angles(self):
-        return self._points.as_euler().astype(self.dtype)
+        return self._points.as_euler("ZYZ").astype(self.dtype)
 
     @angles.setter
     def angles(self, values):
@@ -32,7 +38,7 @@ class Integrator:
 
     @quaternions.setter
     def quaternions(self, values):
-        self._points = R.from_quat(values).astype(self.dtype)
+        self._points = R.from_quat(values)
 
     def coeffs2weights(self, coeffs):
         raise NotImplementedError(

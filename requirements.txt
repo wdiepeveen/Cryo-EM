@@ -8,3 +8,4 @@ pymanopt~=0.2.5
 spherical~=1.0.8
 wheel~=0.36.2
 quadprog~=0.1.8
+osqp~=0.6.2.post0

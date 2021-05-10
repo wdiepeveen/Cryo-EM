@@ -3,28 +3,16 @@ import os
 
 import mrcfile
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.ndimage.filters import gaussian_filter
 
-from aspire.abinitio import CLSyncVoting
-from aspire.basis import FBBasis3D
-from aspire.image.xform import NoiseAdder
-from aspire.operators import RadialCTFFilter,ScalarFilter
-from aspire.reconstruction import MeanEstimator
+from aspire.operators import RadialCTFFilter
 from aspire.source.simulation import Simulation
-from aspire.utils.coor_trans import (
-    get_aligned_rotations,
-    get_rots_mse,
-    register_rotations,
-)
 from aspire.volume import Volume
 
 from noise.noise import SnrNoiseAdder
-from tools.exp_tools import Exp
 
 from solvers.lifting.integration.icosahedron import IcosahedronIntegrator
-from solvers.lifting.problem import LiftingProblem
-from solvers.lifting.update.volume.cg import LeastSquaresCGUpdate
+from solvers.lifting.problems.inside_norm import LiftingProblem
+# from solvers.lifting.update.volume.cg import LeastSquaresCGUpdate
 from solvers.lifting.update.density.qo import quadratic_optimisation_update
 
 logger = logging.getLogger(__name__)
