@@ -28,7 +28,7 @@ class PrimalDualOutsideNormLiftingProblem(LiftingProblem):
                          integrator=integrator,
                          seed=seed)
 
-        self.dual_rots_dcoef = np.zeros(self.N, self.n)
+        self.dual_rots_dcoef = np.zeros((self.N, self.n+1))
 
     def forward(self):
         """

@@ -2,7 +2,7 @@ import os
 import logging
 
 from experiments.lifting.preprocessing import preprocessing
-from experiments.lifting.experiment_on import experiment
+from experiments.lifting.experiment_pdon import experiment
 from experiments.lifting.postprocessing import postprocessing
 
 from tools.exp_tools import Exp

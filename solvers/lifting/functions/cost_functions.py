@@ -2,6 +2,7 @@ import numpy as np
 
 from solvers.lifting.problems import LiftingProblem
 from solvers.lifting.problems.outside_norm import OutsideNormLiftingProblem
+from solvers.lifting.problems.primal_dual_outside_norm import PrimalDualOutsideNormLiftingProblem
 
 
 def l2_data_fidelity(problem):
@@ -15,7 +16,7 @@ def l2_data_fidelity(problem):
 
 
 def l2_data_fidelity_on(problem):
-    assert isinstance(problem, OutsideNormLiftingProblem)
+    assert isinstance(problem, OutsideNormLiftingProblem) or isinstance(problem, PrimalDualOutsideNormLiftingProblem)
 
     # Compute res
     integrands = problem.forward().asnumpy()

@@ -28,6 +28,7 @@ class LiftingSolver:
 
         self.max_it = max_it
         self.tol = tol
+        self.k = 1
 
         self.cost = []
         # TODO do we want error here or just change? If so, rescaled? If so, How?
@@ -36,36 +37,38 @@ class LiftingSolver:
         self.dens_update = dens_update
 
     def solve(self, return_result=True):
-        k = 1
+        self.k = 1
         # TODO redefince error: change in volume/volume norm
         running_error = 1.
         cost = self.get_cost(self.problem)
         self.cost.append(cost)
 
-        fvol = np.zeros((self.problem.L, self.problem.L, self.problem.L), dtype=self.problem.dtype)
+        # fvol = np.zeros((self.problem.L, self.problem.L, self.problem.L), dtype=self.problem.dtype)
 
         logger.info(f"Starting solver | Cost = {cost}")
-        while running_error > self.tol and k <= self.max_it:
-            logger.info(f"================================ Iteration {k} ================================")
-            logger.info(f"Iteration {k} | Orientation Density update")
+        while running_error > self.tol and self.k <= self.max_it:
+            logger.info(f"================================ Iteration {self.k} ================================")
+            logger.info(f"Iteration {self.k} | Orientation Density update")
 
             self.dens_update(self.problem)
 
             cost = self.get_cost(self.problem)
             self.cost.append(cost)
-            logger.info(f"Iteration {k} | Intermediate Cost = {cost}")
-            logger.info(f"Iteration {k} | Volume update")
-            if k==1:
-                fvol = self.vol_update(self.problem)
-            else:
-                fvol = self.vol_update(self.problem, x0=fvol)
+            logger.info(f"Iteration {self.k} | Intermediate Cost = {cost}")
+            logger.info(f"Iteration {self.k} | Volume update")
+            self.vol_update(self.problem)
+
+            # if k==1:
+            #     fvol = self.vol_update(self.problem)
+            # else:
+            #     fvol = self.vol_update(self.problem, x0=fvol)
 
             # update info
             cost = self.get_cost(self.problem)
             self.cost.append(cost)
 
-            logger.info(f"Iteration {k} | Cost = {cost}")
-            k += 1
+            logger.info(f"Iteration {self.k} | Cost = {cost}")
+            self.k += 1
 
         if return_result:
             return self.problem.vol

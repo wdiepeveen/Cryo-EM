@@ -9,9 +9,9 @@ from noise.noise import SnrNoiseAdder
 from solvers.lifting.integration.hexacosichoron import HexacosichoronIntegrator
 from solvers.lifting.integration.sd1821 import SphDes1821Integrator
 from solvers.lifting.integration.almost_true_rots import AlmostTrueRotsIntegrator
-from solvers.lifting.update.density.qo_on import quadratic_optimisation_update
+from solvers.lifting.update.density.qo_pdon import primal_dual_quadratic_optimisation_update
 from solvers.lifting.update.volume.exact_on import exact_update
-from solvers.lifting.problems.outside_norm import OutsideNormLiftingProblem
+from solvers.lifting.problems.primal_dual_outside_norm import PrimalDualOutsideNormLiftingProblem
 from solvers.lifting.solver import LiftingSolver
 
 logger = logging.getLogger(__name__)
@@ -61,18 +61,18 @@ def experiment(exp=None,
     # integrator = TrueRotsIntegrator(rots=rots_gt)
     # integrator = UniformIntegrator(ell_max=4, n=num_imgs)
     # integrator = IcosahedronIntegrator(ell_max=3)
-    # integrator = SphDes1821Integrator(ell_max=8)
+    integrator = SphDes1821Integrator(ell_max=15)
     # integrator = HexacosichoronIntegrator(ell_max=5)
-    integrator = AlmostTrueRotsIntegrator(ell_max=18, rots=rots_gt)
+    # integrator = AlmostTrueRotsIntegrator(ell_max=18, rots=rots_gt)
 
-    prob = OutsideNormLiftingProblem(imgs=imgs,
-                                     vol=vol_gt,  # TODO get GT out of here for actual experiments
-                                     filter=sim.unique_filters[0],
-                                     integrator=integrator
-                                     )
+    prob = PrimalDualOutsideNormLiftingProblem(imgs=imgs,
+                                               vol=vol_gt,  # TODO get GT out of here for actual experiments
+                                               filter=sim.unique_filters[0],
+                                               integrator=integrator
+                                               )
 
     vol_reg = 1e10
-    dens_reg = 1e-8  # was 0.001
+    dens_reg = 1e-5  # was 0.001
 
     # basis = FBBasis3D((prob.L, prob.L, prob.L))
 
@@ -93,12 +93,11 @@ def experiment(exp=None,
 
     def vol_update(problem):
         exact_update(problem, sq_sigma=sq_sigma, regularizer=vol_reg)
-        return None
 
     def dens_update(problem):
-        # quadratic_optimisation_update(problem, sq_sigma=sq_sigma, regularizer=dens_reg)
+        primal_dual_quadratic_optimisation_update(problem, sq_sigma=sq_sigma, regularizer=dens_reg)
         # problem.rots_dcoef = np.eye(problem.ell, problem.n, dtype=problem.dtype)
-        problem.rots_dcoef = problem.integrator.coeffs
+        # problem.rots_dcoef = problem.integrator.coeffs
 
     solver = LiftingSolver(problem=prob,
                            cost=cost_function,

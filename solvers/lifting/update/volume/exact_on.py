@@ -15,6 +15,7 @@ from aspire.utils.coor_trans import grid_2d
 from aspire.volume import Volume
 
 from solvers.lifting.problems.outside_norm import OutsideNormLiftingProblem
+from solvers.lifting.problems.primal_dual_outside_norm import PrimalDualOutsideNormLiftingProblem
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ def eval_filter_grid(problem, power=1):
 
 
 def exact_update(problem, sq_sigma=1., regularizer=1.):
-    assert isinstance(problem, OutsideNormLiftingProblem)
+    assert isinstance(problem, OutsideNormLiftingProblem) or isinstance(problem, PrimalDualOutsideNormLiftingProblem)
 
     dtype = problem.dtype
 
