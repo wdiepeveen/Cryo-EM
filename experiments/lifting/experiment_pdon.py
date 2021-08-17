@@ -1,18 +1,25 @@
 import logging
 import numpy as np
 
+from scipy.spatial.transform import Rotation as R
+
 from aspire.source.simulation import Simulation
 
 # Own functions
 from solvers.lifting.functions.cost_functions import l2_data_fidelity_on, l2_vol_prior, l2_dens_prior
 from noise.noise import SnrNoiseAdder
 from solvers.lifting.integration.hexacosichoron import HexacosichoronIntegrator
+from solvers.lifting.integration.uniform import UniformIntegrator
 from solvers.lifting.integration.sd1821 import SphDes1821Integrator
 from solvers.lifting.integration.almost_true_rots import AlmostTrueRotsIntegrator
+from solvers.lifting.integration.refined_mesh import RefinedMeshIntegrator
 from solvers.lifting.update.density.qo_pdon import primal_dual_quadratic_optimisation_update
 from solvers.lifting.update.volume.exact_on import exact_update
+from solvers.lifting.update.volume.exact import exact_refinement
 from solvers.lifting.problems.primal_dual_outside_norm import PrimalDualOutsideNormLiftingProblem
 from solvers.lifting.solver import LiftingSolver
+
+from solvers.lifting.functions.rot_converters import quat2mat
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +66,11 @@ def experiment(exp=None,
     print("sigma^2 = {}".format(sq_sigma))
 
     # integrator = TrueRotsIntegrator(rots=rots_gt)
-    # integrator = UniformIntegrator(ell_max=4, n=num_imgs)
+    # integrator = UniformIntegrator(ell_max=5, n=3000)
     # integrator = IcosahedronIntegrator(ell_max=3)
     integrator = SphDes1821Integrator(ell_max=15)
+    # integrator = RefinedMeshIntegrator(ell_max=15, mesh_norm=np.pi/20)
+    # integrator = RefinedMeshIntegrator(ell_max=8, mesh_norm=np.pi/10, base_integrator="icosahedron")
     # integrator = HexacosichoronIntegrator(ell_max=5)
     # integrator = AlmostTrueRotsIntegrator(ell_max=18, rots=rots_gt)
 
@@ -109,6 +118,16 @@ def experiment(exp=None,
 
     solver.solve(return_result=False)
 
+    exp.save_npy("rotation_density_coeffs", solver.problem.rots_dcoef)
+
+    # Postprocessing step
+    quats = solver.problem.integrator.proj(solver.problem.rots_dcoef)
+
+    refined_rots = quat2mat(quats)
+
+    refined_vol = exact_refinement(solver.problem, refined_rots)
+    # TODO maybe just do a refinement solver instead of this (although might be a unnecessary work)
+
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
@@ -119,8 +138,10 @@ def experiment(exp=None,
              ("rots_gt", rots_gt),
              # Results
              ("volume_est", solver.problem.vol),
+             ("refined_volume_est", refined_vol),
              # ("rots_est", solver.problem.rots),
              ("density_est", [integrator.angles, integrator.coeffs2weights(solver.problem.rots_dcoef)]),
+             ("refined_rots_est", refined_rots),
              ("cost", solver.cost),
              # ("relerror_u", solver.relerror_u),
              # ("relerror_g", solver.relerror_g),

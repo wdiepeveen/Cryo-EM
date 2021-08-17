@@ -13,12 +13,13 @@ class TrueRotsIntegrator(Integrator):
                  dtype=np.float32,
                  ):
 
-        super().__init__(dtype=dtype, n=rots.shape[0], ell=rots.shape[0], t=np.inf)
+        super().__init__(dtype=dtype, n=rots.shape[0], ell_max=0, t=np.inf)
+        self.ell = rots.shape[0]
 
         # Compute Euler angles
 
         self.rots = rots
-
+        self.initialize_manifold()
         self.b2w = np.eye(self.ell, self.n, dtype=self.dtype)
 
     def coeffs2weights(self, coeffs, cap_weights=True):

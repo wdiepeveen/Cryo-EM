@@ -15,4 +15,4 @@ print(tri.simplices)
 
 # we cannot just give rotations as input. We should start with a full S3 design --> use the 1821 (3642)
 
-integrator = RefinedMeshIntegrator(ell_max=15, mesh_norm=np.pi/20, mesh_norm2=np.pi/10)  #, base_integrator="icosahedron")
+integrator = RefinedMeshIntegrator(ell_max=15, mesh_norm=np.pi/20, base_integrator="icosahedron")

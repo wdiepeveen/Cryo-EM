@@ -42,12 +42,18 @@ def primal_dual_quadratic_optimisation_update(problem, sq_sigma=1., regularizer=
     qq = qq.astype(np.float64)
 
     H = np.eye(1, ell)
-    G = problem.integrator.b2w.T.astype(np.float64)
-    A = np.vstack([H, G])
-    A = sparse.csc_matrix(A)
+    if isinstance(problem.integrator.b2w, sparse.csr.csr_matrix):
+        print("Sparse b2w matrix recognized")
+        H = sparse.csc_matrix(H)
+        G = problem.integrator.b2w.T.astype(np.float64)
+        A = sparse.vstack([H, G], format="csc")
+    else:
+        G = problem.integrator.b2w.T.astype(np.float64)
+        A = np.vstack([H, G])
+        A = sparse.csc_matrix(A)
 
-    l = np.eye(1, n+1)[0]  # TODO use A shape instead of n
-    u = np.eye(1, n+1)[0]  # TODO use A shape instead of n
+    l = np.eye(1, n+1)[0]
+    u = np.eye(1, n+1)[0]
     u[1:] = np.inf
 
     # Initialize solver
@@ -56,12 +62,13 @@ def primal_dual_quadratic_optimisation_update(problem, sq_sigma=1., regularizer=
     # Loop over all images
     logger.info("Solving for betas")
     beta = np.zeros((N, ell))
-    dual_beta = np.zeros((N, n+1))  # TODO use A shape instead of n
+    dual_beta = np.zeros((N, n+1))
     for i in range(N):
         q = qq[i]
         if i==0:
             # Setup
             m.setup(P=P, q=q, A=A, l=l, u=u)  # was max_iter=150
+            logger.info("Setup complete")
         else:
             # Update
             m.update(q=q)

@@ -1,0 +1,6 @@
+2021-06-21 14:49:01,496 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-06-21 14:49:01,870 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-06-21 14:49:01,873 INFO Initialize simulation object and CTF filters.
+2021-06-21 14:49:01,873 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-06-21 14:49:02,494 INFO Use downsampled map to creat simulation object.
+2021-06-21 14:49:02,523 INFO Get true rotation angles generated randomly by the simulation object.

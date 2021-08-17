@@ -1,0 +1,23 @@
+2021-06-21 15:14:39,312 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-06-21 15:14:39,850 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-06-21 15:14:39,863 INFO Initialize simulation object and CTF filters.
+2021-06-21 15:14:39,863 INFO Load 3D map and downsample 3D map to desired grids of 33 x 33 x 33.
+2021-06-21 15:14:40,447 INFO Use downsampled map to creat simulation object.
+2021-06-21 15:14:40,462 INFO Get true rotation angles generated randomly by the simulation object.
+2021-06-21 15:14:50,302 INFO Computing 512 means of 512 points in at most 200 steps...
+2021-06-21 15:14:54,956 WARNING *c* argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with *x* & *y*.  Please use the *color* keyword-argument or provide a 2-D array with a single row if you intend to specify the same RGB or RGBA value for all points.
+2021-06-21 15:14:58,685 CRITICAL 'c' argument has 4 elements, which is inconsistent with 'x' and 'y' with size 512.
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/project_density_to_rot.py", line 111, in <module>
+    img = ax.scatter(x, y, z, c=c, cmap=plt.cool())
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/mpl_toolkits/mplot3d/axes3d.py", line 2312, in scatter
+    patches = super().scatter(xs, ys, s=s, c=c, *args, **kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/__init__.py", line 1447, in inner
+    return func(ax, *map(sanitize_sequence, args), **kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/cbook/deprecation.py", line 411, in wrapper
+    return func(*inner_args, **inner_kwargs)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/axes/_axes.py", line 4453, in scatter
+    get_next_color_func=self._get_patches_for_fill.get_next_color)
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/axes/_axes.py", line 4297, in _parse_scatter_color_args
+    raise invalid_shape_exception(c.size, xsize) from err
+

@@ -10,6 +10,8 @@ from aspire.utils.coor_trans import (
 
 from noise.noise import SnrNoiseAdder
 
+from solvers.lifting.functions.rot_converters import mat2angle
+
 logger = logging.getLogger(__name__)
 
 
@@ -44,10 +46,13 @@ def postprocessing(exp=None,
                                             snr=snr)  # bug in ASPIRE so that we cannot pickle sim like this
             vol_init = solver_data["vol_init"]  # Volume 65L
             vol_gt = solver_data["vol_gt"]  # Volume 65L
+            rots_gt = solver_data["rots_gt"]
             # Load results
             volume_est = solver_data["volume_est"]
+            refined_volume_est = solver_data["refined_volume_est"]
             density_est = solver_data["density_est"]
             angles, density = density_est
+            refined_rots = solver_data["refined_rots_est"]
             cost = solver_data["cost"]
 
             if i == 0 and j == 0:
@@ -78,6 +83,28 @@ def postprocessing(exp=None,
             plt.colorbar(img)
 
             exp.save_fig("density" + postfix)
+
+            refined_angles = mat2angle(refined_rots)
+            gt_angles = mat2angle(rots_gt)
+
+            # Plot refined rot
+            xx = [refined_angles[0, 0], gt_angles[0,0]]
+            yy = [refined_angles[0, 1], gt_angles[0,1]]
+            zz = [refined_angles[0, 2], gt_angles[0,2]]
+            # cc = np.hstack([c, 200])
+            # TODO plot true rot also here
+
+            # Get density plot
+            fig = plt.figure()
+            ax = fig.gca(projection='3d')
+
+            img = ax.scatter(xx, yy, zz)  #, c=cc, cmap=plt.cool())
+            ax.set_xlabel("$\phi$")
+            ax.set_ylabel("$\\theta$")
+            ax.set_zlabel("$\psi$")  # , rotation=0)
+            plt.colorbar(img)
+
+            exp.save_fig("refined_density" + postfix)
 
             # fig = plt.figure()
             # ax = fig.add_subplot(111, projection='3d')
@@ -144,6 +171,7 @@ def postprocessing(exp=None,
 
             # Save results
             exp.save_mrc("result_vol" + postfix, volume_est.asnumpy()[0])
+            exp.save_mrc("result_refined_vol" + postfix, refined_volume_est.asnumpy()[0])
 
     # # Create tables
     # rot_mse_headers = []

@@ -1,0 +1,7 @@
+2021-06-30 15:53:51,234 CRITICAL cannot import name 'l2_data_fidelity'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/T18_debug_gradient_ascent.py", line 7, in <module>
+    from test.T17_density_gradient_ascent import gradient_ascent
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/test.py", line 12, in <module>
+    from solvers.primaldual import l2_data_fidelity, l2_grad_norm, so3_distance
+

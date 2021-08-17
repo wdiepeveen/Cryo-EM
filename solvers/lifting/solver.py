@@ -43,6 +43,8 @@ class LiftingSolver:
         cost = self.get_cost(self.problem)
         self.cost.append(cost)
 
+        # TODO initialize update schemes
+
         # fvol = np.zeros((self.problem.L, self.problem.L, self.problem.L), dtype=self.problem.dtype)
 
         logger.info(f"Starting solver | Cost = {cost}")

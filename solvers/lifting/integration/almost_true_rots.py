@@ -14,9 +14,11 @@ class AlmostTrueRotsIntegrator(Integrator):
                  dtype=np.float32,
                  ):
 
-        super().__init__(dtype=dtype, n=rots.shape[0], ell=int((2 * ell_max + 1) * (2 * ell_max + 2) * (2 * ell_max + 3) / 6), t=np.inf)
+        super().__init__(dtype=dtype, n=rots.shape[0], ell_max=ell_max, t=np.inf)
 
         self.rots = rots
+        self.initialize_manifold()
+        self.initialize_b2w()
 
         # Copmpute U for all the rotations
         U = np.zeros((self.n, self.ell), dtype=complex)
@@ -25,28 +27,6 @@ class AlmostTrueRotsIntegrator(Integrator):
         for i in range(self.n):
             g = quats[i]
             U[i] = wigner.D(g)
-
-        # Compute V
-        V = np.zeros((self.ell, self.ell), dtype=complex)
-        for l in range(ell_max + 1):
-            for m in range(-l, l + 1):
-                for n in range(-l, l + 1):
-                    if m == 0 and n == 0:
-                        index = wigner.Dindex(l, m, n)
-                        V[index, index] = 1
-                    elif m > 0 or (m == 0 and n > 0):
-                        index = wigner.Dindex(l, m, n)
-                        V[index, index] = 1
-                        indexx = wigner.Dindex(l, -m, -n)
-                        V[index, indexx] = (-1) ** (m - n) * 1j
-                    elif m < 0 or (m == 0 and n < 0):
-                        index = wigner.Dindex(l, m, n)
-                        V[index, index] = -1j
-                        indexx = wigner.Dindex(l, -m, -n)
-                        V[index, indexx] = (-1) ** (m - n)
-
-        UV = U @ V
-        UV /= self.n
 
         # Compute beta
         betas = np.zeros((self.n, self.ell))
@@ -64,8 +44,6 @@ class AlmostTrueRotsIntegrator(Integrator):
                             betas[i, indexx] = (-1) ** (m - n) * (2*l+1) * np.imag(np.conj(U[i, indexx]))
 
         self.coeffs = betas
-
-        self.b2w = np.real(UV).T.astype(self.dtype)
 
     def coeffs2weights(self, coeffs, cap_weights=True):
         weights = coeffs@self.b2w

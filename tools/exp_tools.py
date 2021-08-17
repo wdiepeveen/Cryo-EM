@@ -6,6 +6,7 @@ import os
 import pickle
 import time
 import zipfile
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,11 @@ class Exp:
         # TODO also right away copy the file to results_folder
         return mrcfile.open(os.path.join(dir, filename + ".mrc"))
 
+    def open_npy(self, dir, filename):
+        # TODO also right away copy the file to results_folder
+        return np.load(os.path.join(dir, filename + ".npy"))
+
+
     def save(self, filename, *args):
 
         if len(args) == 0:
@@ -129,6 +135,9 @@ class Exp:
 
         with mrcfile.new(os.path.join(self.results_folder, filename + ".mrc"), overwrite=True) as mrc:
             mrc.set_data(volume)
+
+    def save_npy(self, filename, data):
+        np.save(os.path.join(self.results_folder, filename + ".npy"), data)
 
     def save_fig(self, filename, save_eps=False):
 

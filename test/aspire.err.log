@@ -1,5 +1,5 @@
 Application version: 0.6.2.src
-Platform: Darwin-20.3.0-x86_64-i386-64bit
+Platform: Darwin-20.5.0-x86_64-i386-64bit
 Python version: 3.6.12 |Anaconda, Inc.| (default, Sep  8 2020, 17:50:39) 
 [GCC Clang 10.0.0 ]
 Python 32/64 bit: 64
@@ -359,6 +359,7 @@ cffi==1.14.4
 chardet==4.0.0
 click==7.1.2
 coverage==5.4
+cvxopt==1.2.6
 cycler==0.10.0
 Cython==0.29.23
 dataclasses==0.8
@@ -406,6 +407,8 @@ numba==0.53.1
 numpy==1.16.0
 numpydoc==0.7.0
 odl==0.7.0
+opymize @ git+https://github.com/room-10/Opymize@8632e5b618f41a65b1a37df099a6da254500e14b
+osqp==0.6.2.post0
 packaging==20.9
 pandas==0.25.3
 pandocfilters==1.4.3
@@ -436,11 +439,13 @@ pytz==2021.1
 PyWavelets==1.1.1
 PyYAML==5.4.1
 pyzmq==22.0.2
+qdldl==0.1.5.post0
 qtconsole==5.0.2
 QtPy==1.9.0
 quadprog==0.1.8
 quaternionic==0.3.4
 regex==2021.4.4
+repyducible @ git+https://github.com/room-10/Repyducible@6613469ea146df6ec85bdff3a8762a298f35743e
 requests==2.25.1
 scikit-image==0.16.2
 scikit-learn==0.24.1
@@ -475,424 +480,47 @@ widgetsnbextension==3.5.1
 zipp==3.4.0
 
 Exception Details (most recent call last)
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py", line 131, in <module>
-    quadratic_optimisation_update(problem=problem, sq_sigma=1e-10, reg1=0.001)
-    Cs = 2.0
-    DATA_DIR = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/../data/'
-    IcosahedronIntegrator = <class 'solvers.lifting.integration.icosahedron.IcosahedronIntegrator'>
-    LiftingProblem = <class 'solvers.lifting.problems.LiftingProblem'>
-    RadialCTFFilter = <class 'aspire.operators.filters.RadialCTFFilter'>
-    Simulation = <class 'aspire.source.simulation.Simulation'>
-    SnrNoiseAdder = <class 'noise.noise.SnrNoiseAdder'>
-    Volume = <class 'aspire.volume.Volume'>
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/T18_debug_gradient_ascent.py", line 7, in <module>
+    from test.T17_density_gradient_ascent import gradient_ascent
+    HexacosichoronIntegrator = <class 'solvers.lifting.integration.hexacosichoron.HexacosichoronIntegrator'>
     __annotations__ = {}
     __builtins__ = <module 'builtins' (built-in)>
     __cached__ = None
     __doc__ = None
-    __file__ = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/icosahedron.py'
-    __loader__ = <_frozen_importlib_external.SourceFileLoader object at 0x7fa427d716d8>
+    __file__ = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/T18_debug_gradient_ascent.py'
+    __loader__ = <_frozen_importlib_external.SourceFileLoader object at 0x7fe4785716d8>
     __name__ = '__main__'
     __package__ = None
     __spec__ = None
-    alpha = 0.1
-    amplitudes = array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-       1., 1., 1., 1., 1., 1., 1., 1., 1.])
-    defocus = 15000.0
-    dens0 = array([1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
-    dtype = <class 'numpy.float32'>
-    eye = array([[1., 0., 0., ..., 0., 0., 0.],
-       [1., 1., 0., ..., 0., 0., 0.],
-       [1., 0., 1., ..., 0., 0., 0.],
-       ...,
-       [1., 0., 0., ..., 1., 0., 0.],
-       [1., 0., 0., ..., 0., 1., 0.],
-       [1., 0., 0., ..., 0., 0., 1.]])
-    filters = [<aspire.operators.filters.RadialCTFFilter object at 0x7fa429954ac8>]
-    images = 60 images of size 33x33
-    img_size = 33
-    infile = MrcFile('/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/../data/clean70SRibosome_vol_65p.mrc', mode='r')
-    integrals = array([0.99999994, 1.0501842 , 1.0297666 , 1.0501842 , 1.0297666 ,
-       1.0000001 , 1.025965  , 1.0440494 , 1.025965  , 1.0440494 ,
-       1.0304401 , 1.009174  , 1.0087209 , 1.0091739 , 1.0304401 ,
-       1.009174  , 1.0154049 , 1.0098538 , 1.0154049 , 1.009174  ,
-       1.0087209 , 1.0098538 , 1.        , 1.0126004 , 1.0081348 ,
-       1.0247214 , 1.0039345 , 1.0087454 , 1.0229619 , 1.0247214 ,
-       1.0053757 , 1.0247214 , 1.0081348 , 1.0015738 , 1.0053759 ,
-       1.        , 1.0159259 , 1.0031915 , 1.0018415 , 1.0031915 ,
-       1.0159259 , 1.        , 1.0159259 , 1.0066009 , 1.0033464 ,
-       1.        , 1.0033463 , 1.0066009 , 1.0159259 , 1.0031915 ,
-       1.0033464 , 1.0049001 , 1.005227  , 1.0049001 , 1.0033463 ,
-       1.0031915 , 1.0018415 , 1.        , 1.005227  , 1.        ,
-       1.        , 1.0000001 , 0.9999999 , 1.0059723 , 1.        ,
-       1.0166668 , 0.9999999 , 1.0166667 , 1.005631  , 1.0059723 ,
-       1.0113741 , 1.0171824 , 1.        , 1.        , 1.        ,
-       1.0000001 , 1.0113741 , 1.0447923 , 1.0113741 , 1.0059723 ,
-       0.99999994, 1.0059721 , 1.        , 1.0447924 , 1.0183886 ,
-       1.003838  , 1.0011106 , 1.001461  , 1.        , 1.001461  ,
-       1.0011106 , 1.003838  , 1.0183885 , 1.003838  , 1.        ,
-       1.004368  , 1.        , 1.0000001 , 1.        , 1.004368  ,
-       0.99999994, 1.0038378 , 1.0011106 , 1.004368  , 1.0007912 ,
-       1.0014659 , 1.        , 1.0014658 , 1.0007912 , 1.004368  ,
-       1.0011106 , 1.0014611 , 1.        , 1.0014659 , 1.        ,
-       1.        , 1.        , 1.0014658 , 1.        , 1.001461  ,
-       0.99999994, 1.0000001 , 1.        , 1.        , 1.        ,
-       1.        , 1.0000001 , 0.99999994, 1.0023184 , 1.        ,
-       1.0000628 , 1.0036544 , 1.0000001 , 1.        , 1.0166668 ,
-       1.0036544 , 1.0000001 , 1.        , 1.0008388 , 1.        ,
-       1.0000001 , 1.0036544 , 1.0000001 , 1.        , 1.        ,
-       1.        , 1.0008388 , 1.0032259 , 1.0000001 , 1.        ,
-       1.0000628 , 1.        , 1.0000001 , 1.        , 1.0318155 ,
-       1.0032259 , 1.0000001 , 1.0032259 , 1.0008389 , 1.        ,
-       1.0023184 , 0.99999994, 1.0008388 , 1.        , 1.0000001 ],
-      dtype=float32)
-    integrator = <solvers.lifting.integration.icosahedron.IcosahedronIntegrator object at 0x7fa431733c50>
-    logger = <Logger __main__ (DEBUG)>
+    np = <module 'numpy' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/__init__.py'>
+    plt = <module 'matplotlib.pyplot' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/matplotlib/pyplot.py'>
+    spherical = <module 'spherical' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/spherical/__init__.py'>
+
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/test.py", line 12, in <module>
+    from solvers.primaldual import l2_data_fidelity, l2_grad_norm, so3_distance
+    Exp = <class 'tools.exp_tools.Exp'>
+    Volume = <class 'aspire.volume.Volume'>
+    __builtins__ = {'__name__': 'builtins', '__doc__': "Built-in functions, exceptions, and other objects.\n\nNoteworthy: None is the `nil' object; Ellipsis represents `...' in slices.", '__package__': '', '__loader__': <class '_frozen_importlib.BuiltinImporter'>, '__spec__': ModuleSpec(name='builtins', loader=<class '_frozen_importlib.BuiltinImporter'>), '__build_class__': <built-in function __build_class__>, '__import__': <built-in function __import__>, 'abs': <built-in function abs>, 'all': <built-in function all>, 'any': <built-in function any>, 'ascii': <built-in function ascii>, 'bin': <built-in function bin>, 'callable': <built-in function callable>, 'chr': <built-in function chr>, 'compile': <built-in function compile>, 'delattr': <built-in function delattr>, 'dir': <built-in function dir>, 'divmod': <built-in function divmod>, 'eval': <built-in function eval>, 'exec': <built-in function exec>, 'format': <built-in function format>, 'getattr': <built-in function getattr>, 'globals': <built-in function globals>, 'hasattr': <built-in function hasattr>, 'hash': <built-in function hash>, 'hex': <built-in function hex>, 'id': <built-in function id>, 'input': <built-in function input>, 'isinstance': <built-in function isinstance>, 'issubclass': <built-in function issubclass>, 'iter': <built-in function iter>, 'len': <built-in function len>, 'locals': <built-in function locals>, 'max': <built-in function max>, 'min': <built-in function min>, 'next': <built-in function next>, 'oct': <built-in function oct>, 'ord': <built-in function ord>, 'pow': <built-in function pow>, 'print': <built-in function print>, 'repr': <built-in function repr>, 'round': <built-in function round>, 'setattr': <built-in function setattr>, 'sorted': <built-in function sorted>, 'sum': <built-in function sum>, 'vars': <built-in function vars>, 'None': None, 'Ellipsis': Ellipsis, 'NotImplemented': NotImplemented, 'False': False, 'True': True, 'bool': <class 'bool'>, 'memoryview': <class 'memoryview'>, 'bytearray': <class 'bytearray'>, 'bytes': <class 'bytes'>, 'classmethod': <class 'classmethod'>, 'complex': <class 'complex'>, 'dict': <class 'dict'>, 'enumerate': <class 'enumerate'>, 'filter': <class 'filter'>, 'float': <class 'float'>, 'frozenset': <class 'frozenset'>, 'property': <class 'property'>, 'int': <class 'int'>, 'list': <class 'list'>, 'map': <class 'map'>, 'object': <class 'object'>, 'range': <class 'range'>, 'reversed': <class 'reversed'>, 'set': <class 'set'>, 'slice': <class 'slice'>, 'staticmethod': <class 'staticmethod'>, 'str': <class 'str'>, 'super': <class 'super'>, 'tuple': <class 'tuple'>, 'type': <class 'type'>, 'zip': <class 'zip'>, '__debug__': True, 'BaseException': <class 'BaseException'>, 'Exception': <class 'Exception'>, 'TypeError': <class 'TypeError'>, 'StopAsyncIteration': <class 'StopAsyncIteration'>, 'StopIteration': <class 'StopIteration'>, 'GeneratorExit': <class 'GeneratorExit'>, 'SystemExit': <class 'SystemExit'>, 'KeyboardInterrupt': <class 'KeyboardInterrupt'>, 'ImportError': <class 'ImportError'>, 'ModuleNotFoundError': <class 'ModuleNotFoundError'>, 'OSError': <class 'OSError'>, 'EnvironmentError': <class 'OSError'>, 'IOError': <class 'OSError'>, 'EOFError': <class 'EOFError'>, 'RuntimeError': <class 'RuntimeError'>, 'RecursionError': <class 'RecursionError'>, 'NotImplementedError': <class 'NotImplementedError'>, 'NameError': <class 'NameError'>, 'UnboundLocalError': <class 'UnboundLocalError'>, 'AttributeError': <class 'AttributeError'>, 'SyntaxError': <class 'SyntaxError'>, 'IndentationError': <class 'IndentationError'>, 'TabError': <class 'TabError'>, 'LookupError': <class 'LookupError'>, 'IndexError': <class 'IndexError'>, 'KeyError': <class 'KeyError'>, 'ValueError': <class 'ValueError'>, 'UnicodeError': <class 'UnicodeError'>, 'UnicodeEncodeError': <class 'UnicodeEncodeError'>, 'UnicodeDecodeError': <class 'UnicodeDecodeError'>, 'UnicodeTranslateError': <class 'UnicodeTranslateError'>, 'AssertionError': <class 'AssertionError'>, 'ArithmeticError': <class 'ArithmeticError'>, 'FloatingPointError': <class 'FloatingPointError'>, 'OverflowError': <class 'OverflowError'>, 'ZeroDivisionError': <class 'ZeroDivisionError'>, 'SystemError': <class 'SystemError'>, 'ReferenceError': <class 'ReferenceError'>, 'BufferError': <class 'BufferError'>, 'MemoryError': <class 'MemoryError'>, 'Warning': <class 'Warning'>, 'UserWarning': <class 'UserWarning'>, 'DeprecationWarning': <class 'DeprecationWarning'>, 'PendingDeprecationWarning': <class 'PendingDeprecationWarning'>, 'SyntaxWarning': <class 'SyntaxWarning'>, 'RuntimeWarning': <class 'RuntimeWarning'>, 'FutureWarning': <class 'FutureWarning'>, 'ImportWarning': <class 'ImportWarning'>, 'UnicodeWarning': <class 'UnicodeWarning'>, 'BytesWarning': <class 'BytesWarning'>, 'ResourceWarning': <class 'ResourceWarning'>, 'ConnectionError': <class 'ConnectionError'>, 'BlockingIOError': <class 'BlockingIOError'>, 'BrokenPipeError': <class 'BrokenPipeError'>, 'ChildProcessError': <class 'ChildProcessError'>, 'ConnectionAbortedError': <class 'ConnectionAbortedError'>, 'ConnectionRefusedError': <class 'ConnectionRefusedError'>, 'ConnectionResetError': <class 'ConnectionResetError'>, 'FileExistsError': <class 'FileExistsError'>, 'FileNotFoundError': <class 'FileNotFoundError'>, 'IsADirectoryError': <class 'IsADirectoryError'>, 'NotADirectoryError': <class 'NotADirectoryError'>, 'InterruptedError': <class 'InterruptedError'>, 'PermissionError': <class 'PermissionError'>, 'ProcessLookupError': <class 'ProcessLookupError'>, 'TimeoutError': <class 'TimeoutError'>, 'open': <built-in function open>, 'quit': Use quit() or Ctrl-D (i.e. EOF) to exit, 'exit': Use exit() or Ctrl-D (i.e. EOF) to exit, 'copyright': Copyright (c) 2001-2020 Python Software Foundation.
+All Rights Reserved.
+
+Copyright (c) 2000 BeOpen.com.
+All Rights Reserved.
+
+Copyright (c) 1995-2001 Corporation for National Research Initiatives.
+All Rights Reserved.
+
+Copyright (c) 1991-1995 Stichting Mathematisch Centrum, Amsterdam.
+All Rights Reserved., 'credits':     Thanks to CWI, CNRI, BeOpen.com, Zope Corporation and a cast of thousands
+    for supporting Python development.  See www.python.org for more information., 'license': Type license() to see the full license text, 'help': Type help() for interactive help, or help(object) for help about object., '__pybind11_internals_v3__': <capsule object NULL at 0x7fe47ed31d50>}
+    __cached__ = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/__pycache__/test.cpython-36.pyc'
+    __doc__ = None
+    __file__ = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/test.py'
+    __loader__ = <_frozen_importlib_external.SourceFileLoader object at 0x7fe481a51630>
+    __name__ = 'test'
+    __package__ = ''
+    __spec__ = ModuleSpec(name='test', loader=<_frozen_importlib_external.SourceFileLoader object at 0x7fe481a51630>, origin='/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/test/test.py')
     logging = <module 'logging' from '/Users/wdiepeveen/anaconda3/envs/aspire_env/lib/python3.6/logging/__init__.py'>
     mrcfile = <module 'mrcfile' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/mrcfile/__init__.py'>
     np = <module 'numpy' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/__init__.py'>
-    num_imgs = 60
-    offsets = array([[0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.],
-       [0., 0.]], dtype=float32)
     os = <module 'os' from '/Users/wdiepeveen/anaconda3/envs/aspire_env/lib/python3.6/os.py'>
-    pixel_size = 5
-    problem = <solvers.lifting.problems.LiftingProblem object at 0x7fa42ee2a668>
-    quadratic_optimisation_update = <function quadratic_optimisation_update at 0x7fa43172f488>
-    rand_rots = array([[[ 0.7262187 ,  0.59636956,  0.3419792 ],
-        [-0.1160673 ,  0.596673  , -0.7940464 ],
-        [-0.6775949 ,  0.53695875,  0.5025341 ]],
-
-       [[-0.5271888 ,  0.4456637 ,  0.7235025 ],
-        [ 0.0687212 ,  0.8710033 , -0.4864469 ],
-        [-0.84696484, -0.20672938, -0.48980972]],
-
-       [[-0.01252663, -0.7158174 ,  0.69817513],
-        [ 0.02885321,  0.6976804 ,  0.7158279 ],
-        [-0.99950516,  0.02911151,  0.01191405]],
-
-       [[-0.4583734 ,  0.4171714 ,  0.78476864],
-        [-0.8771816 , -0.07028843, -0.4749863 ],
-        [-0.14299054, -0.9061057 ,  0.39815342]],
-
-       [[-0.8900764 , -0.17699163, -0.42004517],
-        [ 0.3772092 , -0.80335087, -0.4608043 ],
-        [-0.25588515, -0.56859595,  0.7818065 ]],
-
-       [[ 0.93238944,  0.16164187,  0.32329836],
-        [-0.24234088,  0.9431793 ,  0.22734052],
-        [-0.26818055, -0.2903183 ,  0.91858286]],
-
-       [[-0.51240396, -0.8402404 , -0.17730837],
-        [-0.00997001, -0.2006392 ,  0.9796145 ],
-        [-0.8586867 ,  0.50372607,  0.09443111]],
-
-       [[-0.3880088 , -0.6419321 , -0.66134137],
-        [-0.73311406,  0.64983475, -0.2006453 ],
-        [ 0.55856323,  0.4069865 , -0.722751  ]],
-
-       [[ 0.30525613,  0.6589077 ,  0.68750226],
-        [ 0.9512451 , -0.24448077, -0.18804757],
-        [ 0.0441751 ,  0.71138585, -0.70141196]],
-
-       [[-0.35451695, -0.38229412,  0.85332817],
-        [-0.89503807,  0.4028458 , -0.19136906],
-        [-0.27060038, -0.8316048 , -0.48498344]],
-
-       [[-0.6888508 ,  0.60363543,  0.40138358],
-        [-0.28862545, -0.7363132 ,  0.6119953 ],
-        [ 0.66496605,  0.30572397,  0.6814345 ]],
-
-       [[-0.5067306 , -0.10166017,  0.85608953],
-        [-0.44689667,  0.88016   , -0.16000547],
-        [-0.7372296 , -0.46366322, -0.4914356 ]],
-
-       [[ 0.49350098, -0.44081956,  0.7497566 ],
-        [ 0.80755943,  0.5523427 , -0.20679766],
-        [-0.32296214,  0.7075278 ,  0.62856966]],
-
-       [[-0.13565657, -0.50091857, -0.854797  ],
-        [-0.98796195,  0.13314272,  0.07876708],
-        [ 0.0743541 ,  0.8551921 , -0.5129502 ]],
-
-       [[ 0.9157901 ,  0.36871117,  0.15931307],
-        [-0.2518311 ,  0.8360806 , -0.48739135],
-        [-0.3129052 ,  0.40622815,  0.85852724]],
-
-       [[-0.71073955, -0.3683544 ,  0.5993032 ],
-        [ 0.3208434 ,  0.5884244 ,  0.74217   ],
-        [-0.6260262 ,  0.71977204, -0.30003244]],
-
-       [[ 0.70998937,  0.06999807, -0.7007249 ],
-        [ 0.45018017, -0.81029063,  0.37518913],
-        [-0.5415283 , -0.58183277, -0.6068095 ]],
-
-       [[ 0.13441609, -0.6493334 ,  0.74853086],
-        [-0.634948  , -0.63637763, -0.43802342],
-        [ 0.7607715 , -0.4164008 , -0.49783236]],
-
-       [[-0.35527736, -0.8993234 ,  0.254942  ],
-        [ 0.1323003 , -0.31836694, -0.9386901 ],
-        [ 0.9253511 , -0.29976645,  0.23208933]],
-
-       [[ 0.16719966,  0.19521573,  0.9664032 ],
-        [ 0.77277875,  0.58275384, -0.2514179 ],
-        [-0.6122559 ,  0.7888528 , -0.05342232]],
-
-       [[-0.5619419 ,  0.6324803 , -0.53309464],
-        [ 0.59373635, -0.14030907, -0.7923323 ],
-        [-0.5759326 , -0.76176244, -0.29668105]],
-
-       [[-0.31009832,  0.60783505,  0.73100996],
-        [-0.7825176 , -0.59986   ,  0.16683567],
-        [ 0.5399122 , -0.5202927 ,  0.6616572 ]],
-
-       [[ 0.59527963, -0.56146264,  0.5748059 ],
-        [ 0.55196124, -0.23413773, -0.80032384],
-        [ 0.5839357 ,  0.7936871 ,  0.1705282 ]],
-
-       [[-0.12420747, -0.39398155,  0.91068715],
-        [-0.03617089, -0.9153865 , -0.4009479 ],
-        [ 0.99159676, -0.08274109,  0.09944718]],
-
-       [[ 0.81617326, -0.5262261 , -0.23863636],
-        [ 0.36297807,  0.78828704, -0.4968405 ],
-        [ 0.4495644 ,  0.31888816,  0.8343873 ]],
-
-       [[ 0.44035587,  0.896748  ,  0.0439284 ],
-        [ 0.40233248, -0.15335584, -0.9025578 ],
-        [-0.80263025,  0.41512042, -0.428322  ]],
-
-       [[ 0.9956596 ,  0.08540224, -0.03699175],
-        [-0.07558957,  0.5101592 , -0.8567519 ],
-        [-0.05429685,  0.8558295 ,  0.5144004 ]],
-
-       [[-0.7209473 , -0.17102915, -0.67155343],
-        [-0.31804085, -0.77932525,  0.5399094 ],
-        [-0.6156988 ,  0.60282767,  0.50745815]],
-
-       [[ 0.8123076 ,  0.21192205, -0.54336494],
-        [-0.43208888, -0.40708402, -0.8047247 ],
-        [-0.3917341 ,  0.8884659 , -0.23910826]],
-
-       [[-0.87405497, -0.11983982,  0.4708145 ],
-        [ 0.48178935, -0.08913137,  0.8717423 ],
-        [-0.0625051 ,  0.98878413,  0.13564326]],
-
-       [[ 0.27715442, -0.9499144 , -0.14438869],
-        [-0.8437832 , -0.16874932, -0.509464  ],
-        [ 0.45958167,  0.26303294, -0.8482914 ]],
-
-       [[-0.8930931 ,  0.07928264,  0.44283065],
-        [ 0.13214526,  0.98715687,  0.0897716 ],
-        [-0.430026  ,  0.13869236, -0.8920998 ]],
-
-       [[ 0.5572098 , -0.8131918 , -0.16803677],
-        [ 0.14634079, -0.10302762,  0.98385453],
-        [-0.8173748 , -0.57280403,  0.06159512]],
-
-       [[ 0.60038847, -0.08711136,  0.7949499 ],
-        [-0.17559087,  0.9554321 ,  0.23731273],
-        [-0.78019327, -0.28206578,  0.55833447]],
-
-       [[-0.74303263,  0.5313575 ,  0.40689275],
-        [-0.4496388 , -0.8466686 ,  0.2845649 ],
-        [ 0.49570903,  0.02848624,  0.86802137]],
-
-       [[ 0.38929668, -0.8710806 ,  0.29944396],
-        [-0.631177  , -0.48903993, -0.6020428 ],
-        [ 0.67086786,  0.04537114, -0.74018764]],
-
-       [[ 0.825733  , -0.45268244, -0.33651692],
-        [-0.22164577,  0.28820747, -0.93156296],
-        [ 0.5186889 ,  0.84380984,  0.13764727]],
-
-       [[ 0.5563389 , -0.7236394 , -0.40845194],
-        [ 0.19521977, -0.36396423,  0.9107246 ],
-        [-0.80769813, -0.58640945, -0.06121875]],
-
-       [[ 0.8579119 ,  0.4705307 ,  0.20636871],
-        [ 0.492103  , -0.8679753 , -0.06673507],
-        [ 0.14772205,  0.15880747, -0.9761959 ]],
-
-       [[-0.3817334 ,  0.04022136,  0.92339694],
-        [ 0.5746599 ,  0.7928077 ,  0.20303194],
-        [-0.72391   ,  0.60814327, -0.32575476]],
-
-       [[ 0.48699993,  0.5439937 , -0.6833022 ],
-        [ 0.8622233 , -0.4242122 ,  0.27679402],
-        [-0.13929091, -0.7239578 , -0.6756354 ]],
-
-       [[-0.09947366,  0.7977526 , -0.5947233 ],
-        [-0.7766149 ,  0.3114139 ,  0.54762274],
-        [ 0.6220726 ,  0.51634496,  0.5885691 ]],
-
-       [[ 0.9919774 ,  0.0886365 ,  0.09013566],
-        [ 0.11681668, -0.37018558, -0.9215837 ],
-        [-0.04831903,  0.9247195 , -0.37756994]],
-
-       [[ 0.5318187 , -0.79932106,  0.2797405 ],
-        [ 0.20417069, -0.19956362, -0.95837814],
-        [ 0.82187784,  0.56679827,  0.05706625]],
-
-       [[-0.73772323, -0.610947  ,  0.28724232],
-        [-0.28688648,  0.6688552 ,  0.68580526],
-        [-0.6111142 ,  0.42352852, -0.6687025 ]],
-
-       [[-0.18487498,  0.10668186, -0.9769546 ],
-        [-0.7270213 , -0.68372625,  0.0629168 ],
-        [-0.6612574 ,  0.7218985 ,  0.20396385]],
-
-       [[ 0.5367353 , -0.15424246, -0.8295327 ],
-        [ 0.18698601, -0.9369585 ,  0.29520327],
-        [-0.8227706 , -0.31355703, -0.4740575 ]],
-
-       [[-0.39620537,  0.7143216 , -0.5768587 ],
-        [-0.07077814, -0.6501676 , -0.75648695],
-        [-0.91542983, -0.25889522,  0.30815825]],
-
-       [[-0.35530338, -0.9050473 , -0.23377097],
-        [ 0.44098568,  0.05821488, -0.89562416],
-        [ 0.8241912 , -0.42130795,  0.37842897]],
-
-       [[ 0.38027114,  0.9245218 ,  0.02556078],
-        [-0.45070285,  0.20937335, -0.8677729 ],
-        [-0.80762666,  0.31846866,  0.49630323]],
-
-       [[-0.98061454, -0.11024052, -0.16199425],
-        [-0.17136787,  0.0816071 ,  0.9818214 ],
-        [-0.09501662,  0.99054897, -0.09891679]],
-
-       [[ 0.50587773, -0.82943153, -0.23692003],
-        [-0.79506314, -0.3417957 , -0.5010492 ],
-        [ 0.33460775,  0.441836  , -0.8323573 ]],
-
-       [[-0.6143444 ,  0.6323562 , -0.47191796],
-        [ 0.70032173,  0.16146195, -0.6953269 ],
-        [-0.3634975 , -0.7576646 , -0.542046  ]],
-
-       [[ 0.3469949 , -0.89070576,  0.29366264],
-        [ 0.7522912 ,  0.45131674,  0.47996992],
-        [-0.56004685,  0.05437269,  0.82667476]],
-
-       [[-0.6728603 , -0.5191101 ,  0.5270519 ],
-        [-0.25974274,  0.83287543,  0.48872507],
-        [-0.6926707 ,  0.19194578, -0.6952439 ]],
-
-       [[-0.32650325,  0.5639887 , -0.7584935 ],
-        [-0.86992186, -0.4931279 ,  0.00779672],
-        [-0.36963704,  0.66237575,  0.651634  ]],
-
-       [[-0.24560732, -0.08839296,  0.9653309 ],
-        [-0.7687348 , -0.5888897 , -0.24951091],
-        [ 0.5905285 , -0.8033652 ,  0.07668489]],
-
-       [[ 0.8986315 , -0.4335962 , -0.06675109],
-        [ 0.43847367,  0.89263386,  0.10462153],
-        [ 0.01422078, -0.12328479,  0.99226946]],
-
-       [[-0.8433753 ,  0.27491984, -0.46166784],
-        [ 0.43038124,  0.86003065, -0.27407897],
-        [ 0.32169873, -0.42984462, -0.84364897]],
-
-       [[-0.28149965,  0.9456634 ,  0.16272292],
-        [ 0.15747364, -0.12175355,  0.9799888 ],
-        [ 0.9465516 ,  0.30149108, -0.11464348]]], dtype=float32)
-    sim = <aspire.source.simulation.Simulation object at 0x7fa431733390>
-    snr = 0.5
-    vol_gt = <aspire.volume.Volume object at 0x7fa431733320>
-    vols = <aspire.volume.Volume object at 0x7fa431733358>
-    voltage = 200
-    weights = array([0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667,
-       0.01666667, 0.01666667, 0.01666667, 0.01666667, 0.01666667],
-      dtype=float32)
-
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/solvers/lifting/update/density/qo.py", line 31, in quadratic_optimisation_update
-    integrands = problem.integrands_forward().asnumpy()
-    L = 33
-    N = 60
-    dtype = dtype('float32')
-    ell = 165
-    n = 60
-    problem = <solvers.lifting.problems.LiftingProblem object at 0x7fa42ee2a668>
-    reg1 = 0.001
-    reg2 = 1.0
-    sq_sigma = 1e-10
 
