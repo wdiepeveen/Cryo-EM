@@ -2,6 +2,8 @@ import logging
 
 import numpy as np
 import spherical
+import quaternionic
+
 from scipy.spatial.transform import Rotation as R
 from scipy.sparse import csc_matrix
 
@@ -49,11 +51,11 @@ class Integrator:
         quats = np.roll(self._points.as_quat().astype(self.dtype),1,axis=-1)
         sign_s = np.sign(quats[:, 0])
         sign_s[sign_s == 0] = 1
-        return sign_s[:, None] * quats
+        return quaternionic.array(sign_s[:, None] * quats).normalized.ndarray
 
     @quaternions.setter
     def quaternions(self, values):
-        quats = np.roll(values,-1,axis=-1)
+        quats = quaternionic.array(np.roll(values,-1,axis=-1)).normalized.ndarray
         self._points = R.from_quat(quats)
 
     def coeffs2weights(self, coeffs, cap_weights=True):
@@ -114,7 +116,8 @@ class Integrator:
         logger.info("integrals U = {}".format(integrals))
         logger.info("l_inf error = {}".format(np.max(np.abs(integrals - np.eye(1, self.ell)[0]))))
 
-        self.U = csc_matrix(U)
+        self.U = U
+        # self.U = csc_matrix(U)
 
         # Compute V
         logger.info("Construct V matrix")
