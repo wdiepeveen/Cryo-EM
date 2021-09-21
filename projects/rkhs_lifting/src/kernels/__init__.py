@@ -1,9 +1,9 @@
 
 
 class RKHS_Kernel:
-    def __init__(self, width):
-
-        self.width = width
+    # def __init__(self, width):
+    #
+    #     self.width = width
 
     def apply_kernel(self, omega):
         raise NotImplementedError(
