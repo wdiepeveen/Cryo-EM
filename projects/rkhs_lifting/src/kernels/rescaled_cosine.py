@@ -21,8 +21,7 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         threshold_ij = (np.pi / self.width - distance_ij).step()
         no_thresh_kernel_ij = (self.width / 2 * distance_ij).cos() ** 2  # **Symbolic** (M, N) matrix
         kernel_ij = threshold_ij * no_thresh_kernel_ij  # Symbolic
-        print("K_ij = {}".format(kernel_ij))
-        print("K_ij[1,2] = {}".format(kernel_ij[0,:10]))
+        # print("K_ij = {}".format(kernel_ij))
 
         self.kernel_matrix = kernel_ij
 
