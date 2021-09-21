@@ -8,7 +8,7 @@ from projects.rkhs_lifting.src.manifolds.so3 import SO3
 from projects.rkhs_lifting.src.mesh import Mesh
 
 
-class SO3_Midpoint_Refinement(Mesh):
+class SO3_Midpoint_Barycentre_Refinement(Mesh):
 
     def __init__(self, quats=None, h=None):
         """ Setup a simplicial grid on SO(3).
@@ -59,8 +59,11 @@ class SO3_Midpoint_Refinement(Mesh):
                     edgecenters[e[0], e[1]] = edgecenters[e[1], e[0]] = nverts
                     nverts += 1
         edges = np.array(edges, dtype=np.int64)
+        barycenters = np.int64(np.arange(nverts, nverts + nsimplices))
+        nverts += nsimplices
         verts = np.concatenate((verts,
-                                self.manifold.mean(verts[edges][None], np.ones((1, 1, 2)))[0, :, 0],), axis=0)
+                                self.manifold.mean(verts[edges][None], np.ones((1, 1, 2)))[0, :, 0],
+                                self.manifold.mean(verts[simplices][None], np.ones((1, 1, 4)))[0, :, 0],), axis=0)
 
         newsims = []
         for j, sim in enumerate(simplices):
@@ -70,15 +73,17 @@ class SO3_Midpoint_Refinement(Mesh):
             p14 = edgecenters[sim[0], sim[3]]
             p24 = edgecenters[sim[1], sim[3]]
             p34 = edgecenters[sim[2], sim[3]]
-            assert np.all([p12, p23, p13, p14, p24, p34])
+            pc = barycenters[j]
+            assert np.all([p12, p23, p13, p14, p24, p34, pc])
             newsims.extend([
-                [sim[0], p12, p13, p14],  # K1
-                [sim[1], p12, p23, p24],  # K2
-                [sim[2], p13, p23, p34],  # K3
-                [sim[3], p12, p13, p14],  # K4
-                [sim[3], p12, p23, p24],  # K5
-                [sim[3], p13, p23, p34],  # K6
-                [sim[3], p12, p13, p23],  # K7
+                [sim[0], p12, p13, p14],
+                [pc, p12, p13, p14],
+                [sim[1], p12, p23, p24],
+                [pc, p12, p23, p24],
+                [sim[2], p13, p23, p34],
+                [pc, p13, p23, p34],
+                [sim[3], p14, p24, p34],
+                [pc, p14, p24, p34],
             ])
         simplices = np.asarray(newsims)
 
