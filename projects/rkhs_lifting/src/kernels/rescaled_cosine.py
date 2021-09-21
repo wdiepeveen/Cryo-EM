@@ -26,4 +26,4 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         self.kernel_matrix = kernel_ij
 
     def apply_kernel(self, vector):
-        return vector @ self.kernel_matrix  # Assuming here that we are dealing with a row vector
+        return self.kernel_matrix @ vector # Assuming here that we are dealing with a row vector
