@@ -6,10 +6,10 @@ from solvers.lifting.integration.rkhs.kernels import RKHS_Kernel
 
 
 class Rescaled_Cosine_Kernel(RKHS_Kernel):
-    def __init__(self, quats, sep_distance):  # , kappa=None):
+    def __init__(self, quats, radius):  # , kappa=None):
 
         # Use separation distance between grid points to find suitable kappa
-        kappa = int(np.floor(np.pi/sep_distance))  # Then we have separation distance <= pi/kappa
+        kappa = int(np.floor(np.pi/radius))  # Then we have radius <= pi/kappa
 
         super().__init__(kappa)
 
