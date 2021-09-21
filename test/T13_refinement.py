@@ -4,7 +4,7 @@ from solvers.lifting.integration.refined_mesh import RefinedMeshIntegrator
 from solvers.lifting.integration.icosahedron import IcosahedronIntegrator
 
 # Construct integrator
-integrator = RefinedMeshIntegrator(ell_max=0, mesh_norm=np.pi/5, base_integrator="icosahedron")
+integrator = RefinedMeshIntegrator(ell_max=0, mesh_norm=np.pi/10, base_integrator="icosahedron")
 # integrator = IcosahedronIntegrator()
 
 print(integrator.quaternions)
@@ -25,6 +25,6 @@ ax.set_ylabel("$\\theta$")
 
 # ax.zaxis.set_rotate_label(False)
 ax.set_zlabel("$\psi$")  #, rotation=0)
-plt.colorbar(img)
+# plt.colorbar(img)
 
 plt.show()
