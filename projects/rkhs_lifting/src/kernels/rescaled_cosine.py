@@ -2,7 +2,7 @@ import numpy as np
 
 from pykeops.numpy import LazyTensor as LazyTensor_np
 
-from solvers.lifting.integration.rkhs.kernels import RKHS_Kernel
+from projects.rkhs_lifting.src.kernels import RKHS_Kernel
 
 
 class Rescaled_Cosine_Kernel(RKHS_Kernel):
