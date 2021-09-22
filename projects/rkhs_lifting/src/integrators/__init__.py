@@ -14,9 +14,9 @@ class RKHS_Density_Integrator:
 
         self.dtype = dtype
 
-        assert issubclass(base_integrator, SO3_Integrator)
+        assert issubclass(type(base_integrator), SO3_Integrator)
         self.base_integrator = base_integrator
-        assert issubclass(kernel, RKHS_Kernel)
+        assert issubclass(type(kernel), RKHS_Kernel)
         self.kernel = kernel
 
         self.n = base_integrator.n
