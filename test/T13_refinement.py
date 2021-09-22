@@ -4,7 +4,7 @@ from solvers.lifting.integration.refined_mesh import RefinedMeshIntegrator
 from solvers.lifting.integration.icosahedron import IcosahedronIntegrator
 
 # Construct integrator
-integrator = RefinedMeshIntegrator(ell_max=0, mesh_norm=np.pi/10, base_integrator="icosahedron")
+integrator = RefinedMeshIntegrator(ell_max=0, mesh_norm=np.pi/2, base_integrator="icosahedron")
 # integrator = IcosahedronIntegrator()
 
 print(integrator.quaternions)
