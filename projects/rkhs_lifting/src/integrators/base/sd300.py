@@ -14,7 +14,7 @@ class SD300(SO3_Integrator):
         filename = "sdr011_00600.txt"
         filepath = os.path.join(data_dir, filename)
 
-        all_quats = np.array_split(np.loadtxt(filepath, dtype=self.dtype), [4], axis=1)[0]
+        all_quats = np.array_split(np.loadtxt(filepath, dtype=dtype), [4], axis=1)[0]
 
         # Remove SO3 duplicates
         reference_dir = np.array([1.0, 1e-4, 1.1e-4, 1.5e-4])
