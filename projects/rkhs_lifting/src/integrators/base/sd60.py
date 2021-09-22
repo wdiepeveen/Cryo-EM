@@ -1,42 +1,24 @@
 import numpy as np
+import os
 
-from projects.rkhs_lifting.src.integrators.so3_haar import SO3_Integrator
+from projects.rkhs_lifting.src.integrators.base import SO3_Integrator
 
 
 class SD60(SO3_Integrator):
-    """Icosahedron integrator"""
+    """Icosahedron Integration"""
 
     def __init__(self, dtype=np.float32):
 
-        # Compute Euler angles
-        angles = np.zeros((60, 3))
+        # Read quaternions from text file
+        data_dir = os.path.join(os.path.dirname(__file__), "points")
+        filename = "sdr011_00120.txt"
+        filepath = os.path.join(data_dir, filename)
 
-        for i in range(12):
-            if i == 0:
-                phi = 0
-                theta = 0
-            elif i <= 5:
-                phi = 2 / 5 * i * np.pi
-                theta = np.arctan(2)
-            elif i <= 10:
-                phi = 2 / 5 * (i - 5) * np.pi + 1 / 5 * np.pi
-                theta = np.pi - np.arctan(2)
-            else:
-                phi = 0
-                theta = np.pi
+        all_quats = np.array_split(np.loadtxt(filepath, dtype=self.dtype), [4], axis=1)[0]
 
-            for j in range(5):
-                if i == 0 or i == 11:
-                    c = 0
-                else:
-                    c = 1 / 5 * np.pi
+        # Remove SO3 duplicates
+        reference_dir = np.array([1.0, 1e-4, 1.1e-4, 1.5e-4])
+        quatskeep = (all_quats.dot(reference_dir) > 0)
+        quaternions = all_quats[quatskeep]
 
-                omega = 2 / 5 * j * np.pi + c
-                if omega - phi < 0:
-                    psi = 2 * np.pi + omega - phi
-                else:
-                    psi = omega - phi
-
-                angles[i * 5 + j] = np.array([phi, theta, psi])
-
-        super().__init__(angles, representation="angles", dtype=dtype)
+        super().__init__(quaternions, dtype=dtype)

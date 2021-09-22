@@ -5,7 +5,7 @@ class RKHS_Kernel:
     #
     #     self.width = width
 
-    def apply_kernel(self, omega):
+    def matrix_mult(self, vector):
         raise NotImplementedError(
             "Subclasses should implement this and return an matrix-like object"
         )
