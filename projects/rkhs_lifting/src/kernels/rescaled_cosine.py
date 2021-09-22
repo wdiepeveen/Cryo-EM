@@ -6,7 +6,7 @@ from projects.rkhs_lifting.src.kernels import RKHS_Kernel
 
 
 class Rescaled_Cosine_Kernel(RKHS_Kernel):
-    def __init__(self, quaternions, radius):  # , kappa=None):
+    def __init__(self, quaternions=None, radius=np.pi/10):  # , kappa=None):
 
         # Use separation distance between grid points to find suitable kappa
         width = int(np.floor(np.pi/radius))  # Then we have radius <= pi/kappa

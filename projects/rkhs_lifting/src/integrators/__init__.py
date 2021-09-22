@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class RKHS_Density_Integrator:
     """Integration against a density build up from RKHS kernels"""
-    def __init__(self, base_integrator, kernel, dtype=np.float32):
+    def __init__(self, base_integrator=None, kernel=None, dtype=np.float32):
 
         self.dtype = dtype
 
