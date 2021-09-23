@@ -9,12 +9,12 @@ class Joint_Volume_Rots_Solver:
             "Subclasses should implement this"
         )
 
-    def stage1_step_solver(self):
+    def step_solver(self):
         raise NotImplementedError(
             "Subclasses should implement this"
         )
 
-    def stage2_step_solver(self):
+    def finalize_solver(self):
         raise NotImplementedError(
             "Subclasses should implement this"
         )
@@ -22,8 +22,8 @@ class Joint_Volume_Rots_Solver:
     def solve(self):
         while not self.stop_solver():
             self.iter += 1
-            self.stage1_step_solver()
+            self.step_solver()
 
-        self.stage2_step_solver()
+        self.finalize_solver()
 
         # TODO return result

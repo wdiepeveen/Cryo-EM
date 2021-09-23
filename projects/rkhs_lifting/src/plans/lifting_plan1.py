@@ -1,72 +1,68 @@
 import numpy as np
 import logging
 
-from aspire.image import Image
 from aspire.volume import Volume
+from aspire.image import Image
 
+from projects.rkhs_lifting.src.plans import Plan
+from projects.rkhs_lifting.src.plans.problems.lifting_problem1 import Lifting_Problem1
+from projects.rkhs_lifting.src.plans.options.lifting_options1 import Lifting_Options1
 
 logger = logging.getLogger(__name__)
 
-# TODO Delete once everything in liftingsolver1
 
-class RKHS_Lifting1:
+class Lifting_Plan1(Plan):
     def __init__(self,
-                 imgs=None,
                  vol=None,
+                 density_coeffs=None,
+                 dual_coeffs=None,
+                 stop=None,  # TODO here a default stopping criterion
+                 stop_density_update=None,  # TODO here a default stopping criterion
+                 images=None,
                  filter=None,
-                 # offsets=None,
                  amplitude=None,
-                 dtype=np.float32,
                  integrator=None,
+                 dtype=np.float32,
                  seed=0,
                  ):
-        super().__init__(imgs=imgs,
-                         vol=vol,
-                         filter=filter,
-                         amplitude=amplitude,
-                         dtype=dtype,
-                         # integrator=integrator,
-                         seed=seed)
 
-        # TODO Setup problem and options
+        if images is None:
+            raise RuntimeError("No data provided")
+        else:
+            assert isinstance(images, Image)
 
-        self.dual_rots_dcoef = np.zeros((self.N, self.n+1))
+        self.p = Lifting_Problem1(images=images,
+                                  filter=filter,
+                                  amplitude=amplitude,
+                                  integrator=integrator,
+                                  dtype=dtype,
+                                  seed=seed)
 
-        # TODO
+        if vol is None:
+            raise RuntimeError("No volume provided")
+        else:
+            assert isinstance(vol, Volume)
 
-    def forward(self):
-        """
-        Apply forward image model to volume
-        :param vol: A volume instance.
-        :param start: Start index of image to consider
-        :param num: Number of images to consider
-        :return: The images obtained from volume by projecting, applying CTFs, translating, and multiplying by the
-            amplitude.
-        """
-        # print(type(self.vol))
-        im = self.vol.project(0, self.integrator.rots)
-        im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
-        # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
-        im *= self.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
-                                # but might as well do one for every entry
+        if vol.dtype != self.p.dtype:
+            logger.warning(
+                f"{self.__class__.__name__}"
+                f" vol.dtype {vol.dtype} != self.dtype {self.p.dtype}."
+                " In the future this will raise an error."
+            )
 
-        return im
+        # Initialize density coefficients
+        if density_coeffs is None:
+            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
 
-    def adjoint_forward(self, im):
-        """
-        Apply adjoint mapping to set of images
-        :param im: An Image instance to which we wish to apply the adjoint of the forward model.
-        :param start: Start index of image to consider
-        :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
-        """
-        weights = self.integrator.coeffs2weights(self.rots_dcoef)
+        if dual_coeffs is None:
+            dual_coeffs = np.zeros((1, self.p.N), dtype=self.p.dtype)
 
-        integrands = Image(np.einsum("ig,ikl->gkl", weights, im.asnumpy()))
-        integrands *= self.amplitude
-        # im = im.shift(-self.offsets[all_idx, :])
-        integrands = self.eval_filter(integrands)
+        self.o = Lifting_Options1(vol=vol,
+                                  density_coeffs=density_coeffs,
+                                  dual_coeffs=dual_coeffs,
+                                  stop=stop,
+                                  stop_density_update=stop_density_update,
+                                  )
 
-        res = integrands.backproject(self.integrator.rots)[0]
-
-        logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
-        return res
+    def get_cost(self):
+        k = 1  # TODO get from options and hard-code this here
