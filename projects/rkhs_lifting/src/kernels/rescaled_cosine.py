@@ -13,6 +13,7 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         # Use separation distance between grid points to find suitable kappa
         width = int(np.floor(np.pi / radius))  # Then we have radius <= pi/kappa
 
+        print("quaternions.dtype = {}".format(quaternions.dtype))
         x_i = LazyTensor_np(quaternions[:, None, :]).dtype(self.dtype)  # x_i.shape = (M, 1, 4)
         y_j = LazyTensor_np(quaternions[None, :, :]).dtype(self.dtype)  # y_j.shape = ( 1, M, 4)
 
