@@ -78,12 +78,12 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], n, axis=0)
         qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
-        q = self.plan.p.integrator.coeffs_to_weights(np.ones((n, N), dtype=dtype))  # TODO this is not correct if we have non-identity integration
+        q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
         logger.info("Computed qs, shape = {}".format(q.shape))
 
-        e = np.ones((n, 1), dtype=dtype)
+        e = np.ones((n, N), dtype=dtype)
         print("e.shape = {}".format(e.shape))
-        A = self.plan.p.integrator.coeffs_to_weights(e)
+        A = self.plan.p.integrator.coeffs_to_weights(e)[:,0].T
         print("A.shape = {}".format(A.shape))
 
         # Compute sigmas and taus
