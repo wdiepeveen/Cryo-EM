@@ -97,13 +97,13 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         # taus = np.repeat(1 / Arowa[:, None], N, axis=1)
 
         def primal_prox(primals, sigma):
-            result = 1 / (1 + self.plan.p.rots_density_reg_param * self.plan.p.n * sigma[:, None]) * (
-                    primals - sigma[:, None] / self.plan.p.n * q)
+            result = 1 / (1 + self.plan.p.rots_density_reg_param * self.plan.p.n * sigma) * (
+                    primals - sigma / self.plan.p.n * q)
             result *= (result >= 0)
             return result
 
         def dual_prox(duals, tau):
-            result = duals - tau[:, None]
+            result = duals - tau
             return result
 
         def block_operator(primals):
@@ -119,8 +119,8 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
                                      adjoint=adjoint_block_operator,
                                      x0=self.plan.o.density_coeffs,
                                      y0=self.plan.o.dual_coeffs,
-                                     sigmas=sigmas,
-                                     taus=taus)
+                                     sigmas=sigmas[:, None],
+                                     taus=taus[:, None])
 
         solver.solve()
         self.plan.o.density_coeffs = solver.x
