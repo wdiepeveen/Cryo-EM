@@ -88,7 +88,7 @@ class Lifting_Plan1(Plan):
         print("self.p.L = {}".format(self.p.L))
         qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
-        rhos = self.p.integrator.coeffs2weights(self.o.density_coeffs)
+        rhos = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
         data_fidelity_penalty = np.sum(qs * rhos)
 
         # TODO we need to do something similar here as we do in liftingsolver1.rots_density_step
