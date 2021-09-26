@@ -88,9 +88,9 @@ def run_experiment(exp=None,
     print("sigma^2 = {}".format(squared_noise_level))
 
     base_integrator = SD1821()
-    resolution = np.pi / 5
+    resolution = np.pi / 10
     refined_integrator = Refined_SD(base_integrator=base_integrator, resolution=resolution, dtype=dtype)
-    radius = resolution
+    radius = np.pi / 20
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
