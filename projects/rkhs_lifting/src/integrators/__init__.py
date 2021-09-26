@@ -25,15 +25,15 @@ class RKHS_Density_Integrator:
 
     @property
     def angles(self):
-        return self.base_integrator.angles
+        return self.base_integrator.angles.astype(self.dtype)
 
     @property
     def rots(self):
-        return self.base_integrator.rots
+        return self.base_integrator.rots.astype(self.dtype)
 
     @property
     def quaternions(self):
-        return self.base_integrator.quaternions
+        return self.base_integrator.quaternions.astype(self.dtype)
 
     def coeffs_to_density(self, coeffs, cap_density=True):
         density = self.kernel.matrix_mult(coeffs)
