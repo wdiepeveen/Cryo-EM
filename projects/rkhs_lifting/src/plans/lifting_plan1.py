@@ -84,14 +84,13 @@ class Lifting_Plan1(Plan):
         q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
         q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
         q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], self.p.n, axis=0)
-        print("self.o.squared_noise_level = {}".format(self.o.squared_noise_level))
-        print("self.p.L = {}".format(self.p.L))
+        # print("self.o.squared_noise_level = {}".format(self.o.squared_noise_level))
+        # print("self.p.L = {}".format(self.p.L))
         qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         rhos = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
         data_fidelity_penalty = np.sum(qs * rhos)
 
-        # TODO we need to do something similar here as we do in liftingsolver1.rots_density_step
         # data_fidelity_penalty = 1 / 2 * np.sum(residual.asnumpy() ** 2) / self.o.squared_noise_level # was 1 / (2 * problem.L ** 2) * np.sum(res.asnumpy() ** 2)
 
         vol_l2_penalty = self.p.volume_reg_param / (2 * self.p.L ** 3) * np.sum(self.o.vol.asnumpy() ** 2)  # TODO factor 2L instead of just L?
