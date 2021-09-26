@@ -90,13 +90,13 @@ def run_experiment(exp=None,
     base_integrator = SD1821()
     resolution = np.pi / 10
     refined_integrator = Refined_SD(base_integrator=base_integrator, resolution=resolution, dtype=dtype)
-    radius = 1.2 * resolution
+    radius = 2 * resolution
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
 
     volume_reg_param = 1e10
-    rots_density_reg_param = 1e-5  # was 0.001
+    rots_density_reg_param = 1e-10  # was 0.001
 
     solver = RKHS_Lifting_Solver1(vol=vol_gt,
                                   squared_noise_level=squared_noise_level,
