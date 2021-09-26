@@ -32,22 +32,21 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
                  dtype=np.float32,
                  seed=0,
                  ):
+        plan = Lifting_Plan1(vol=vol,
+                             density_coeffs=density_coeffs,
+                             dual_coeffs=dual_coeffs,
+                             stop=stop,  # TODO here a default stopping criterion
+                             stop_density_update=stop_density_update,  # TODO here a default stopping criterion
+                             images=images,
+                             filter=filter,
+                             amplitude=amplitude,
+                             integrator=integrator,
+                             volume_reg_param=volume_reg_param,
+                             rots_density_reg_param=rots_density_reg_param,
+                             dtype=dtype,
+                             seed=seed, )
 
-        super().__init__()
-
-        self.plan = Lifting_Plan1(vol=vol,
-                 density_coeffs=density_coeffs,
-                 dual_coeffs=dual_coeffs,
-                 stop=stop,  # TODO here a default stopping criterion
-                 stop_density_update=stop_density_update,  # TODO here a default stopping criterion
-                 images=images,
-                 filter=filter,
-                 amplitude=amplitude,
-                 integrator=integrator,
-                 volume_reg_param=volume_reg_param,
-                 rots_density_reg_param=rots_density_reg_param,
-                 dtype=dtype,
-                 seed=seed,)
+        super().__init__(plan=plan)
 
     def stop_solver(self):
         # TODO this one should probably go better elsewhere since it is quite default
@@ -56,6 +55,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
     def step_solver(self):
         self.rots_density_step()
         self.volume_step()
+        self.cost.append(self.plan.get_cost())
 
     def finalize_solver(self):
         print("Solver has finished")
@@ -82,8 +82,8 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         # Compute sigmas and taus
         alpha = 1.
-        sigmas = 1/np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
-        taus = 1/np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
+        sigmas = 1 / np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
+        taus = 1 / np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
 
         # Acola = np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
         # Arowa = np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
@@ -138,7 +138,8 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         weights = np.repeat(sq_filters_f[:, :, np.newaxis], n, axis=2)
 
-        summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.rots_dcoef), axis=1) # TODO check whether axis=1 instead of 0 is correct
+        summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.rots_dcoef),
+                                axis=1)  # TODO check whether axis=1 instead of 0 is correct
         # print("summed densities = {}".format(summed_density))
         weights *= summed_density  # [np.newaxis, np.newaxis, :]
 
@@ -172,10 +173,11 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         f_kernel += self.plan.p.volume_reg_param * self.plan.o.squared_noise_level
 
         f_kernel = FourierKernel(
-                1.0 / f_kernel.kernel, centered=False
-            )
+            1.0 / f_kernel.kernel, centered=False
+        )
 
         # apply kernel
-        vol = np.real(f_kernel.convolve_volume(src.T)).astype(dtype)  # TODO works, but still not entirely sure why we need to transpose here
+        vol = np.real(f_kernel.convolve_volume(src.T)).astype(
+            dtype)  # TODO works, but still not entirely sure why we need to transpose here
 
         self.plan.o.vol = Volume(vol)
