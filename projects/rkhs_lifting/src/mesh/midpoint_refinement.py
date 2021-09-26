@@ -104,7 +104,8 @@ class Midpoint_Refinement(Mesh):
         """
         if quats is None:
             # Read quaternions from text file
-            data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "points"))
+            data_dir = os.path.join("data", "points")
+            # data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "points"))
             filename = "sds031_03642.txt"
             filepath = os.path.join(data_dir, filename)
             verts = np.array_split(np.loadtxt(filepath), [4], axis=1)[0]  # used , dtype=self.dtype
