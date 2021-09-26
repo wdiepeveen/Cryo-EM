@@ -85,7 +85,7 @@ def run_experiment(exp=None,
 
     # Estimate simgma
     squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    print("sigma^2 = {}".format(sq_sigma))
+    print("sigma^2 = {}".format(squared_noise_level))
 
     base_integrator = SD1821()
     resolution = np.pi / 5
