@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class Lifting_Options1(Options):
     def __init__(self,
                  vol=None,
+                 squared_noise_level=None,
                  density_coeffs=None,
                  dual_coeffs=None,
                  stop=None,
@@ -15,6 +16,7 @@ class Lifting_Options1(Options):
                  ):
         super().__init__(stop=stop)
         self.vol = vol
+        self.squared_noise_level = squared_noise_level
 
         self.density_coeffs = density_coeffs
         self.dual_coeffs = dual_coeffs

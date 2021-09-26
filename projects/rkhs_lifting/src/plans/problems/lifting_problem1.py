@@ -13,6 +13,8 @@ class Lifting_Problem1(Problem):
                  filter=None,
                  amplitude=None,
                  integrator=None,
+                 volume_reg_param=None,
+                 rots_density_reg_param=None,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -27,8 +29,10 @@ class Lifting_Problem1(Problem):
         if not issubclass(type(integrator), RKHS_Density_Integrator):
             raise RuntimeError("integrator is not an Integrator object")
         self.integrator = integrator
-
         self.n = self.integrator.n
+
+        self.volume_reg_param = volume_reg_param
+        self.rots_density_reg_param = rots_density_reg_param
 
         # TODO here maybe some functions such as cost, proxes
 

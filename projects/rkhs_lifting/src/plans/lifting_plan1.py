@@ -1,8 +1,9 @@
 import numpy as np
 import logging
 
-from aspire.volume import Volume
 from aspire.image import Image
+from aspire.utils.coor_trans import grid_2d
+from aspire.volume import Volume
 
 from projects.rkhs_lifting.src.plans import Plan
 from projects.rkhs_lifting.src.plans.problems.lifting_problem1 import Lifting_Problem1
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Lifting_Plan1(Plan):
+    """Class for preprocessing inputs and defining several functions such as cost and forward operator"""
     def __init__(self,
                  vol=None,
                  density_coeffs=None,
@@ -22,6 +24,8 @@ class Lifting_Plan1(Plan):
                  filter=None,
                  amplitude=None,
                  integrator=None,
+                 volume_reg_param=None,
+                 rots_density_reg_param=None,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -35,6 +39,8 @@ class Lifting_Plan1(Plan):
                                   filter=filter,
                                   amplitude=amplitude,
                                   integrator=integrator,
+                                  volume_reg_param=volume_reg_param,
+                                  rots_density_reg_param=rots_density_reg_param,
                                   dtype=dtype,
                                   seed=seed)
 
@@ -50,14 +56,16 @@ class Lifting_Plan1(Plan):
                 " In the future this will raise an error."
             )
 
-        # Initialize density coefficients
+        # Initialize density coefficients  # TODO we can also use normalized q here for a better start
+        # TODO Better: use 1/q since q>0 everywhere. Then normalize
         if density_coeffs is None:
-            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
+            density_coeffs = 1/self.p.n * np.ones((self.p.n, self.p.N), dtype=self.p.dtype)
 
         if dual_coeffs is None:
             dual_coeffs = np.zeros((1, self.p.N), dtype=self.p.dtype)
 
         self.o = Lifting_Options1(vol=vol,
+                                  squared_noise_level=None,
                                   density_coeffs=density_coeffs,
                                   dual_coeffs=dual_coeffs,
                                   stop=stop,
@@ -65,4 +73,80 @@ class Lifting_Plan1(Plan):
                                   )
 
     def get_cost(self):
-        k = 1  # TODO get from options and hard-code this here
+        # TODO still not entirely sure whether we shouldn't divide by L to some power here at several costs
+        residual = self.forward(self.o.vol) - self.p.images  # TODO this should not work We dont average over the manifold here
+
+        # TODO we need to do something similar here as we do in liftingsolver1.rots_density_step
+        data_fidelity_penalty = 1 / 2 * np.sum(residual.asnumpy() ** 2) / self.o.squared_noise_level # was 1 / (2 * problem.L ** 2) * np.sum(res.asnumpy() ** 2)
+
+        vol_l2_penalty = self.p.volume_reg_param / 2 * np.sum(self.o.vol.asnumpy() ** 2)
+
+        dens_l2_penalty = self.p.rots_density_reg_param * self.p.n / 2 * np.sum(self.o.density_coeffs ** 2)
+
+        cost = data_fidelity_penalty + vol_l2_penalty + dens_l2_penalty
+
+        logger.info(
+            "data penalty = {} | vol_reg penalty = {} | dens_reg1 penalty = {}".format(
+                data_fidelity_penalty,
+                vol_l2_penalty,
+                dens_l2_penalty)
+        )
+        return cost
+
+    def forward(self, vol):
+        """
+        Apply forward image model to volume
+        :param vol: A volume instance.
+        :param start: Start index of image to consider
+        :param num: Number of images to consider
+        :return: The images obtained from volume by projecting, applying CTFs, translating, and multiplying by the
+            amplitude.
+        """
+        # print(type(self.vol))
+        im = vol.project(0, self.p.integrator.rots)
+        im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
+        # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
+        im *= self.p.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
+                                # but might as well do one for every entry
+
+        return im
+
+    def adjoint_forward(self, im):
+        """
+        Apply adjoint mapping to set of images
+        :param im: An Image instance to which we wish to apply the adjoint of the forward model.
+        :param start: Start index of image to consider
+        :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
+        """
+        weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
+
+        integrands = Image(np.einsum("gi,ikl->gkl", weights, im.asnumpy()))
+        integrands *= self.p.amplitude
+        # im = im.shift(-self.offsets[all_idx, :])
+        integrands = self.eval_filter(integrands)
+
+        res = integrands.backproject(self.p.integrator.rots)[0]
+
+        logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
+        return res
+
+    def eval_filter(self, im_orig):
+        im = im_orig.copy()
+        im = Image(im.asnumpy()).filter(self.p.filter)
+
+        return im
+
+    def eval_filter_grid(self, power=1):
+        dtype = self.p.dtype
+        L = self.p.L
+
+        grid2d = grid_2d(L, dtype=dtype)
+        omega = np.pi * np.vstack((grid2d["x"].flatten(), grid2d["y"].flatten()))
+
+        filter_values = self.p.filter.evaluate(omega)
+        if power != 1:
+            filter_values **= power
+
+        h = np.reshape(filter_values, grid2d["x"].shape)
+
+        return h

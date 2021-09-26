@@ -1,9 +1,6 @@
 
 
 class RKHS_Kernel:
-    # def __init__(self, width):
-    #
-    #     self.width = width
 
     def matrix_mult(self, vector):
         raise NotImplementedError(
