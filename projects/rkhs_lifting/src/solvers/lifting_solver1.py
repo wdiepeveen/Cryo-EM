@@ -74,7 +74,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], N, axis=1)
         q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
         q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], n, axis=0)
-        qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
+        qs = (q1 + q2 + q3) / (2. * self.plan.o.squared_noise_level * L ** 2)
 
         q = self.plan.p.integrator.kernel.matrix_mult(qs)
 
