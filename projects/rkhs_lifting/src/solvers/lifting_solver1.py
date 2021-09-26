@@ -79,6 +79,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
         q = self.plan.p.integrator.kernel.matrix_mult(qs)
+        logger.info("Computed qs")
 
         A = self.plan.p.integrator.coeffs_to_weights(np.ones((n,), dtype=dtype))[None, :]
 
