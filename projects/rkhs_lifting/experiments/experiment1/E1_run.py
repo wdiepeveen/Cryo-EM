@@ -94,7 +94,7 @@ def run_experiment(exp=None,
     print("refined_integrator.quaternions.dtype = {}".format(refined_integrator.quaternions.dtype))
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
-    rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel)
+    rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
 
     volume_reg_param = 1e10
     rots_density_reg_param = 1e-5  # was 0.001

@@ -52,7 +52,7 @@ class SO3_Integrator:
         quats = np.roll(self._points.as_quat().astype(self.dtype), 1, axis=-1)
         sign_s = np.sign(quats[:, 0])
         sign_s[sign_s == 0] = 1
-        return quaternionic.array(sign_s[:, None] * quats).normalized.ndarray
+        return quaternionic.array(sign_s[:, None] * quats).normalized.ndarray.astype(self.dtype)
 
     @quaternions.setter
     def quaternions(self, values):
