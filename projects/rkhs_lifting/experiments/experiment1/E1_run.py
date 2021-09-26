@@ -84,7 +84,7 @@ def run_experiment(exp=None,
     rots_gt = sim.rots
 
     # Estimate simgma
-    sq_sigma = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma^2 = {}".format(sq_sigma))
 
     base_integrator = SD1821()
@@ -99,8 +99,9 @@ def run_experiment(exp=None,
     rots_density_reg_param = 1e-5  # was 0.001
 
     solver = RKHS_Lifting_Solver1(vol=vol_gt,
-                                  density_coeffs=None,
-                                  dual_coeffs=None,
+                                  squared_noise_level=squared_noise_level,
+                                  # density_coeffs=None,
+                                  # dual_coeffs=None,
                                   stop=1,  # TODO here a default stopping criterion
                                   # stop_density_update=None,  # TODO here a default stopping criterion
                                   images=sim.images(0, np.inf),
