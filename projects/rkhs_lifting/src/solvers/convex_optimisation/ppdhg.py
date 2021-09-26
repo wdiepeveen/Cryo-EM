@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Preconditioned_PDHG:
-    def __init__(self, primalProx=None, dualProx=None, operator=None, adjoint=None, x0=None, y0=None, sigmas=None, taus=None, tol=1e-2, max_iter=100):
+    def __init__(self, primalProx=None, dualProx=None, operator=None, adjoint=None, x0=None, y0=None, sigmas=None, taus=None, tol=1e-2, max_iter=500):
 
         # Set P-PDHG basic functions
         self.proxf = primalProx

@@ -56,6 +56,8 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
     def step_solver(self):
         self.rots_density_step()
+        self.cost.append(self.plan.get_cost())
+
         self.volume_step()
         self.cost.append(self.plan.get_cost())
 
@@ -82,9 +84,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         logger.info("Computed qs, shape = {}".format(q.shape))
 
         e = np.ones((n, N), dtype=dtype)  # Gives error if we use shape (n,1)
-        print("e.shape = {}".format(e.shape))
         A = self.plan.p.integrator.coeffs_to_weights(e)[:,0].T[None,:]
-        print("A.shape = {}".format(A.shape))
 
         # Compute sigmas and taus
         alpha = 1.
