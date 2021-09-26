@@ -11,7 +11,7 @@ class SD1821(SO3_Integrator):
 
         # Read quaternions from text file
         data_dir = os.path.join("data","points")  # os.path.join(os.path.dirname(__file__), "..", "..", "points")
-        filename = "sdr031_03642.txt"
+        filename = "sds031_03642.txt"
         filepath = os.path.join(data_dir, filename)
 
         all_quats = np.array_split(np.loadtxt(filepath, dtype=dtype), [4], axis=1)[0]
