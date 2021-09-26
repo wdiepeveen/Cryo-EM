@@ -79,7 +79,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
         q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
-        logger.info("Computed qs, shape = ".format(q.shape))
+        logger.info("Computed qs, shape = {}".format(q.shape))
 
         A = self.plan.p.integrator.coeffs_to_weights(np.ones((n,), dtype=dtype))[None, :]
 
