@@ -80,7 +80,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         q = self.plan.p.integrator.kernel.matrix_mult(qs)
 
-        A = self.plan.p.integrator.coeffs2weights(np.ones((n,)))[None, :]
+        A = self.plan.p.integrator.coeffs_to_weights(np.ones((n,)))[None, :]
 
         # Compute sigmas and taus
         alpha = 1.
