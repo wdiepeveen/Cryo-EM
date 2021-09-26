@@ -22,10 +22,13 @@ class Joint_Volume_Rots_Solver:
         )
 
     def solve(self):
+        print("Initializing solver: get initial cost")
         self.cost.append(self.plan.get_cost())  # TODO do this in an initialization
+        print("Start solver")
         while not self.stop_solver():
             self.iter += 1
             self.step_solver()
+            print("=============== Iteration 1: Cost = {} ===============".format(self.cost[-1]))
 
         self.finalize_solver()
 
