@@ -117,26 +117,27 @@ def run_experiment(exp=None,
 
     # Postprocessing step
     # TODO fix
-    quats = solver.problem.integrator.proj(solver.problem.rots_dcoef)
+    # quats = solver.problem.integrator.proj(solver.problem.rots_dcoef)
     #
-    refined_rots = quat2mat(quats)
+    # refined_rots = quat2mat(quats)
 
-    refined_vol = solver.problem.vol
+    # refined_vol = solver.problem.vol
     # refined_vol = exact_refinement(solver.problem, refined_rots)
     # TODO maybe just do a refinement solver instead of this (although might be a unnecessary work)
 
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
-             ("sim", sim),
+             ("sim", sim), # TODO: don't save sim here, but the clean and noisy images
              ("vol_gt", vol_gt),  # (img_size,)*3
              ("rots_gt", rots_gt),
              # Results
-             ("volume_est", solver.problem.vol),
-             ("refined_volume_est", refined_vol),
+             ("volume_est", solver.plan.o.vol),
+             # ("refined_volume_est", refined_vol),
              # ("rots_est", solver.problem.rots),
-             ("density_est", [integrator.angles, integrator.coeffs2weights(solver.problem.rots_dcoef)]),
-             ("refined_rots_est", refined_rots),
+             ("angles", solver.plan.p.integrator.angles),
+             ("density_on_angles",  solver.plan.p.integrator.coeffs2weights(solver.plan.o.density_coeffs)),
+             # ("refined_rots_est", refined_rots),
              ("cost", solver.cost),
              # ("relerror_u", solver.relerror_u),
              # ("relerror_g", solver.relerror_g),

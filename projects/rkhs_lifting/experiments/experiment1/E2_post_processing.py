@@ -42,26 +42,26 @@ def post_processing(exp=None,
     sim = solver_data["sim"]  # Simulator
     sim.noise_adder = SnrNoiseAdder(seed=sim.seed,
                                     snr=snr)  # bug in ASPIRE so that we cannot pickle sim like this
-    vol_init = solver_data["vol_init"]  # Volume 65L
+    # vol_init = solver_data["vol_init"]  # Volume 65L
     vol_gt = solver_data["vol_gt"]  # Volume 65L
     rots_gt = solver_data["rots_gt"]
     # Load results
     volume_est = solver_data["volume_est"]
-    refined_volume_est = solver_data["refined_volume_est"]
-    density_est = solver_data["density_est"]
-    angles, density = density_est
-    refined_rots = solver_data["refined_rots_est"]
+    # refined_volume_est = solver_data["refined_volume_est"]
+    # density_est = solver_data["density_est"]
+    angles = solver_data["angles"]
+    density_est = solver_data["density_on_angles"]
+    # refined_rots = solver_data["refined_rots_est"]
     cost = solver_data["cost"]
 
-    if i == 0 and j == 0:
-        clean_image = sim.images(0, 1, enable_noise=False)
-        exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
-        exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
+    clean_image = sim.images(0, 1, enable_noise=False)
+    exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
+    exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
 
     # Get noisy projecrtion image
     noisy_image = sim.images(0, 1, enable_noise=True)
     exp.save_im("data_projection_noisy" + postfix, noisy_image.asnumpy()[0])
-    exp.save_mrc("result_vol_preprocessing_{}SNR_{}N".format(int(1 / snr), num_imgs), vol_init.asnumpy())
+    # exp.save_mrc("result_vol_preprocessing_{}SNR_{}N".format(int(1 / snr), num_imgs), vol_init.asnumpy())
 
     # Get density plot
     fig = plt.figure()
@@ -70,7 +70,7 @@ def post_processing(exp=None,
     x = angles[:, 0]
     y = angles[:, 1]
     z = angles[:, 2]
-    c = density[0, :] * len(x)  # only first density for visualization
+    c = density_est[:,0] * len(x)  # only first density for visualization
 
     img = ax.scatter(x, y, z, c=c, cmap=plt.cool())
     ax.set_xlabel("$\phi$")
@@ -82,27 +82,27 @@ def post_processing(exp=None,
 
     exp.save_fig("density" + postfix)
 
-    refined_angles = mat2angle(refined_rots)
-    gt_angles = mat2angle(rots_gt)
+    # refined_angles = mat2angle(refined_rots)
+    # gt_angles = mat2angle(rots_gt)
 
     # Plot refined rot
-    xx = [refined_angles[0, 0], gt_angles[0,0]]
-    yy = [refined_angles[0, 1], gt_angles[0,1]]
-    zz = [refined_angles[0, 2], gt_angles[0,2]]
-    # cc = np.hstack([c, 200])
-    # TODO plot true rot also here
-
-    # Get density plot
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-
-    img = ax.scatter(xx, yy, zz)  #, c=cc, cmap=plt.cool())
-    ax.set_xlabel("$\phi$")
-    ax.set_ylabel("$\\theta$")
-    ax.set_zlabel("$\psi$")  # , rotation=0)
-    plt.colorbar(img)
-
-    exp.save_fig("refined_density" + postfix)
+    # xx = [refined_angles[0, 0], gt_angles[0,0]]
+    # yy = [refined_angles[0, 1], gt_angles[0,1]]
+    # zz = [refined_angles[0, 2], gt_angles[0,2]]
+    # # cc = np.hstack([c, 200])
+    # # TODO plot true rot also here
+    #
+    # # Get density plot
+    # fig = plt.figure()
+    # ax = fig.gca(projection='3d')
+    #
+    # img = ax.scatter(xx, yy, zz)  #, c=cc, cmap=plt.cool())
+    # ax.set_xlabel("$\phi$")
+    # ax.set_ylabel("$\\theta$")
+    # ax.set_zlabel("$\psi$")  # , rotation=0)
+    # plt.colorbar(img)
+    #
+    # exp.save_fig("refined_density" + postfix)
 
     # Make plots
     num_its = len(cost)
@@ -114,4 +114,4 @@ def post_processing(exp=None,
 
     # Save results
     exp.save_mrc("result_vol" + postfix, volume_est.asnumpy()[0])
-    exp.save_mrc("result_refined_vol" + postfix, refined_volume_est.asnumpy()[0])
+    # exp.save_mrc("result_refined_vol" + postfix, refined_volume_est.asnumpy()[0])
