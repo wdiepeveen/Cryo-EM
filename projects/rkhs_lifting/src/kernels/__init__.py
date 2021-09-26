@@ -1,6 +1,9 @@
-
+import numpy as np
 
 class RKHS_Kernel:
+
+    def __init__(self, dtype=np.float32):
+        self.dtype = dtype
 
     def matrix_mult(self, vector):
         raise NotImplementedError(
