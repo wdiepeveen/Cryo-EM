@@ -81,9 +81,9 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
         logger.info("Computed qs, shape = {}".format(q.shape))
 
-        e = np.ones((n, N), dtype=dtype)
+        e = np.ones((n, N), dtype=dtype)  # Gives error if we use shape (n,1)
         print("e.shape = {}".format(e.shape))
-        A = self.plan.p.integrator.coeffs_to_weights(e)[:,0].T
+        A = self.plan.p.integrator.coeffs_to_weights(e)[:,0].T[None,:]
         print("A.shape = {}".format(A.shape))
 
         # Compute sigmas and taus
