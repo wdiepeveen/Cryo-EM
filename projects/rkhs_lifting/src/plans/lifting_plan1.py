@@ -16,6 +16,7 @@ class Lifting_Plan1(Plan):
     """Class for preprocessing inputs and defining several functions such as cost and forward operator"""
     def __init__(self,
                  vol=None,
+                 squared_noise_level=None,
                  density_coeffs=None,
                  dual_coeffs=None,
                  stop=None,  # TODO here a default stopping criterion
@@ -65,7 +66,7 @@ class Lifting_Plan1(Plan):
             dual_coeffs = np.zeros((1, self.p.N), dtype=self.p.dtype)
 
         self.o = Lifting_Options1(vol=vol,
-                                  squared_noise_level=None,
+                                  squared_noise_level=squared_noise_level,
                                   density_coeffs=density_coeffs,
                                   dual_coeffs=dual_coeffs,
                                   stop=stop,
@@ -83,7 +84,7 @@ class Lifting_Plan1(Plan):
         q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
         q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
         q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], self.p.n, axis=0)
-        qs = (q1 + q2 + q3) / (2. * self.o.squared_noise_level * self.p.L ** 2)
+        qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         rhos = self.p.integrator.coeffs2weights(self.o.density_coeffs)
         data_fidelity_penalty = np.sum(qs * rhos)
