@@ -80,7 +80,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         q = self.plan.p.integrator.kernel.matrix_mult(qs)
 
-        A = self.plan.p.integrator.coeffs_to_weights(np.ones((n,)))[None, :]
+        A = self.plan.p.integrator.coeffs_to_weights(np.ones((n,), dtype=dtype))[None, :]
 
         # Compute sigmas and taus
         alpha = 1.
@@ -108,6 +108,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         def adjoint_block_operator(duals):
             return A.T @ duals
 
+        print("Start PPDHG")
         solver = Preconditioned_PDHG(primalProx=primal_prox,
                                      dualProx=dual_prox,
                                      operator=block_operator,
