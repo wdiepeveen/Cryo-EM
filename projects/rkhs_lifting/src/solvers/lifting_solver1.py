@@ -145,7 +145,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         weights = np.repeat(sq_filters_f[:, :, np.newaxis], n, axis=2)
 
-        summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.rots_dcoef),
+        summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.density_coeffs),
                                 axis=1)  # TODO check whether axis=1 instead of 0 is correct
         # print("summed densities = {}".format(summed_density))
         weights *= summed_density  # [np.newaxis, np.newaxis, :]
