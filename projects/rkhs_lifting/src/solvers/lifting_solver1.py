@@ -117,13 +117,13 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
                                      dualProx=dual_prox,
                                      operator=block_operator,
                                      adjoint=adjoint_block_operator,
-                                     x0=self.plan.o.rots_dcoef,
+                                     x0=self.plan.o.density_coeffs,
                                      y0=self.plan.o.dual_coeffs,
                                      sigmas=sigmas,
                                      taus=taus)
 
         solver.solve()
-        self.plan.o.rots_dcoef = solver.x
+        self.plan.o.density_coeffs = solver.x
         self.plan.o.dual_coeffs = solver.y
 
         return solver.normalized_errors
