@@ -19,6 +19,7 @@ class Vallee_Poussin_Kernel(RKHS_Kernel):  # TODO Test!
         kernel_ij = normalisation * (distance_ij / 2).cos() ** (2*kappa)  # **Symbolic** (M, N) matrix
         # print("K_ij = {}".format(kernel_ij))
 
+        self.norm = np.sqrt(normalisation)
         self.kernel_matrix = kernel_ij
 
     def matrix_mult(self, vector):

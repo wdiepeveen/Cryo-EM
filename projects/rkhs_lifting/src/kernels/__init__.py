@@ -5,6 +5,9 @@ class RKHS_Kernel:
     def __init__(self, dtype=np.float32):
         self.dtype = dtype
 
+        self.norm = None
+        self.kernel_matrix = None
+
     def matrix_mult(self, vector):
         raise NotImplementedError(
             "Subclasses should implement this and return an matrix-like object"

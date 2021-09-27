@@ -96,7 +96,7 @@ def run_experiment(exp=None,
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
 
     volume_reg_param = 1e10
-    rots_density_reg_param = 1e-10  # was 0.001
+    rots_density_reg_param = 1e-10 / rkhs_integrator.kernel.norm ** 2  # was 0.001
 
     solver = RKHS_Lifting_Solver1(vol=vol_gt,
                                   squared_noise_level=squared_noise_level,

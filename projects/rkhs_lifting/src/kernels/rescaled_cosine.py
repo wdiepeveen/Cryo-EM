@@ -20,11 +20,12 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         distance_ij = 2 * (x_i.normalize() * y_j.normalize()).sum(-1).clamp(-1, 1).abs().acos()
         threshold_ij = (np.pi / width - distance_ij).step()
         no_thresh_kernel_ij = (width / 2 * distance_ij).cos() ** 2  # **Symbolic** (M, N) matrix
-        normalization = 2 * np.pi * width * (width ** 2 - 1) / (
+        normalisation = 2 * np.pi * width * (width ** 2 - 1) / (
                     np.pi * (width ** 2 - 1) - width ** 3 * np.sin(np.pi / width))
-        assert normalization > 0
-        kernel_ij = normalization * threshold_ij * no_thresh_kernel_ij  # Symbolic
+        assert normalisation > 0
+        kernel_ij = normalisation * threshold_ij * no_thresh_kernel_ij  # Symbolic
 
+        self.norm = np.sqrt(normalisation)
         self.kernel_matrix = kernel_ij
 
     def matrix_mult(self, vector):
