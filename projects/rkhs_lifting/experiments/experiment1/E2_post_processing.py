@@ -72,7 +72,7 @@ def post_processing(exp=None,
     z = angles[:, 2]
     c = density_est[:,0] * len(x)  # only first density for visualization
 
-    img = ax.scatter(x, y, z, c=c, cmap=plt.cool())
+    img = ax.scatter(x, y, z, c=c, cmap=plt.cool(), alpha=0.1)
     ax.set_xlabel("$\phi$")
     ax.set_ylabel("$\\theta$")
 
