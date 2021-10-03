@@ -9,7 +9,7 @@ from projects.rkhs_lifting.src.mesh.midpoint_refinement import Midpoint_Refineme
 
 logger = logging.getLogger(__name__)
 
-repeat = 3
+repeat = 4
 
 # Output location quaternions text file
 data_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..", "data", "points", "refined")
