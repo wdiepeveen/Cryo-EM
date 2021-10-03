@@ -2,9 +2,7 @@ import numpy as np
 import os
 import logging
 
-# from projects.rkhs_lifting.src.integrators.base.sd60 import SD60
 from projects.rkhs_lifting.src.integrators.base.sd300 import SD300
-# from projects.rkhs_lifting.src.integrators.base.sd1821 import SD1821
 from projects.rkhs_lifting.src.mesh.midpoint_refinement import Midpoint_Refinement
 
 logger = logging.getLogger(__name__)
