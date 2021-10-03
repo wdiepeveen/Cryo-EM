@@ -12,7 +12,8 @@ from noise.noise import SnrNoiseAdder
 from tools.exp_tools import Exp
 
 from projects.rkhs_lifting.src.integrators.base.sd1821 import SD1821
-from projects.rkhs_lifting.src.integrators.base.refined_sd import Refined_SD
+from projects.rkhs_lifting.src.integrators.base.sd1821mrx import SD1821MRx
+# from projects.rkhs_lifting.src.integrators.base.refined_sd import Refined_SD
 from projects.rkhs_lifting.src.integrators import RKHS_Density_Integrator
 from projects.rkhs_lifting.src.kernels.rescaled_cosine import Rescaled_Cosine_Kernel
 from projects.rkhs_lifting.src.solvers.lifting_solver1 import RKHS_Lifting_Solver1
@@ -87,9 +88,8 @@ def run_experiment(exp=None,
     squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma^2 = {}".format(squared_noise_level))
 
-    base_integrator = SD1821()
-    resolution = np.pi / 10
-    refined_integrator = Refined_SD(base_integrator=base_integrator, resolution=resolution, dtype=dtype)
+    refined_integrator = SD1821MRx(repeat=2, dtype=dtype)
+    resolution = refined_integrator.mesh_norm
     radius = 0.5 * resolution
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
