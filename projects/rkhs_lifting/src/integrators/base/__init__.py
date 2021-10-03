@@ -14,10 +14,14 @@ logger = logging.getLogger(__name__)
 class SO3_Integrator:
     """Integration with respect to the Haar measure"""
 
-    def __init__(self, quaternions, weights=None, dtype=np.float32):
+    def __init__(self, quaternions, sep_dist, mesh_norm, tri_dist, weights=None, dtype=np.float32):
 
         self.dtype = dtype
         self.n = quaternions.shape[0]
+
+        self.sep_dist = sep_dist  # Separation distance
+        self.mesh_norm = mesh_norm  # Mesh norm
+        self.tri_dist = tri_dist  # Maximum distance in the triangulation
 
         self.manifold = SO3()
 

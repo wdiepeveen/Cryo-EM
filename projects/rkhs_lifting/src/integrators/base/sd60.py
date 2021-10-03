@@ -10,8 +10,8 @@ class SD60(SO3_Integrator):
     def __init__(self, dtype=np.float32):
 
         # Read quaternions from text file
-        data_dir = os.path.join("data", "points")
-        # data_dir = os.path.join(os.path.dirname(__file__), "..", "..", "points")
+        # data_dir = os.path.join("data", "points")
+        data_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..", "data", "points")
         filename = "sdr011_00120.txt"
         filepath = os.path.join(data_dir, filename)
 
@@ -22,4 +22,8 @@ class SD60(SO3_Integrator):
         quatskeep = (all_quats.dot(reference_dir) > 0)
         quaternions = all_quats[quatskeep]
 
-        super().__init__(quaternions, dtype=dtype)
+        sep_dist = 1.25664  # See Womersly, Efficient Spherical Designs with Good Geometric Properties
+        mesh_norm = 0.77628  # See Womersly, Efficient Spherical Designs with Good Geometric Properties
+        tri_dist = 1.25664
+
+        super().__init__(quaternions, sep_dist, mesh_norm, tri_dist, dtype=dtype)
