@@ -74,24 +74,22 @@ class Lifting_Plan1(Plan):
                                   )
 
     def get_cost(self):
-        # TODO still not entirely sure whether we shouldn't divide by L to some power here at several costs
-        # residual = self.forward(self.o.vol) - self.p.images  # TODO this should not work We dont average over the manifold here
-
         # Compute q's
         rots_sampling_projections = self.forward(self.o.vol).asnumpy()
         im = self.p.images.asnumpy()
 
-        q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
-        q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-        q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], self.p.n, axis=0)
-        # print("self.o.squared_noise_level = {}".format(self.o.squared_noise_level))
-        # print("self.p.L = {}".format(self.p.L))
-        qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
+        residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
+        qs = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
+
+        # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
+        # q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
+        # q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], self.p.n, axis=0)
+        # # print("self.o.squared_noise_level = {}".format(self.o.squared_noise_level))
+        # # print("self.p.L = {}".format(self.p.L))
+        # qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         rhos = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
         data_fidelity_penalty = np.sum(qs * rhos)
-
-        # data_fidelity_penalty = 1 / 2 * np.sum(residual.asnumpy() ** 2) / self.o.squared_noise_level # was 1 / (2 * problem.L ** 2) * np.sum(res.asnumpy() ** 2)
 
         vol_l2_penalty = self.p.volume_reg_param / (2 * self.p.L ** 3) * np.sum(self.o.vol.asnumpy() ** 2)  # TODO factor 2L instead of just L?
 
