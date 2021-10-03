@@ -75,16 +75,19 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         rots_sampling_projections = self.plan.forward(self.plan.o.vol).asnumpy()
         im = self.plan.p.images.asnumpy()
 
-        q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], N, axis=1)
-        q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-        q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], n, axis=0)
-        qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
+        residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
+        qs = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
+
+        # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], N, axis=1)
+        # q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
+        # q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], n, axis=0)
+        # qs = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
         q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
         logger.info("Computed qs, shape = {}".format(q.shape))
 
         e = np.ones((n, N), dtype=dtype)  # Gives error if we use shape (n,1)
-        A = self.plan.p.integrator.coeffs_to_weights(e)[:,0].T[None,:]
+        A = self.plan.p.integrator.coeffs_to_weights(e)[:, 0].T[None, :]
 
         # Compute sigmas and taus
         alpha = 1.
