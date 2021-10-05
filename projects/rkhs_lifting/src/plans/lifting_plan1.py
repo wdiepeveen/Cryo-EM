@@ -27,7 +27,7 @@ class Lifting_Plan1(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_density_reg_param=None,
-                 batch_size=1024,
+                 batch_size=512,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -79,6 +79,7 @@ class Lifting_Plan1(Plan):
         # Compute q's
         im = self.p.images.asnumpy()
         qs = np.zeros((self.p.n, self.p.N))
+        logger.info("Construct qs with batch size {}".format(self.o.batch_size))
         for start in range(0, self.p.n, self.o.batch_size):
             logger.info("Running through projections {}/{} = {}%".format(start, self.p.n, start/self.p.n))
             rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
