@@ -74,12 +74,25 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         logger.info("Computing qs")
         im = self.plan.p.images.asnumpy()
         qs = np.zeros((n, N))
-        for start in range(0, n, self.plan.o.batch_size):
-            logger.info("Running through projections {}/{} = {}%".format(start, self.plan.p.n, np.round(start/self.plan.p.n*100,2)))
+        logger.info("Construct qs with batch size {}".format(self.plan.o.batch_size))
+        q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
+        for start in range(0, self.plan.p.n, self.plan.o.batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
             rots_sampling_projections = self.plan.forward(self.plan.o.vol, start, self.plan.o.batch_size).asnumpy()
 
+            q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
+            q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
+
             all_idx = np.arange(start, min(start + self.plan.o.batch_size, n))
-            qs[all_idx, :] = np.sum((rots_sampling_projections[:, None, :, :] - im[None, :, :, :]) ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
+            qs[all_idx, :] = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
+
+        # for start in range(0, n, self.plan.o.batch_size):
+        #     logger.info("Running through projections {}/{} = {}%".format(start, self.plan.p.n, np.round(start/self.plan.p.n*100,2)))
+        #     rots_sampling_projections = self.plan.forward(self.plan.o.vol, start, self.plan.o.batch_size).asnumpy()
+        #
+        #     all_idx = np.arange(start, min(start + self.plan.o.batch_size, n))
+        #     qs[all_idx, :] = np.sum((rots_sampling_projections[:, None, :, :] - im[None, :, :, :]) ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
             # residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
             # qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
