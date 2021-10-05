@@ -28,7 +28,7 @@ class Joint_Volume_Rots_Solver:
         while not self.stop_solver():
             self.iter += 1
             self.step_solver()
-            print("=============== Iteration 1: Cost = {} ===============".format(self.cost[-1]))
+            # print("=============== Iteration 1: Cost = {} ===============".format(self.cost[-1]))
 
         self.finalize_solver()
 
