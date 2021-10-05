@@ -56,10 +56,10 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
     def step_solver(self):
         self.rots_density_step()
-        self.cost.append(self.plan.get_cost())
+        # self.cost.append(self.plan.get_cost())
 
         self.volume_step()
-        self.cost.append(self.plan.get_cost())
+        # self.cost.append(self.plan.get_cost())
 
     def finalize_solver(self):
         print("Solver has finished")
