@@ -73,7 +73,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         # Compute q:
         logger.info("Computing qs")
         im = self.plan.p.images.asnumpy()
-        qs = np.zeros((n, N))
+        qs = np.zeros((n, N), dtype=self.plan.p.dtype)
         logger.info("Construct qs with batch size {}".format(self.plan.o.batch_size))
         q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
         for start in range(0, self.plan.p.n, self.plan.o.batch_size):
