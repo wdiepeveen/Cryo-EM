@@ -75,12 +75,14 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         im = self.plan.p.images.asnumpy()
         qs = np.zeros((n, N))
         for start in range(0, n, self.plan.o.batch_size):
-            logger.info("Running through projections {}/{} = {}%".format(start, n, start / n))
+            logger.info("Running through projections {}/{} = {}%".format(start, self.plan.p.n, np.round(start/self.plan.p.n*100,2)))
             rots_sampling_projections = self.plan.forward(self.plan.o.vol, start, self.plan.o.batch_size).asnumpy()
 
             all_idx = np.arange(start, min(start + self.plan.o.batch_size, n))
-            residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
-            qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
+            qs[all_idx, :] = np.sum((rots_sampling_projections[:, None, :, :] - im[None, :, :, :]) ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
+
+            # residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
+            # qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
         # rots_sampling_projections = self.plan.forward(self.plan.o.vol).asnumpy()
         # im = self.plan.p.images.asnumpy()
