@@ -88,7 +88,7 @@ def run_experiment(exp=None,
     squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma^2 = {}".format(squared_noise_level))
 
-    refined_integrator = SD1821MRx(repeat=2, dtype=dtype)
+    refined_integrator = SD1821MRx(repeat=1, dtype=dtype)
     resolution = refined_integrator.mesh_norm
     radius = 0.5 * resolution
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
