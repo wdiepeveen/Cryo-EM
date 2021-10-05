@@ -84,7 +84,7 @@ class Lifting_Plan1(Plan):
             rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
 
             all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
-            residual = rots_sampling_projections[all_idx, None, :, :] - im[None, :, :, :]
+            residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
             qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
