@@ -27,7 +27,7 @@ class Lifting_Plan1(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_density_reg_param=None,
-                 batch_size=4096,
+                 batch_size=8192,
                  dtype=np.float32,
                  seed=0,
                  ):
