@@ -9,6 +9,7 @@ from projects.rkhs_lifting.src.mesh import Mesh
 
 
 class Local_Refinement(Mesh):
+    # TODO (re)write this class
 
     def __init__(self, quats=None, h=None):
         """ Setup a local grid around a rotation on SO(3).

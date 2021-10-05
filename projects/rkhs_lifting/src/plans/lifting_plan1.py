@@ -27,6 +27,7 @@ class Lifting_Plan1(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_density_reg_param=None,
+                 batch_size=512,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -71,15 +72,20 @@ class Lifting_Plan1(Plan):
                                   dual_coeffs=dual_coeffs,
                                   stop=stop,
                                   stop_density_update=stop_density_update,
+                                  batch_size=batch_size,
                                   )
 
     def get_cost(self):
         # Compute q's
-        rots_sampling_projections = self.forward(self.o.vol).asnumpy()
         im = self.p.images.asnumpy()
+        qs = np.zeros((self.p.n, self.p.N))
+        for start in range(0, self.p.n, self.o.batch_size):
+            logger.info("Running through projections {}/{} = {}%".format(start, self.p.n, start/self.p.n))
+            rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
 
-        residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
-        qs = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
+            all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
+            residual = rots_sampling_projections[all_idx, None, :, :] - im[None, :, :, :]
+            qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
         # q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
@@ -105,7 +111,7 @@ class Lifting_Plan1(Plan):
         )
         return cost
 
-    def forward(self, vol):
+    def forward(self, vol, start, num):
         """
         Apply forward image model to volume
         :param vol: A volume instance.
@@ -114,8 +120,9 @@ class Lifting_Plan1(Plan):
         :return: The images obtained from volume by projecting, applying CTFs, translating, and multiplying by the
             amplitude.
         """
+        all_idx = np.arange(start, min(start + num, self.p.n))
         # print(type(self.vol))
-        im = vol.project(0, self.p.integrator.rots)
+        im = vol.project(0, self.p.integrator.rots[all_idx, :, :])
         im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
         # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
         im *= self.p.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
