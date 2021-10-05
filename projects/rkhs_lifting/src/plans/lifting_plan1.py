@@ -81,12 +81,15 @@ class Lifting_Plan1(Plan):
         qs = np.zeros((self.p.n, self.p.N))
         logger.info("Construct qs with batch size {}".format(self.o.batch_size))
         for start in range(0, self.p.n, self.o.batch_size):
-            logger.info("Running through projections {}/{} = {}%".format(start, self.p.n, start/self.p.n))
+            logger.info("Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start/self.p.n*100,2)))
             rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
 
             all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
-            residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
-            qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
+            qs[all_idx, :] = np.sum((rots_sampling_projections[:, None, :, :] - im[None, :, :, :]) ** 2,
+                                    axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
+
+            # residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
+            # qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
         # q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
