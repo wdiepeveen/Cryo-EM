@@ -98,7 +98,7 @@ def run_experiment(exp=None,
     volume_reg_param = 1e10
     rots_density_reg_param = 1e-10 / rkhs_integrator.kernel.norm ** 2  # was 0.001
 
-    solver = RKHS_Lifting_Solver1(vol=vol_gt,
+    solver = RKHS_Lifting_Solver1(vol=exp_vol_gt,
                                   squared_noise_level=squared_noise_level,
                                   # density_coeffs=None,
                                   # dual_coeffs=None,
@@ -130,7 +130,7 @@ def run_experiment(exp=None,
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
              ("sim", sim), # TODO: don't save sim here, but the clean and noisy images
-             ("vol_gt", vol_gt),  # (img_size,)*3
+             ("vol_gt", exp_vol_gt),  # (img_size,)*3
              ("rots_gt", rots_gt),
              # Results
              ("volume_est", solver.plan.o.vol),
