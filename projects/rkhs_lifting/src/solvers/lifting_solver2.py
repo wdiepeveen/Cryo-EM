@@ -100,8 +100,7 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         def proxg(y):
             proj = np.ones((1, n), dtype=dtype) @ y
-            print("proj.shape = {}".format(proj.shape))
-            result = y - (1 - proj)/n * y
+            result = y - (1 - proj)/n * np.ones((n,), dtype=dtype)[:,None]
             return result
 
         print("Start DRS")
