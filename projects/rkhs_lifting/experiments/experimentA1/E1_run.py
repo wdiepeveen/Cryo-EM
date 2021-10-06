@@ -25,6 +25,7 @@ def run_experiment(exp=None,
                    num_imgs=None,
                    snr=1.,
                    img_size=65,
+                   mr_repeat=1,
                    data_path=None,
                    ):
     logger.info(
@@ -88,7 +89,7 @@ def run_experiment(exp=None,
     squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma^2 = {}".format(squared_noise_level))
 
-    refined_integrator = SD1821MRx(repeat=1, dtype=dtype)
+    refined_integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
     resolution = refined_integrator.mesh_norm
     radius = 0.5 * resolution
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
@@ -129,7 +130,7 @@ def run_experiment(exp=None,
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
-             ("sim", sim), # TODO: don't save sim here, but the clean and noisy images
+             ("sim", sim),  # TODO: don't save sim here, but the clean and noisy images
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
              ("rots_gt", rots_gt),
              # Results
@@ -137,7 +138,7 @@ def run_experiment(exp=None,
              # ("refined_volume_est", refined_vol),
              # ("rots_est", solver.problem.rots),
              ("angles", solver.plan.p.integrator.angles),
-             ("density_on_angles",  solver.plan.p.integrator.coeffs_to_weights(solver.plan.o.density_coeffs)),
+             ("density_on_angles", solver.plan.p.integrator.coeffs_to_weights(solver.plan.o.density_coeffs)),
              # ("refined_rots_est", refined_rots),
              ("cost", solver.cost),
              # ("relerror_u", solver.relerror_u),
