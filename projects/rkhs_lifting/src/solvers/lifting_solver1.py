@@ -164,6 +164,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         dtype = self.plan.p.dtype
 
         # compute adjoint forward map of images
+        logger.info("Compute adjoint forward mapping on the images")
         src = self.plan.adjoint_forward(self.plan.p.images)
 
         # compute kernel in fourier domain
