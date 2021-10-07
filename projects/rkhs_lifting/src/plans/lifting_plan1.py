@@ -152,21 +152,20 @@ class Lifting_Plan1(Plan):
 
         return im
 
-    def adjoint_forward(self, im, start):
+    def adjoint_forward(self, im):
         """
         Apply adjoint mapping to set of images
         :param im: An Image instance to which we wish to apply the adjoint of the forward model.
         :param start: Start index of image to consider
         :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
-        num = im.n_images
-
         weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
 
         integrands = Image(np.einsum("gi,ikl->gkl", weights, im.asnumpy()))
         integrands *= self.p.amplitude
         # im = im.shift(-self.offsets[all_idx, :])
         integrands = self.eval_filter(integrands)
+        # TODO here we need an iteration over all batches for the backproject part
 
         res = integrands.backproject(self.p.integrator.rots)[0]
 
