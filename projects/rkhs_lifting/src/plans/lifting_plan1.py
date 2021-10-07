@@ -59,8 +59,7 @@ class Lifting_Plan1(Plan):
                 " In the future this will raise an error."
             )
 
-        # Initialize density coefficients  # TODO we can also use normalized q here for a better start
-        # TODO Better: use 1/q since q>0 everywhere. Then normalize
+        # Initialize density coefficients
         if density_coeffs is None:
             logger.info("Initializing density")
             im = self.p.images.asnumpy()
@@ -78,6 +77,7 @@ class Lifting_Plan1(Plan):
                 all_idx = np.arange(start, min(start + batch_size, self.p.n))
                 qs[all_idx, :] = (q1 + q2 + q3) / (2 * squared_noise_level * self.p.L ** 2)
 
+            logger.info("Start computing Wqs")
             Wqs = self.p.integrator.coeffs_to_weights(qs)
             density_coeffs = np.eye(self.p.n, dtype=self.p.dtype)[:, np.argmax(Wqs, axis=0)]  # Gives us one hot vectors at the maximum Wqs value
 
