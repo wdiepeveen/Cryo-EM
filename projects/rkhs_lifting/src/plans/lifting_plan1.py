@@ -79,7 +79,10 @@ class Lifting_Plan1(Plan):
 
             logger.info("Start computing Wqs")
             Wqs = self.p.integrator.coeffs_to_weights(qs)
-            density_coeffs = np.eye(self.p.n, dtype=self.p.dtype)[:, np.argmax(Wqs, axis=0)]  # Gives us one hot vectors at the maximum Wqs value
+            argmaxes = np.argmax(Wqs, axis=0)
+            # print(argmaxes)
+            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
+            density_coeffs[argmaxes,np.arange(self.p.N)] = 1
 
             # density_coeffs = 1 / self.p.n * np.ones((self.p.n, self.p.N), dtype=self.p.dtype)
 

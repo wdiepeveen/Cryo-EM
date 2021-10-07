@@ -77,9 +77,10 @@ class Lifting_Plan2(Plan):
                 qs[all_idx, :] = (q1 + q2 + q3) / (2 * squared_noise_level * self.p.L ** 2)
 
             Wqs = self.p.integrator.coeffs_to_weights(qs)
-            density_coeffs = np.eye(self.p.n, dtype=self.p.dtype)[:,
-                             np.argmax(Wqs, axis=0)]  # Gives us one hot vectors at the maximum Wqs value
-
+            argmaxes = np.argmax(Wqs, axis=0)
+            # print(argmaxes)
+            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
+            density_coeffs[argmaxes, np.arange(self.p.N)] = 1
 
         if drs_coeffs is None:
                 drs_coeffs = density_coeffs
