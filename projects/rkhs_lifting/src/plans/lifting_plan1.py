@@ -62,29 +62,29 @@ class Lifting_Plan1(Plan):
         # Initialize density coefficients
         if density_coeffs is None:
             logger.info("Initializing density")
-            # im = self.p.images.asnumpy()
-            # qs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-            # logger.info("Construct qs with batch size {}".format(batch_size))
-            # q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
-            # for start in range(0, self.p.n, batch_size):
-            #     logger.info("Running through projections {}/{} = {}%".format(start, self.p.n,
-            #                                                                  np.round(start / self.p.n * 100, 2)))
-            #     rots_sampling_projections = self.forward(vol, start, batch_size).asnumpy()
-            #
-            #     q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
-            #     q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-            #
-            #     all_idx = np.arange(start, min(start + batch_size, self.p.n))
-            #     qs[all_idx, :] = (q1 + q2 + q3) / (2 * squared_noise_level * self.p.L ** 2)
-            #
-            # logger.info("Start computing Wqs")
-            # Wqs = self.p.integrator.coeffs_to_weights(qs)
-            # argmaxes = np.argmax(Wqs, axis=0)
-            # # print(argmaxes)
-            # density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-            # density_coeffs[argmaxes,np.arange(self.p.N)] = 1
+            im = self.p.images.asnumpy()
+            qs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
+            logger.info("Construct qs with batch size {}".format(batch_size))
+            q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
+            for start in range(0, self.p.n, batch_size):
+                logger.info("Running through projections {}/{} = {}%".format(start, self.p.n,
+                                                                             np.round(start / self.p.n * 100, 2)))
+                rots_sampling_projections = self.forward(vol, start, batch_size).asnumpy()
 
-            density_coeffs = 1 / self.p.n * np.ones((self.p.n, self.p.N), dtype=self.p.dtype)
+                q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
+                q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
+
+                all_idx = np.arange(start, min(start + batch_size, self.p.n))
+                qs[all_idx, :] = (q1 + q2 + q3) / (2 * squared_noise_level * self.p.L ** 2)
+
+            logger.info("Start computing Wqs")
+            Wqs = self.p.integrator.coeffs_to_weights(qs)
+            argmins = np.argmin(Wqs, axis=0)
+            # print(argmaxes)
+            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
+            density_coeffs[argmins,np.arange(self.p.N)] = 1
+
+            # density_coeffs = 1 / self.p.n * np.ones((self.p.n, self.p.N), dtype=self.p.dtype)
 
         if dual_coeffs is None:
             dual_coeffs = np.zeros((1, self.p.N), dtype=self.p.dtype)
@@ -114,24 +114,6 @@ class Lifting_Plan1(Plan):
 
             all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
             qs[all_idx, :] = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
-
-        # for start in range(0, self.p.n, self.o.batch_size):
-        #     logger.info("Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start/self.p.n*100,2)))
-        #     rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
-        #
-        #     all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
-        #     qs[all_idx, :] = np.sum((rots_sampling_projections[:, None, :, :] - im[None, :, :, :]) ** 2,
-        #                             axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
-
-        # residual = rots_sampling_projections[:, None, :, :] - im[None, :, :, :]
-        # qs[all_idx, :] = np.sum(residual ** 2, axis=(2, 3)) / (2 * self.o.squared_noise_level * self.p.L ** 2)
-
-        # q1 = np.repeat(np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None], self.p.N, axis=1)
-        # q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-        # q3 = np.repeat(np.sum(im ** 2, axis=(1, 2))[None, :], self.p.n, axis=0)
-        # # print("self.o.squared_noise_level = {}".format(self.o.squared_noise_level))
-        # # print("self.p.L = {}".format(self.p.L))
-        # qs = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         rhos = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
         data_fidelity_penalty = np.sum(qs * rhos)
@@ -170,13 +152,15 @@ class Lifting_Plan1(Plan):
 
         return im
 
-    def adjoint_forward(self, im):
+    def adjoint_forward(self, im, start):
         """
         Apply adjoint mapping to set of images
         :param im: An Image instance to which we wish to apply the adjoint of the forward model.
         :param start: Start index of image to consider
         :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
+        num = im.n_images
+
         weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
 
         integrands = Image(np.einsum("gi,ikl->gkl", weights, im.asnumpy()))
