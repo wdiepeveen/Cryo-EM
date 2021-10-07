@@ -65,7 +65,7 @@ class Lifting_Plan1(Plan):
             logger.info("Initializing density")
             im = self.p.images.asnumpy()
             qs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-            logger.info("Construct qs with batch size {}".format(self.o.batch_size))
+            logger.info("Construct qs with batch size {}".format(batch_size))
             q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
             for start in range(0, self.p.n, batch_size):
                 logger.info("Running through projections {}/{} = {}%".format(start, self.p.n,
