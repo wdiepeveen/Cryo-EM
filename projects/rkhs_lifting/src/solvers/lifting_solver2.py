@@ -50,7 +50,6 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         super().__init__(plan=plan)
 
-
     def stop_solver(self):
         # TODO this one should probably go better elsewhere since it is quite default
         return self.iter == self.plan.o.stop  # TODO this now only works since we assume that this is an integer
@@ -91,22 +90,21 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
         q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
         logger.info("Computed qs, shape = {}".format(q.shape))
 
-
         def proxf(y):
-            result = 1 / (1 + self.plan.p.rots_density_reg_param * n ) * (
+            result = 1 / (1 + self.plan.p.rots_density_reg_param * n) * (
                     y - 1 / n * q)
             result *= (result >= 0)
             return result
 
         def proxg(y):
             proj = np.ones((1, n), dtype=dtype) @ y
-            result = y - (1 - proj)/n * np.ones((n,), dtype=dtype)[:,None]
+            result = y + (1 - proj) / n * np.ones((n,), dtype=dtype)[:, None]
             return result
 
         print("Start DRS")
         solver = Douglas_Rachford_Splitting(proxf=proxf,
-                                     proxg=proxg,
-                                     x0=self.plan.o.drs_coeffs,
+                                            proxg=proxg,
+                                            x0=self.plan.o.drs_coeffs,
                                             )
 
         solver.solve()

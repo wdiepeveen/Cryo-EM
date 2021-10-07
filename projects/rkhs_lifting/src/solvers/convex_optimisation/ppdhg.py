@@ -89,12 +89,12 @@ class Preconditioned_PDHG:
 
     def solve(self):
         k = 1
-        print("primal iterate = {}".format(self.x[0, 0:5]))
-        print("dual iterate = {}".format(self.y[0, 0:5]))
+        # print("primal iterate = {}".format(self.x[0, 0:5]))
+        # print("dual iterate = {}".format(self.y[0, 0:5]))
         while self.normalized_error > self.tol and k <= self.max_iter:
             print("=============== ITERATION {} ===============".format(k))
             self.do_step()
             k += 1
-            print("primal iterate = {}".format(self.x[0,0:5]))
-            print("dual iterate = {}".format(self.y[0,0:5]))
-            print("barred primal iterate = {}".format(self.xb[0, 0:5]))
+            # print("primal iterate = {}".format(self.x[0,0:5]))
+            # print("dual iterate = {}".format(self.y[0,0:5]))
+            # print("barred primal iterate = {}".format(self.xb[0, 0:5]))
