@@ -153,26 +153,30 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.p.amplitude ** 2
 
-        weights = np.repeat(sq_filters_f[:, :, np.newaxis], n, axis=2)
-
         summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.density_coeffs),
                                 axis=1)  # TODO check whether axis=1 instead of 0 is correct
-        # print("summed densities = {}".format(summed_density))
-        weights *= summed_density  # [np.newaxis, np.newaxis, :]
-
-        if L % 2 == 0:
-            weights[0, :, :] = 0
-            weights[:, 0, :] = 0
-
-        weights = m_flatten(weights)
 
         # TODO memory overload here very likely -> split rots here too?
         for start in range(0, self.plan.p.n, self.plan.o.rots_batch_size):
             logger.info(
                 "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
             all_idx = np.arange(start, min(start + self.plan.o.rots_batch_size, n))
-            pts_rot = rotated_grids(L, self.plan.p.integrator.rots[all_idx,:,:])
-            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
+
+            # weights = np.repeat(sq_filters_f[:, :, None], self.plan.o.rots_batch_size, axis=2)
+            # TODO hier gebleven 8 okt 2021 12:31
+            # print("summed densities = {}".format(summed_density))
+            summed_density_ = summed_density[all_idx]
+            print(summed_density_.shape)
+            weights = sq_filters_f[:, :, None] * summed_density_[None, None, :]  # [np.newaxis, np.newaxis, :]
+
+            if L % 2 == 0:
+                weights[0, :, :] = 0
+                weights[:, 0, :] = 0
+
+            weights = m_flatten(weights)
+
+            pts_rot = rotated_grids(L, self.plan.p.integrator.rots[all_idx, :, :])
+            pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
