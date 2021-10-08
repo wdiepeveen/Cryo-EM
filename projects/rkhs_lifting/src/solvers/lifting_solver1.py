@@ -160,21 +160,26 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         # print("summed densities = {}".format(summed_density))
         weights *= summed_density  # [np.newaxis, np.newaxis, :]
 
-        pts_rot = rotated_grids(L, self.plan.p.integrator.rots)
-        # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
-        pts_rot = m_reshape(pts_rot, (3, -1))
-
         if L % 2 == 0:
             weights[0, :, :] = 0
             weights[:, 0, :] = 0
 
         weights = m_flatten(weights)
 
-        kernel += (
-                1
-                / (L ** 4)  # TODO check whether scaling is correct like this
-                * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
-        )
+        # TODO memory overload here very likely -> split rots here too?
+        for start in range(0, self.plan.p.n, self.plan.o.rots_batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
+            all_idx = np.arange(start, min(start + self.plan.o.rots_batch_size, n))
+            pts_rot = rotated_grids(L, self.plan.p.integrator.rots[all_idx,:,:])
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
+            pts_rot = m_reshape(pts_rot, (3, -1))
+
+            kernel += (
+                    1
+                    / (L ** 4)  # TODO check whether scaling is correct like this
+                    * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
+            )
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0
