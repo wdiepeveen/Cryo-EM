@@ -106,7 +106,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
         # taus = np.repeat(1 / Arowa[:, None], N, axis=1)
 
         def primal_prox(primals, sigma):
-            result = 1 / (1 + self.plan.p.rots_density_reg_param * self.plan.p.n * sigma) * (
+            result = 1 / (1 + self.plan.p.rots_density_reg_param * self.plan.p.integrator.kernel.norm ** 2 * sigma) * (
                     primals - sigma / self.plan.p.n * q)
             result *= (result >= 0)
             return result
@@ -175,7 +175,7 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
             weights = m_flatten(weights)
 
             pts_rot = rotated_grids(L, self.plan.p.integrator.rots[all_idx, :, :])
-            pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this? -> No, but was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
