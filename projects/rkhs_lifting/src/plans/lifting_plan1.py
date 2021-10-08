@@ -28,7 +28,7 @@ class Lifting_Plan1(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_density_reg_param=None,
-                 batch_size=8192,
+                 rots_batch_size=8192,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -95,24 +95,24 @@ class Lifting_Plan1(Plan):
                                   dual_coeffs=dual_coeffs,
                                   stop=stop,
                                   stop_density_update=stop_density_update,
-                                  batch_size=batch_size,
+                                  rots_batch_size=rots_batch_size,
                                   )
 
     def get_cost(self):
         # Compute q's
         im = self.p.images.asnumpy()
         qs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-        logger.info("Construct qs with batch size {}".format(self.o.batch_size))
+        logger.info("Construct qs with batch size {}".format(self.o.rots_batch_size))
         q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
-        for start in range(0, self.p.n, self.o.batch_size):
+        for start in range(0, self.p.n, self.o.rots_batch_size):
             logger.info(
                 "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
-            rots_sampling_projections = self.forward(self.o.vol, start, self.o.batch_size).asnumpy()
+            rots_sampling_projections = self.forward(self.o.vol, start, self.o.rots_batch_size).asnumpy()
 
             q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
             q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
 
-            all_idx = np.arange(start, min(start + self.o.batch_size, self.p.n))
+            all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
             qs[all_idx, :] = (q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)
 
         rhos = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
@@ -166,8 +166,12 @@ class Lifting_Plan1(Plan):
         # im = im.shift(-self.offsets[all_idx, :])
         integrands = self.eval_filter(integrands)
         # TODO here we need an iteration over all batches for the backproject part
-
-        res = integrands.backproject(self.p.integrator.rots)[0]
+        res = np.zeros((self.p.L, self.p.L, self.p.L), dtype=self.p.dtype)
+        for start in range(0, self.p.n, self.o.rots_batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
+            all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
+            res += integrands.backproject(self.p.integrator.rots[all_idx, :, :])[0]
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res

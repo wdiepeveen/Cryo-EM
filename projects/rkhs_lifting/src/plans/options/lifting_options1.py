@@ -13,7 +13,7 @@ class Lifting_Options1(Options):
                  dual_coeffs=None,
                  stop=None,
                  stop_density_update=None,
-                 batch_size=None,
+                 rots_batch_size=None,
                  ):
         super().__init__(stop=stop)
         self.vol = vol
@@ -24,7 +24,7 @@ class Lifting_Options1(Options):
 
         self.stop_density_update = stop_density_update
 
-        self.batch_size = batch_size
+        self.rots_batch_size = rots_batch_size
 
     def get_solver_result(self):
         return self.vol
