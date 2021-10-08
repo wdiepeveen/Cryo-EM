@@ -161,18 +161,18 @@ class Lifting_Plan1(Plan):
         """
         weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
 
-        integrands = Image(np.einsum("gi,ikl->gkl", weights, im.asnumpy()))
-        integrands *= self.p.amplitude
-        # im = im.shift(-self.offsets[all_idx, :])
-        integrands = self.eval_filter(integrands)
-        # TODO here we need an iteration over all batches for the backproject part
         res = np.zeros((self.p.L, self.p.L, self.p.L), dtype=self.p.dtype)
         for start in range(0, self.p.n, self.o.rots_batch_size):
             logger.info(
                 "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
             all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
-            imgs = Image(integrands[all_idx, :, :])
-            res += imgs.backproject(self.p.integrator.rots[all_idx, :, :])[0]
+
+            integrands = Image(np.einsum("gi,ikl->gkl", weights[all_idx, :], im.asnumpy()[all_idx, :, :]))
+            integrands *= self.p.amplitude
+            # im = im.shift(-self.offsets[all_idx, :])
+            integrands = self.eval_filter(integrands)
+
+            res += integrands.backproject(self.p.integrator.rots[all_idx, :, :])[0]
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res
