@@ -152,14 +152,14 @@ class Lifting_Plan1(Plan):
 
         return im
 
-    def adjoint_forward(self, im):
+    def adjoint_forward(self, im, weights):
         """
         Apply adjoint mapping to set of images
         :param im: An Image instance to which we wish to apply the adjoint of the forward model.
         :param start: Start index of image to consider
         :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
-        weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
+        # weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
 
         res = np.zeros((self.p.L, self.p.L, self.p.L), dtype=self.p.dtype)
         for start in range(0, self.p.n, self.o.rots_batch_size):
