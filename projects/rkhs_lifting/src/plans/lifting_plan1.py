@@ -171,7 +171,7 @@ class Lifting_Plan1(Plan):
             logger.info(
                 "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
             all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
-            imgs = integrands[all_idx, :, :]
+            imgs = Image(integrands[all_idx, :, :])
             res += imgs.backproject(self.p.integrator.rots[all_idx, :, :])[0]
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
