@@ -25,6 +25,7 @@ def run_experiment(exp=None,
                    num_imgs=None,
                    snr=1.,
                    img_size=65,
+                   kernel_radius=np.pi / 20,
                    mr_repeat=1,
                    data_path=None,
                    ):
@@ -91,7 +92,7 @@ def run_experiment(exp=None,
 
     refined_integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
     resolution = refined_integrator.mesh_norm
-    radius = 0.5 * resolution
+    radius = kernel_radius
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
