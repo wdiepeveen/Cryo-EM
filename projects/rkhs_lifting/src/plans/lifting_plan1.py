@@ -167,7 +167,7 @@ class Lifting_Plan1(Plan):
                 "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
             all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
 
-            integrands = Image(np.einsum("gi,ikl->gkl", weights[all_idx, :], im.asnumpy()[all_idx, :, :]))
+            integrands = Image(np.einsum("gi,ikl->gkl", weights[all_idx, :], im.asnumpy()))
             integrands *= self.p.amplitude
             # im = im.shift(-self.offsets[all_idx, :])
             integrands = self.eval_filter(integrands)
