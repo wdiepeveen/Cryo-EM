@@ -91,7 +91,7 @@ def run_experiment(exp=None,
     print("sigma^2 = {}".format(squared_noise_level))
 
     refined_integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
-    resolution = refined_integrator.mesh_norm
+    # resolution = refined_integrator.mesh_norm
     radius = kernel_radius
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
