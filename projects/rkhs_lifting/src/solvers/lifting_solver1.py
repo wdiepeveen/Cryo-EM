@@ -97,8 +97,8 @@ class RKHS_Lifting_Solver1(Joint_Volume_Rots_Solver):
 
         # Compute sigmas and taus
         alpha = 1.
-        sigmas = 1 / np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
-        taus = 1 / np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
+        sigmas = 0.9 / np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
+        taus = 0.9 / np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
 
         # Acola = np.sum(np.abs(A) ** (2 - alpha), axis=0)  # For the sigmas
         # Arowa = np.sum(np.abs(A) ** alpha, axis=1)  # For the taus
