@@ -98,8 +98,8 @@ def run_experiment(exp=None,
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
-    logger.info("integrator mesh norm = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.mesh_norm,
-                                                                            np.pi / rkhs_integrator.base_integrator.mesh_norm))
+    logger.info("integrator separation distance = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.sep_dist,
+                                                                            np.pi / rkhs_integrator.base_integrator.sep_dist))
     solver = RKHS_Lifting_Solver2(vol=exp_vol_gt,
                                   squared_noise_level=squared_noise_level,
                                   # density_coeffs=None,
