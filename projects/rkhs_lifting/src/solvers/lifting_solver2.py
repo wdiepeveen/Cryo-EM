@@ -87,12 +87,12 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
             all_idx = np.arange(start, min(start + self.plan.o.batch_size, n))
             qs[all_idx, :] = (q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * L ** 2)
 
-        q = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
-        logger.info("Computed qs, shape = {}".format(q.shape))
+        Wqs = self.plan.p.integrator.coeffs_to_weights(qs)  # TODO this is not correct if we have non-identity integration
+        logger.info("Computed Wqs, shape = {}".format(Wqs.shape))
 
         def proxf(y):
-            result = 1 / (1 + self.plan.p.rots_density_reg_param * n) * (
-                    y - 1 / n * q)
+            result = 1 / (1 + self.plan.p.rots_density_reg_param * self.plan.p.integrator.kernel.norm**2) * (
+                    y - 1 / n * Wqs)
             result *= (result >= 0)
             return result
 
@@ -105,21 +105,25 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
         solver = Douglas_Rachford_Splitting(proxf=proxf,
                                             proxg=proxg,
                                             x0=self.plan.o.drs_coeffs,
+                                            xref=self.plan.o.ref_drs_coeffs
                                             )
 
         solver.solve()
         self.plan.o.drs_coeffs = solver.x.astype(dtype)
         self.plan.o.density_coeffs = proxf(self.plan.o.drs_coeffs).astype(dtype)
 
-        return solver.normalized_errors
+        return solver.ref_relerrors
 
     def volume_step(self):
         L = self.plan.p.L
         n = self.plan.p.n
         dtype = self.plan.p.dtype
 
+        evaluated_density = self.plan.p.integrator.coeffs_to_weights(self.plan.o.density_coeffs)
+
         # compute adjoint forward map of images
-        src = self.plan.adjoint_forward(self.plan.p.images)
+        logger.info("Compute adjoint forward mapping on the images")
+        src = self.plan.adjoint_forward(self.plan.p.images, evaluated_density)
 
         # compute kernel in fourier domain
 
@@ -128,28 +132,34 @@ class RKHS_Lifting_Solver2(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.p.amplitude ** 2
 
-        weights = np.repeat(sq_filters_f[:, :, np.newaxis], n, axis=2)
+        summed_density = np.sum(evaluated_density, axis=1)  # TODO check whether axis=1 instead of 0 is correct
 
-        summed_density = np.sum(self.plan.p.integrator.coeffs_to_weights(self.plan.o.density_coeffs),
-                                axis=1)  # TODO check whether axis=1 instead of 0 is correct
-        # print("summed densities = {}".format(summed_density))
-        weights *= summed_density  # [np.newaxis, np.newaxis, :]
+        for start in range(0, self.plan.p.n, self.plan.o.rots_batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
+            all_idx = np.arange(start, min(start + self.plan.o.rots_batch_size, n))
 
-        pts_rot = rotated_grids(L, self.plan.p.integrator.rots)
-        # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this?
-        pts_rot = m_reshape(pts_rot, (3, -1))
+            # weights = np.repeat(sq_filters_f[:, :, None], self.plan.o.rots_batch_size, axis=2)
 
-        if L % 2 == 0:
-            weights[0, :, :] = 0
-            weights[:, 0, :] = 0
+            # print("summed densities = {}".format(summed_density))
+            summed_density_ = summed_density[all_idx]
+            weights = sq_filters_f[:, :, None] * summed_density_[None, None, :]  # [np.newaxis, np.newaxis, :]
 
-        weights = m_flatten(weights)
+            if L % 2 == 0:
+                weights[0, :, :] = 0
+                weights[:, 0, :] = 0
 
-        kernel += (
-                1
-                / (L ** 4)  # TODO check whether scaling is correct like this
-                * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
-        )
+            weights = m_flatten(weights)
+
+            pts_rot = rotated_grids(L, self.plan.p.integrator.rots[all_idx, :, :])
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this? -> No, but was in Aspire. Might be needed for non radial kernels
+            pts_rot = m_reshape(pts_rot, (3, -1))
+
+            kernel += (
+                    1
+                    / (L ** 4)  # TODO check whether scaling is correct like this
+                    * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
+            )
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0

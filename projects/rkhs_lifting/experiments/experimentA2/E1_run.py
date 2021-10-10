@@ -25,7 +25,10 @@ def run_experiment(exp=None,
                    num_imgs=None,
                    snr=1.,
                    img_size=65,
+                   kernel_radius=np.pi / 20,
                    mr_repeat=1,
+                   volume_reg_param=1e10,
+                   rots_density_reg_param=1e-6,
                    data_path=None,
                    ):
     logger.info(
@@ -90,15 +93,13 @@ def run_experiment(exp=None,
     print("sigma^2 = {}".format(squared_noise_level))
 
     refined_integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
-    resolution = refined_integrator.mesh_norm
-    radius = 0.5 * resolution
+    # resolution = refined_integrator.mesh_norm
+    radius = kernel_radius
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
-
-    volume_reg_param = 1e10
-    rots_density_reg_param = 1e-10 / rkhs_integrator.kernel.norm ** 2  # was 0.001
-
+    logger.info("integrator mesh norm = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.mesh_norm,
+                                                                            np.pi / rkhs_integrator.base_integrator.mesh_norm))
     solver = RKHS_Lifting_Solver2(vol=exp_vol_gt,
                                   squared_noise_level=squared_noise_level,
                                   # density_coeffs=None,

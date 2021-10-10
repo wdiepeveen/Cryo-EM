@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class Lifting_Plan2(Plan):
     """Class for preprocessing inputs and defining several functions such as cost and forward operator"""
+
     def __init__(self,
                  vol=None,
                  squared_noise_level=None,
@@ -27,7 +28,7 @@ class Lifting_Plan2(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_density_reg_param=None,
-                 batch_size=8192,
+                 rots_batch_size=8192,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -61,26 +62,7 @@ class Lifting_Plan2(Plan):
         # Initialize density coefficients
         if density_coeffs is None:
             logger.info("Initializing density")
-            im = self.p.images.asnumpy()
-            qs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-            logger.info("Construct qs with batch size {}".format(batch_size))
-            q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
-            for start in range(0, self.p.n, batch_size):
-                logger.info("Running through projections {}/{} = {}%".format(start, self.p.n,
-                                                                             np.round(start / self.p.n * 100, 2)))
-                rots_sampling_projections = self.forward(vol, start, batch_size).asnumpy()
-
-                q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
-                q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-
-                all_idx = np.arange(start, min(start + batch_size, self.p.n))
-                qs[all_idx, :] = (q1 + q2 + q3) / (2 * squared_noise_level * self.p.L ** 2)
-
-            Wqs = self.p.integrator.coeffs_to_weights(qs)
-            argmaxes = np.argmax(Wqs, axis=0)
-            # print(argmaxes)
-            density_coeffs = np.zeros((self.p.n, self.p.N), dtype=self.p.dtype)
-            density_coeffs[argmaxes, np.arange(self.p.N)] = 1
+            density_coeffs = 1 / self.p.n * np.ones((self.p.n, self.p.N), dtype=self.p.dtype)
 
         if drs_coeffs is None:
                 drs_coeffs = density_coeffs
@@ -91,7 +73,7 @@ class Lifting_Plan2(Plan):
                                   drs_coeffs=drs_coeffs,
                                   stop=stop,
                                   stop_density_update=stop_density_update,
-                                  batch_size=batch_size,
+                                  rots_batch_size=rots_batch_size,
                                   )
 
     def get_cost(self):
@@ -138,30 +120,33 @@ class Lifting_Plan2(Plan):
             amplitude.
         """
         all_idx = np.arange(start, min(start + num, self.p.n))
-        # print(type(self.vol))
         im = vol.project(0, self.p.integrator.rots[all_idx, :, :])
         im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
         # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
         im *= self.p.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
-                                # but might as well do one for every entry
+        # but might as well do one for every entry
 
         return im
 
-    def adjoint_forward(self, im):
+    def adjoint_forward(self, im, weights):
         """
         Apply adjoint mapping to set of images
         :param im: An Image instance to which we wish to apply the adjoint of the forward model.
         :param start: Start index of image to consider
         :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
-        weights = self.p.integrator.coeffs_to_weights(self.o.density_coeffs)
+        res = np.zeros((self.p.L, self.p.L, self.p.L), dtype=self.p.dtype)
+        for start in range(0, self.p.n, self.o.rots_batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, self.p.n, np.round(start / self.p.n * 100, 2)))
+            all_idx = np.arange(start, min(start + self.o.rots_batch_size, self.p.n))
 
-        integrands = Image(np.einsum("gi,ikl->gkl", weights, im.asnumpy()))
-        integrands *= self.p.amplitude
-        # im = im.shift(-self.offsets[all_idx, :])
-        integrands = self.eval_filter(integrands)
+            integrands = Image(np.einsum("gi,ikl->gkl", weights[all_idx, :], im.asnumpy()))
+            integrands *= self.p.amplitude
+            # im = im.shift(-self.offsets[all_idx, :])
+            integrands = self.eval_filter(integrands)
 
-        res = integrands.backproject(self.p.integrator.rots)[0]
+            res += integrands.backproject(self.p.integrator.rots[all_idx, :, :])[0]
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res
