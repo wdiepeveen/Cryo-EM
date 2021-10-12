@@ -79,9 +79,9 @@ def post_processing(exp=None,
     ax.set_xlabel("$\phi$")
     ax.set_ylabel("$\\theta$")
     ax.set_zlabel("$\psi$")  #, rotation=0)
-    ax.xlim([-np.pi, np.pi])
-    ax.ylim([0, np.pi])
-    ax.zlim([-np.pi, np.pi])
+    ax.set_xlim([-np.pi, np.pi])
+    ax.set_ylim([0, np.pi])
+    ax.set_zlim([-np.pi, np.pi])
     plt.colorbar(img)
 
     exp.save_fig("density" + postfix)
