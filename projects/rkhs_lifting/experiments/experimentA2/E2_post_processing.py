@@ -71,10 +71,11 @@ def post_processing(exp=None,
     y = angles[:, 1]
     z = angles[:, 2]
     c = density_est[:,0] * len(x)  # only first density for visualization
+    mask = (c >= max(c)/2)
     
     print("integrated (averaged) density = {}".format(np.sum(c)/len(x)))
 
-    img = ax.scatter(x, y, z, c=c, cmap=plt.cool(), alpha=0.1)
+    img = ax.scatter(x[mask], y[mask], z[mask], c=c[mask], cmap=plt.cool(), alpha=0.1)
     ax.set_xlabel("$\phi$")
     ax.set_ylabel("$\\theta$")
 
