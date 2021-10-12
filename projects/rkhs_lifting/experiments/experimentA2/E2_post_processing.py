@@ -71,7 +71,8 @@ def post_processing(exp=None,
     y = angles[:, 1]
     z = angles[:, 2]
     c = density_est[:,0] * len(x)  # only first density for visualization
-    mask = (c >= max(c)/2)
+    mask = (c >= 1/2)
+    # mask = (c >= max(c) / 2)
     
     print("integrated (averaged) density = {}".format(np.sum(c)/len(x)))
 
