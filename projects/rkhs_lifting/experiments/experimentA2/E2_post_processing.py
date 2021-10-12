@@ -75,7 +75,7 @@ def post_processing(exp=None,
     
     print("integrated (averaged) density = {}".format(np.sum(c)/len(x)))
 
-    img = ax.scatter(x[mask], y[mask], z[mask], c=c[mask], cmap=plt.cool(), alpha=0.1)
+    img = ax.scatter(x[mask], y[mask], z[mask], c=c[mask], cmap=plt.cool())  #, alpha=0.1)
     ax.set_xlabel("$\phi$")
     ax.set_ylabel("$\\theta$")
 
