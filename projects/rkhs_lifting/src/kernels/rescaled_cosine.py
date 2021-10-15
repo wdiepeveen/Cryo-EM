@@ -35,4 +35,4 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         dist = self.manifold.dist(free_quaternion, fixed_quaternion)
         scaling = self.norm**2 * self.width**2 * np.cos(self.width * dist/2) * np.sinc(self.width * dist/2)
         direction = self.manifold.log(free_quaternion, fixed_quaternion)
-        return scaling * direction
+        return (dist <= np.pi/self.width) * scaling * direction
