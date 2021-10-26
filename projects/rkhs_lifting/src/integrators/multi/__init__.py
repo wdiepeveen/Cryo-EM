@@ -3,7 +3,7 @@ import logging
 import numpy as np
 import quaternionic
 
-from scipy.sparse import diags
+# from scipy.sparse import diags
 from scipy.spatial.transform import Rotation as R
 
 from projects.rkhs_lifting.src.manifolds.so3 import SO3
@@ -33,10 +33,12 @@ class SO3_Multi_Integrator:
         self.quaternions = quaternions
 
         if weights is not None:
-            assert self.n == weights.shape[0]
-            self.weight_matrix = diags(weights)
+            assert self.n == weights.shape[0] and len(weights.shape) == 1
+            self.weights = weights[:, None]
+            # self.weight_matrix = diags(weights)
         else:
-            self.weight_matrix = diags(1 / self.n * np.ones(self.n, ))
+            # self.weight_matrix = diags(1 / self.n * np.ones(self.n, ))
+            self.weights = (1 / self.n * np.ones(self.n, ))[:, None]
 
     @property
     def angles(self):
@@ -68,7 +70,8 @@ class SO3_Multi_Integrator:
 
     # TODO check whether this still makes sense
     def weigh_integrands(self, integrands):
-        weighted_integrands = self.weight_matrix @ integrands
+        weighted_integrands = self.weights * integrands
+        # weighted_integrands = self.weight_matrix @ integrands
         return weighted_integrands.astype(self.dtype)
 
     def integrate(self, integrands):

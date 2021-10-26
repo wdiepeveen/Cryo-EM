@@ -21,7 +21,7 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         threshold_ij = (np.pi / self.width - distance_ij).step()
         no_thresh_kernel_ij = (self.width / 2 * distance_ij).cos() ** 2  # **Symbolic** (M, N) matrix
         normalisation = 2 * np.pi * self.width * (self.width ** 2 - 1) / (
-                    np.pi * (self.width ** 2 - 1) - self.width ** 3 * np.sin(np.pi / self.width))
+                np.pi * (self.width ** 2 - 1) - self.width ** 3 * np.sin(np.pi / self.width))
         assert normalisation > 0
         kernel_ij = normalisation * threshold_ij * no_thresh_kernel_ij  # Symbolic
 
@@ -32,7 +32,8 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         return self.kernel_matrix @ vector
 
     def gradient(self, free_quaternion=None, fixed_quaternion=None):
-        dist = self.manifold.dist(free_quaternion, fixed_quaternion)
-        scaling = self.norm**2 * self.width**2 * np.cos(self.width * dist/2) * np.sinc(self.width * dist/2)
+        dist = self.manifold.dist(free_quaternion, fixed_quaternion)[:, :, :, None]
+        print(dist.shape)
+        scaling = self.norm ** 2 * self.width ** 2 * np.cos(self.width * dist / 2) * np.sinc(self.width * dist / 2)
         direction = self.manifold.log(free_quaternion, fixed_quaternion)
-        return (dist <= np.pi/self.width) * scaling * direction
+        return ((dist <= np.pi / self.width) * scaling * direction).squeeze()
