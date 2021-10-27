@@ -17,6 +17,7 @@ from projects.rkhs_lifting.src.integrators.base.sd1821mrx import SD1821MRx
 from projects.rkhs_lifting.src.integrators import RKHS_Density_Integrator
 from projects.rkhs_lifting.src.kernels.rescaled_cosine import Rescaled_Cosine_Kernel
 from projects.rkhs_lifting.src.solvers.lifting_solver2 import RKHS_Lifting_Solver2
+from projects.rkhs_lifting.src.solvers.refinement_solver1 import Refinement_Solver1
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +27,9 @@ def run_experiment(exp=None,
                    snr=1.,
                    img_size=65,
                    kernel_radius=np.pi / 20,
-                   mr_repeat=1,
-                   volume_reg_param=1e10,
-                   rots_density_reg_param=1e-6,
-                   data_path=None,
+                   l=3,
+                   data_dir=None,
+                   data_filename=None,
                    ):
     logger.info(
         "This experiment illustrates orientation refinement using a lifting approach"
@@ -38,25 +38,27 @@ def run_experiment(exp=None,
     if not isinstance(exp, Exp):
         raise RuntimeError("Cannot run experiment without Exp object")
 
-    if data_path is None:
+    if data_dir is None or data_filename is None:
         raise RuntimeError("No data path provided")
 
     # Define a precision for this experiment
     dtype = np.float32
 
-    # Specify the CTF parameters not used for this example
-    # but necessary for initializing the simulation object
-    pixel_size = 5  # Pixel size of the images (in angstroms)
-    voltage = 200  # Voltage (in KV)
-    defocus = 1.5e4  # Minimum defocus value (in angstroms)
-    Cs = 2.0  # Spherical aberration
-    alpha = 0.1  # Amplitude contrast
+    solver_data = exp.open_pkl(data_dir, data_filename)
+    # Load data
+    # sim = solver_data["sim"]  # Simulator
+    vol_gt = solver_data["vol_gt"]  # Volume 65L
+    rots_gt = solver_data["rots_gt"]
+    squared_noise_level = solver_data["squared_noise_level"]
+    filter_ = solver_data["filter"]
+    images = solver_data["images"]
+    # Load lifting results
+    volume_est = solver_data["volume_est"]
+    rots = solver_data["rots"]
+    density_est = solver_data["density_on_angles"]
 
-    logger.info("Initialize simulation object and CTF filters.")
-    # Create CTF filters
-    filters = [
-        RadialCTFFilter(pixel_size, voltage, defocus=defocus, Cs=Cs, alpha=alpha)
-    ]
+    rots_indices = np.argmax(density_est, axis=0)
+    rots_est = rots[rots_indices]
 
     # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
     # The downsampling should be done by the internal function of Volume object in future.
@@ -64,29 +66,15 @@ def run_experiment(exp=None,
         f"Load 3D map and downsample 3D map to desired grids "
         f"of {img_size} x {img_size} x {img_size}."
     )
-    infile = mrcfile.open(data_path)
-    vol_gt = Volume(infile.data.astype(dtype))
 
     # Up- or downsample data for experiment
-    if img_size >= vol_gt.shape[1]:
-        if img_size == vol_gt.shape[1]:
-            exp_vol_gt = vol_gt
+    if img_size >= volume_est.shape[1]:
+        if img_size == volume_est.shape[1]:
+            exp_vol_gt = volume_est
         else:
-            exp_vol_gt = Volume(zoom(vol_gt.asnumpy()[0], img_size / vol_gt.shape[1]))  # cubic spline interpolation
+            exp_vol_gt = Volume(zoom(volume_est.asnumpy()[0], img_size / volume_est.shape[1]))  # cubic spline interpolation
     else:
-        exp_vol_gt = vol_gt.downsample((img_size,) * 3)
-
-    # Create a simulation object with specified filters and the downsampled 3D map
-    logger.info("Use downsampled map to creat simulation object.")
-
-    offsets = np.zeros((num_imgs, 2)).astype(dtype)
-    amplitudes = np.ones(num_imgs)
-    sim = Simulation(L=img_size, n=num_imgs, vols=exp_vol_gt,
-                     offsets=offsets, unique_filters=filters, amplitudes=amplitudes, dtype=dtype)
-    sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
-
-    logger.info("Get true rotation angles generated randomly by the simulation object.")
-    rots_gt = sim.rots
+        exp_vol_gt = volume_est.downsample((img_size,) * 3)
 
     # Estimate simgma
     squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
@@ -98,21 +86,23 @@ def run_experiment(exp=None,
     kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
 
     rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
-    logger.info("integrator separation distance = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.sep_dist,
-                                                                            np.pi / rkhs_integrator.base_integrator.sep_dist))
-    solver = RKHS_Lifting_Solver2(vol=exp_vol_gt,
-                                  squared_noise_level=squared_noise_level,
-                                  # density_coeffs=None,
-                                  # dual_coeffs=None,
-                                  stop=0,  # TODO here a default stopping criterion
-                                  # stop_density_update=None,  # TODO here a default stopping criterion
-                                  images=sim.images(0, np.inf),
-                                  filter=sim.unique_filters[0],
-                                  # amplitude=None,
-                                  integrator=rkhs_integrator,
-                                  volume_reg_param=volume_reg_param,
-                                  rots_density_reg_param=rots_density_reg_param,
-                                  )
+    logger.info(
+        "integrator separation distance = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.sep_dist,
+                                                                              np.pi / rkhs_integrator.base_integrator.sep_dist))
+
+    solver = Refinement_Solver1(vol=volume_est,
+                                rots=rots_est,
+                                squared_noise_level=squared_noise_level,
+                                stop=1,
+                                stop_rots_gd=5,
+                                images=images,  # TODO from data loader
+                                filter=filter_,
+                                amplitude=None,  # TODO hard code
+                                kernel=None,  # TODO as input function
+                                integrator=None,
+                                dtype=np.float32,
+                                seed=0,
+                                )
 
     solver.solve()
 
@@ -131,7 +121,6 @@ def run_experiment(exp=None,
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
-             ("solver", solver),  # TODO check whether this works at all
              ("sim", sim),  # TODO: don't save sim here, but the clean and noisy images
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
              ("rots_gt", rots_gt),
@@ -140,16 +129,10 @@ def run_experiment(exp=None,
              # ("refined_volume_est", refined_vol),
              # ("rots_est", solver.problem.rots),
              ("angles", solver.plan.p.integrator.angles),
-             ("rots", solver.plan.p.integrator.rots),
-             ("quats", solver.plan.p.integrator.quaternions),
-             # ("density_on_angles", solver.plan.p.integrator.coeffs_to_weights(solver.plan.o.density_coeffs)),
-             ("density_on_angles", solver.plan.o.density_coeffs),
+             ("density_on_angles", solver.plan.p.integrator.coeffs_to_weights(solver.plan.o.density_coeffs)),
              # ("refined_rots_est", refined_rots),
              ("cost", solver.cost),
              # ("relerror_u", solver.relerror_u),
              # ("relerror_g", solver.relerror_g),
              # ("relerror_tot", solver.relerror_tot)
-             # ("squared_noise_level", squared_noise_level),
-             # ("filter", solver.plan.p.filter),
-             # ("images", solver.plan.p.images)
              )
