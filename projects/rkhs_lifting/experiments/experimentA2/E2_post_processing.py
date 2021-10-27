@@ -70,7 +70,7 @@ def post_processing(exp=None,
     x = angles[:, 0]
     y = angles[:, 1]
     z = angles[:, 2]
-    c = density_est[:,0] * len(x)  # only first density for visualization
+    c = density_est[:,0] # * len(x)  # only first density for visualization
     mask = (c >= 1/2)
     # mask = (c >= max(c) / 2)
     

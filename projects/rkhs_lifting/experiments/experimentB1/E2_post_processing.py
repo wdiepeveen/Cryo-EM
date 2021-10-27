@@ -39,53 +39,47 @@ def post_processing(exp=None,
 
     solver_data = exp.open_pkl(data_dir, "solver_data" + postfix)
     # Load data
-    sim = solver_data["sim"]  # Simulator
-    sim.noise_adder = SnrNoiseAdder(seed=sim.seed,
-                                    snr=snr)  # bug in ASPIRE so that we cannot pickle sim like this
+    solver = solver_data["solver"]
     # vol_init = solver_data["vol_init"]  # Volume 65L
     vol_gt = solver_data["vol_gt"]  # Volume 65L
     rots_gt = solver_data["rots_gt"]
+    volume_init = solver_data["volume_init"]
     # Load results
-    volume_est = solver_data["volume_est"]
-    # refined_volume_est = solver_data["refined_volume_est"]
-    # density_est = solver_data["density_est"]
-    angles = solver_data["angles"]
-    density_est = solver_data["density_on_angles"]
-    # refined_rots = solver_data["refined_rots_est"]
-    cost = solver_data["cost"]
+    volume_est = solver.plan.vol
 
-    clean_image = sim.images(0, 1, enable_noise=False)
-    exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
     exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
 
+    # TODO get global rotation from gt rots and both est and init and see how far away we are (preferably in manifold
+    #  distance)
+
     # Get noisy projecrtion image
-    noisy_image = sim.images(0, 1, enable_noise=True)
-    exp.save_im("data_projection_noisy" + postfix, noisy_image.asnumpy()[0])
+    # noisy_image = sim.images(0, 1, enable_noise=True)
+    # exp.save_im("data_projection_noisy" + postfix, noisy_image.asnumpy()[0])
     # exp.save_mrc("result_vol_preprocessing_{}SNR_{}N".format(int(1 / snr), num_imgs), vol_init.asnumpy())
 
-    # Get density plot
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-
-    x = angles[:, 0]
-    y = angles[:, 1]
-    z = angles[:, 2]
-    c = density_est[:,0] * len(x)  # only first density for visualization
-    mask = (c >= 1/2)
-    # mask = (c >= max(c) / 2)
-    
-    print("integrated (averaged) density = {}".format(np.sum(c)/len(x)))
-
-    img = ax.scatter(x[mask], y[mask], z[mask], c=c[mask], cmap=plt.cool())  #, alpha=0.1)
-    ax.set_xlabel("$\phi$")
-    ax.set_ylabel("$\\theta$")
-    ax.set_zlabel("$\psi$")  #, rotation=0)
-    ax.set_xlim([-np.pi, np.pi])
-    ax.set_ylim([0, np.pi])
-    ax.set_zlim([-np.pi, np.pi])
-    plt.colorbar(img)
-
-    exp.save_fig("density" + postfix)
+    # # Get density plot
+    # fig = plt.figure()
+    # ax = fig.gca(projection='3d')
+    #
+    # x = angles[:, 0]
+    # y = angles[:, 1]
+    # z = angles[:, 2]
+    # c = density_est[:,0] * len(x)  # only first density for visualization
+    # mask = (c >= 1/2)
+    # # mask = (c >= max(c) / 2)
+    #
+    # print("integrated (averaged) density = {}".format(np.sum(c)/len(x)))
+    #
+    # img = ax.scatter(x[mask], y[mask], z[mask], c=c[mask], cmap=plt.cool())  #, alpha=0.1)
+    # ax.set_xlabel("$\phi$")
+    # ax.set_ylabel("$\\theta$")
+    # ax.set_zlabel("$\psi$")  #, rotation=0)
+    # ax.set_xlim([-np.pi, np.pi])
+    # ax.set_ylim([0, np.pi])
+    # ax.set_zlim([-np.pi, np.pi])
+    # plt.colorbar(img)
+    #
+    # exp.save_fig("density" + postfix)
 
     # refined_angles = mat2angle(refined_rots)
     # gt_angles = mat2angle(rots_gt)
@@ -109,13 +103,13 @@ def post_processing(exp=None,
     #
     # exp.save_fig("refined_density" + postfix)
 
-    # Make plots
-    num_its = len(cost)
-
-    plt.figure()
-    plt.plot(np.arange(num_its) + 1, cost)
-    plt.yscale('linear')
-    exp.save_fig("result_cost" + postfix)
+    # # Make plots
+    # num_its = len(cost)
+    #
+    # plt.figure()
+    # plt.plot(np.arange(num_its) + 1, cost)
+    # plt.yscale('linear')
+    # exp.save_fig("result_cost" + postfix)
 
     # Save results
     exp.save_mrc("result_vol" + postfix, volume_est.asnumpy()[0])

@@ -22,11 +22,14 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
                  squared_noise_level=None,
                  stop=None,
                  stop_rots_gd=None,
+                 gd_step_size=10**-2,
+                 gd_eta=0.25,
                  images=None,
                  filter=None,
                  amplitude=None,
                  kernel=None,
                  integrator=None,
+                 volume_reg_param=None,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -34,12 +37,15 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
                                 rots=rots,
                                 stop=stop,  # TODO here a default stopping criterion
                                 stop_rots_gd=stop_rots_gd,  # TODO here a default stopping criterion
+                                gd_step_size=gd_step_size,
+                                gd_eta=gd_eta,
                                 squared_noise_level=squared_noise_level,
                                 images=images,
                                 filter=filter,
                                 amplitude=amplitude,
                                 kernel=kernel,
                                 integrator=integrator,
+                                volume_reg_param=volume_reg_param,
                                 rots_batch_size=8192,
                                 dtype=dtype,
                                 seed=seed,
@@ -104,7 +110,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
             quaternion = self.plan.quaternions[index, :]
 
         # Construct sampling sets for all images
-        integrator = self.plan.p.integrator.update(quaternions=quaternion)
+        integrator = self.plan.p.integrator.update(quaternion=quaternion)
 
         # Compute data fidelity terms \|Ag.u - fi\|^2:
         logger.info("Computing qs")
@@ -122,7 +128,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
 
         # Compute gradients (n, 4)
         gradients = self.plan.p.kernel.gradient(free_quaternion=quaternion[None, None, :],
-                                                fixed_quaternion=integrator.quaternions.swapaxes(0, 1))
+                                                fixed_quaternion=integrator.quaternions[None, :, :])  # .swapaxes(0, 1))
 
         # Reduce gradients (4)
         gradient = np.einsum("g,gj->j", data_fidelity, gradients) / integrator.n  # TODO use integrate function here?

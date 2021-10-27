@@ -29,6 +29,9 @@ class Local_Regular(SO3_Multi_Integrator):
         quaternion_grid = so3.exp(e, v)  # Grid in TeSO(3)
 
         # Transport mesh over manifold through group action
+        if quaternions is None:
+            quaternions = e[0][None]
+
         g1 = quaternionic.array(quaternions[None, :, :]).normalized
         g2 = quaternionic.array(quaternion_grid[:, None, :]).normalized
         quaternion_grid = (g1 * g2).ndarray

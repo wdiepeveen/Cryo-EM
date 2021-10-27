@@ -2,6 +2,7 @@ import numpy as np
 import logging
 
 from projects.rkhs_lifting.src.plans.problems import Problem
+from projects.rkhs_lifting.src.manifolds.so3 import SO3
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +14,7 @@ class Refinement_Problem1(Problem):
                  amplitude=None,
                  kernel=None,
                  integrator=None,
+                 volume_reg_param=None,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -26,6 +28,8 @@ class Refinement_Problem1(Problem):
 
         self.kernel = kernel
         self.integrator = integrator
-        self.n = self.integrator.n
+        self.volume_reg_param = volume_reg_param
+        # self.n = self.integrator.n
+        self.manifold = SO3()
 
 

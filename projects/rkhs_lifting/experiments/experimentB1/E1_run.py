@@ -7,13 +7,12 @@ from scipy.ndimage import zoom
 from aspire.operators import RadialCTFFilter
 from aspire.source.simulation import Simulation
 from aspire.volume import Volume
+from aspire.image.image import Image
 
 from noise.noise import SnrNoiseAdder
 from tools.exp_tools import Exp
 
-from projects.rkhs_lifting.src.integrators.base.sd1821 import SD1821
-from projects.rkhs_lifting.src.integrators.base.sd1821mrx import SD1821MRx
-# from projects.rkhs_lifting.src.integrators.base.refined_sd import Refined_SD
+from projects.rkhs_lifting.src.integrators.base.local_regular import Local_Regular
 from projects.rkhs_lifting.src.integrators import RKHS_Density_Integrator
 from projects.rkhs_lifting.src.kernels.rescaled_cosine import Rescaled_Cosine_Kernel
 from projects.rkhs_lifting.src.solvers.lifting_solver2 import RKHS_Lifting_Solver2
@@ -26,8 +25,10 @@ def run_experiment(exp=None,
                    num_imgs=None,
                    snr=1.,
                    img_size=65,
-                   kernel_radius=np.pi / 20,
+                   kernel_radius=np.pi / 90,
                    l=3,
+                   sep_dist=np.pi / 180,
+                   volume_reg_param=None,
                    data_dir=None,
                    data_filename=None,
                    ):
@@ -41,24 +42,25 @@ def run_experiment(exp=None,
     if data_dir is None or data_filename is None:
         raise RuntimeError("No data path provided")
 
+    assert sep_dist * (l - 1) <= 2 * kernel_radius
+
     # Define a precision for this experiment
     dtype = np.float32
 
     solver_data = exp.open_pkl(data_dir, data_filename)
     # Load data
-    # sim = solver_data["sim"]  # Simulator
+    old_solver = solver_data["solver"]
     vol_gt = solver_data["vol_gt"]  # Volume 65L
     rots_gt = solver_data["rots_gt"]
-    squared_noise_level = solver_data["squared_noise_level"]
-    filter_ = solver_data["filter"]
-    images = solver_data["images"]
     # Load lifting results
-    volume_est = solver_data["volume_est"]
-    rots = solver_data["rots"]
-    density_est = solver_data["density_on_angles"]
+    volume_est = old_solver.plan.o.vol
+    rots = old_solver.plan.p.integrator.rots
+    quats = old_solver.plan.p.integrator.quaternions
+    density_est = old_solver.plan.o.density_coeffs
 
     rots_indices = np.argmax(density_est, axis=0)
     rots_est = rots[rots_indices]
+    # quats_est = quats[rots_indices]
 
     # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
     # The downsampling should be done by the internal function of Volume object in future.
@@ -67,72 +69,44 @@ def run_experiment(exp=None,
         f"of {img_size} x {img_size} x {img_size}."
     )
 
-    # Up- or downsample data for experiment
+    # Up- or downsample data for experiment  # TODO see whether this makes sense -> not just GT here?
     if img_size >= volume_est.shape[1]:
         if img_size == volume_est.shape[1]:
             exp_vol_gt = volume_est
         else:
-            exp_vol_gt = Volume(zoom(volume_est.asnumpy()[0], img_size / volume_est.shape[1]))  # cubic spline interpolation
+            exp_vol_gt = Volume(
+                zoom(volume_est.asnumpy()[0], img_size / volume_est.shape[1]))  # cubic spline interpolation
     else:
         exp_vol_gt = volume_est.downsample((img_size,) * 3)
 
-    # Estimate simgma
-    squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    print("sigma^2 = {}".format(squared_noise_level))
-
-    refined_integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
-    # resolution = refined_integrator.mesh_norm
-    radius = kernel_radius
-    kernel = Rescaled_Cosine_Kernel(quaternions=refined_integrator.quaternions, radius=radius, dtype=dtype)
-
-    rkhs_integrator = RKHS_Density_Integrator(base_integrator=refined_integrator, kernel=kernel, dtype=dtype)
-    logger.info(
-        "integrator separation distance = {}, corresponding to k = {}".format(rkhs_integrator.base_integrator.sep_dist,
-                                                                              np.pi / rkhs_integrator.base_integrator.sep_dist))
+    # TODO
+    images = Image(old_solver.plan.p.images[0:num_imgs])
+    integrator = Local_Regular(l=l, sep_dist=sep_dist, dtype=dtype)
+    kernel = Rescaled_Cosine_Kernel(radius=kernel_radius, dtype=dtype)
 
     solver = Refinement_Solver1(vol=volume_est,
                                 rots=rots_est,
-                                squared_noise_level=squared_noise_level,
+                                squared_noise_level=old_solver.plan.o.squared_noise_level,
                                 stop=1,
                                 stop_rots_gd=5,
-                                images=images,  # TODO from data loader
-                                filter=filter_,
-                                amplitude=None,  # TODO hard code
-                                kernel=None,  # TODO as input function
-                                integrator=None,
+                                images=images,
+                                filter=old_solver.plan.p.filter,
+                                amplitude=old_solver.plan.p.amplitude,
+                                kernel=kernel,
+                                integrator=integrator,
+                                volume_reg_param=volume_reg_param,
                                 dtype=np.float32,
                                 seed=0,
                                 )
 
     solver.solve()
 
-    # exp.save_npy("rotation_density_coeffs", solver.problem.rots_dcoef)
-
-    # Postprocessing step
-    # TODO fix
-    # quats = solver.problem.integrator.proj(solver.problem.rots_dcoef)
-    #
-    # refined_rots = quat2mat(quats)
-
-    # refined_vol = solver.problem.vol
-    # refined_vol = exact_refinement(solver.problem, refined_rots)
-    # TODO maybe just do a refinement solver instead of this (although might be a unnecessary work)
-
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
-             ("sim", sim),  # TODO: don't save sim here, but the clean and noisy images
+             ("solver", solver),
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
+             ("vol_init", volume_est),  # (img_size,)*3
              ("rots_gt", rots_gt),
-             # Results
-             ("volume_est", solver.plan.o.vol),
-             # ("refined_volume_est", refined_vol),
-             # ("rots_est", solver.problem.rots),
-             ("angles", solver.plan.p.integrator.angles),
-             ("density_on_angles", solver.plan.p.integrator.coeffs_to_weights(solver.plan.o.density_coeffs)),
-             # ("refined_rots_est", refined_rots),
-             ("cost", solver.cost),
-             # ("relerror_u", solver.relerror_u),
-             # ("relerror_g", solver.relerror_g),
-             # ("relerror_tot", solver.relerror_tot)
+             ("rots_init", rots_est),
              )
