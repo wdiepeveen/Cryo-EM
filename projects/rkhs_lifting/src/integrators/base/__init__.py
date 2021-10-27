@@ -29,10 +29,10 @@ class SO3_Integrator:
         self.quaternions = quaternions
 
         if weights is not None:
-            assert self.n == weights.shape[0]
-            self.weight_matrix = diags(weights)
+            assert self.n == weights.shape[0] and len(weights.shape) == 1
+            self.weights = weights[:, None]
         else:
-            self.weight_matrix = diags(1/self.n * np.ones(self.n,))
+            self.weights = (1 / self.n * np.ones(self.n, ))[:, None]
 
 
     @property
@@ -64,7 +64,11 @@ class SO3_Integrator:
         self._points = R.from_quat(quats)
 
     def weigh_integrands(self, integrands):
-        weighted_integrands = self.weight_matrix @ integrands
+        if len(integrands.shape) == 1:
+            weights = self.weights.squeeze()
+        else:
+            weights = self.weights
+        weighted_integrands = weights * integrands
         return weighted_integrands.astype(self.dtype)
 
     def integrate(self, integrands):

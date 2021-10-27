@@ -28,6 +28,7 @@ def run_experiment(exp=None,
                    kernel_radius=np.pi / 90,
                    l=3,
                    sep_dist=np.pi / 180,
+                   gd_step_size=None,
                    volume_reg_param=None,
                    data_dir=None,
                    data_filename=None,
@@ -79,7 +80,6 @@ def run_experiment(exp=None,
     else:
         exp_vol_gt = volume_est.downsample((img_size,) * 3)
 
-    # TODO
     images = Image(old_solver.plan.p.images[0:num_imgs])
     integrator = Local_Regular(l=l, sep_dist=sep_dist, dtype=dtype)
     kernel = Rescaled_Cosine_Kernel(radius=kernel_radius, dtype=dtype)
@@ -89,6 +89,7 @@ def run_experiment(exp=None,
                                 squared_noise_level=old_solver.plan.o.squared_noise_level,
                                 stop=1,
                                 stop_rots_gd=5,
+                                gd_step_size=gd_step_size,
                                 images=images,
                                 filter=old_solver.plan.p.filter,
                                 amplitude=old_solver.plan.p.amplitude,

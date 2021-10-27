@@ -40,14 +40,14 @@ def post_processing(exp=None,
     solver_data = exp.open_pkl(data_dir, "solver_data" + postfix)
     # Load data
     solver = solver_data["solver"]
-    # vol_init = solver_data["vol_init"]  # Volume 65L
     vol_gt = solver_data["vol_gt"]  # Volume 65L
     rots_gt = solver_data["rots_gt"]
-    volume_init = solver_data["volume_init"]
+    vol_init = solver_data["vol_init"]  # Volume 65L
     # Load results
     volume_est = solver.plan.vol
 
     exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
+    exp.save_mrc("data_vol_init", vol_gt.asnumpy()[0])
 
     # TODO get global rotation from gt rots and both est and init and see how far away we are (preferably in manifold
     #  distance)

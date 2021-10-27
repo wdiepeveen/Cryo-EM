@@ -24,7 +24,7 @@ class Refinement_Plan1(Plan):
                  rots=None,
                  stop=None,  # TODO here a default stopping criterion
                  stop_rots_gd=None,  # TODO here a default stopping criterion
-                 gd_step_size=10 ** -5,
+                 gd_step_size=10 ** -2,
                  gd_eta=0.25,
                  squared_noise_level=None,
                  images=None,
@@ -130,9 +130,16 @@ class Refinement_Plan1(Plan):
         q2 = - 2 * np.einsum("jk,gjk->g", im, rots_sampling_projections)
         q3 = np.sum(im ** 2)
 
-        integrands = ((q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)).astype(self.p.dtype)
+        data_fidelity = ((q1 + q2 + q3) / (2 * self.o.squared_noise_level * self.p.L ** 2)).astype(self.p.dtype)
+        # print("data_fidelity.shape = {}".format(data_fidelity.shape))
 
-        cost = integrator.integrate(integrands)  # TODO we need the kernel for this
+        # Compute kernel (n,)
+        weights = self.p.kernel.kernel(free_quaternion=quaternion[None, None, :],
+                                                fixed_quaternion=integrator.quaternions[None, :, :])  # .swapaxes(0, 1))
+        # print("weights.shape = {}".format(weights.shape))
+
+        cost = integrator.integrate(data_fidelity * weights)  # TODO we need the kernel for this
+        # print("cost.shape = {}".format(cost.shape))
 
         return cost
 

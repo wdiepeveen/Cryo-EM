@@ -78,32 +78,43 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         for i in range(self.plan.p.N):  # TODO parallellize
             k = 0
             cost = self.plan.get_cost(index=i)
+            cost0 = cost
             costs = [cost]
             # TODO costs for cost per i and Costs as list of lists
-            logger.info("{} | k = {} | cost = {}".format(i, k, cost))
+            logger.info("==================== Image {} ====================".format(i+1))
+            logger.info("{} | k = {} | relative cost = {}".format(i+1, k, 1))
             while not stop_gradient_descent(k):
                 quat = quaternions[i, :]
+                # print("quat = {}".format(quat))
                 gradient = self.compute_Riemannian_gradient(index=i, quaternion=quat)
 
                 step_size = self.plan.o.gd_step_size
                 new_quat = self.plan.p.manifold.exp(quat, - step_size * gradient)
+                # print("new_quat = {}".format(new_quat))
                 new_cost = self.plan.get_cost(index=i, quaternion=new_quat)
+                # print("ln 93 new_cost > cost {}".format((new_cost > cost)))
                 while new_cost > cost:
+                    # TODO fix this while -> max_iter
                     step_size *= self.plan.o.gd_eta
                     new_quat = self.plan.p.manifold.exp(quat, - step_size * gradient)
+                    # print("new_quat = {}".format(new_quat))
                     new_cost = self.plan.get_cost(index=i, quaternion=new_quat)
+                    # print("ln 99 new_cost > cost {}".format((new_cost > cost)))
 
                 cost = new_cost
                 costs.append(cost)
                 quaternions[i, :] = new_quat
                 k += 1
-                logger.info("{} | k = {} | cost = {}".format(i, k, cost))
+                logger.info(
+                    "{} | k = {} | relative cost = {} | ||gradient|| = {}".format(i + 1, k, cost / cost0,
+                                                                                  np.linalg.norm(gradient)))
+
 
             Costs.append(costs)
 
         self.plan.quaternions = quaternions
 
-    def compute_Riemannian_gradient(self, index=None, quaternion=None):
+    def compute_Riemannian_gradient(self, index=None, quaternion=None, rescale=True):
         assert index is not None
 
         if quaternion is None:
@@ -113,7 +124,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         integrator = self.plan.p.integrator.update(quaternion=quaternion)
 
         # Compute data fidelity terms \|Ag.u - fi\|^2:
-        logger.info("Computing qs")
+        # logger.info("Computing qs")
         im = self.plan.p.images.asnumpy()[index, :, :]
 
         rots_sampling_projections = self.plan.forward(self.plan.vol,
@@ -125,13 +136,19 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
 
         data_fidelity = ((q1 + q2 + q3) / (2 * self.plan.o.squared_noise_level * self.plan.p.L ** 2)).astype(
             self.plan.p.dtype)
+        # print(data_fidelity)
 
         # Compute gradients (n, 4)
         gradients = self.plan.p.kernel.gradient(free_quaternion=quaternion[None, None, :],
                                                 fixed_quaternion=integrator.quaternions[None, :, :])  # .swapaxes(0, 1))
+        # print(gradients)
 
         # Reduce gradients (4)
         gradient = np.einsum("g,gj->j", data_fidelity, gradients) / integrator.n  # TODO use integrate function here?
+        if rescale:
+            gradient /= self.plan.p.kernel.norm**2
+
+        # print(gradient)
         return gradient
 
     def volume_step(self):
@@ -194,7 +211,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         vol = np.real(f_kernel.convolve_volume(src.T)).astype(
             dtype)  # TODO works, but still not entirely sure why we need to transpose here
 
-        self.plan.o.vol = Volume(vol)
+        self.plan.vol = Volume(vol)
 
     # def compute_Riemannian_gradient(self):
     #     L = self.plan.p.L
