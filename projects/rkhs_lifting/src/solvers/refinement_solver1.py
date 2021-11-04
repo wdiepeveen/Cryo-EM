@@ -74,43 +74,62 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
 
         print("Start Riemannian Gradient Descent Solver")
         Costs = []
+        Relerrors = []
         quaternions = self.plan.quaternions
-        for i in range(self.plan.p.N):  # TODO parallellize
-            k = 0
-            cost = self.plan.get_cost(index=i)
-            cost0 = cost
-            costs = [cost]
-            # TODO costs for cost per i and Costs as list of lists
-            logger.info("==================== Image {} ====================".format(i+1))
-            logger.info("{} | k = {} | relative cost = {}".format(i+1, k, 1))
-            while not stop_gradient_descent(k):
-                quat = quaternions[i, :]
-                # print("quat = {}".format(quat))
-                gradient = self.compute_Riemannian_gradient(index=i, quaternion=quat)
+        if not stop_gradient_descent(0):
+            for i in range(self.plan.p.N):  # TODO parallellize
+                # TODO test for loop then write function out of this and parallellize
+                k = 0
+                cost = self.plan.get_cost(index=i)
+                cost0 = cost
+                costs = [cost]
+                gradient = self.compute_Riemannian_gradient(index=i)
+                logger.debug("gradient = {}".format(gradient))
+                normgradient0 = np.linalg.norm(gradient)
+                relerror = 1.
+                relerrors = [relerror]
+                logger.info("==================== Image {} ====================".format(i+1))
+                logger.info("{} | k = {} | relative cost = {} | relerror = {}".format(i+1, k, 1., relerror))
+                while not stop_gradient_descent(k) and relerror > 1e-3:
+                    quat = quaternions[i, :]
+                    logger.debug("quat = {}".format(quat))
 
-                step_size = self.plan.o.gd_step_size
-                new_quat = self.plan.p.manifold.exp(quat, - step_size * gradient)
-                # print("new_quat = {}".format(new_quat))
-                new_cost = self.plan.get_cost(index=i, quaternion=new_quat)
-                # print("ln 93 new_cost > cost {}".format((new_cost > cost)))
-                while new_cost > cost:
-                    # TODO fix this while -> max_iter
-                    step_size *= self.plan.o.gd_eta
+                    # Use gradient computed in previous iteration
+                    logger.debug("gradient = {}".format(gradient))
+                    step_size = self.plan.o.gd_step_size
                     new_quat = self.plan.p.manifold.exp(quat, - step_size * gradient)
-                    # print("new_quat = {}".format(new_quat))
                     new_cost = self.plan.get_cost(index=i, quaternion=new_quat)
-                    # print("ln 99 new_cost > cost {}".format((new_cost > cost)))
+                    j = 0
+                    break_out_flag = False
+                    while new_cost > cost:
+                        if j>=10:
+                            break_out_flag = True
+                            break
+                        step_size *= self.plan.o.gd_eta
+                        new_quat = self.plan.p.manifold.exp(quat, - step_size * gradient)
+                        new_cost = self.plan.get_cost(index=i, quaternion=new_quat)
+                        j+=1
 
-                cost = new_cost
-                costs.append(cost)
-                quaternions[i, :] = new_quat
-                k += 1
-                logger.info(
-                    "{} | k = {} | relative cost = {} | ||gradient|| = {}".format(i + 1, k, cost / cost0,
-                                                                                  np.linalg.norm(gradient)))
+                    if break_out_flag:
+                        logger.info(
+                            "{} | k = {} | broken out".format(i + 1, k + 1))
+                        break
+
+                    cost = new_cost
+                    costs.append(cost)
+
+                    quaternions[i, :] = new_quat
+                    gradient = self.compute_Riemannian_gradient(index=i, quaternion=new_quat)
+
+                    relerror = np.linalg.norm(gradient)/normgradient0
+                    relerrors.append(relerror)
+                    k += 1
+                    logger.info(
+                        "{} | k = {} | relative cost = {} | relative error = {}".format(i + 1, k, cost / cost0, relerror))
 
 
-            Costs.append(costs)
+                Costs.append(costs)
+                Relerrors.append(relerrors)
 
         self.plan.quaternions = quaternions
 

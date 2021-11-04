@@ -27,7 +27,8 @@ def run_experiment(exp=None,
                    img_size=65,
                    kernel_radius=np.pi / 90,
                    l=3,
-                   sep_dist=np.pi / 180,
+                   integrator_radius=np.pi / 180,
+                   stop_rots_gd=5,
                    gd_step_size=None,
                    volume_reg_param=None,
                    data_dir=None,
@@ -43,7 +44,7 @@ def run_experiment(exp=None,
     if data_dir is None or data_filename is None:
         raise RuntimeError("No data path provided")
 
-    assert sep_dist * (l - 1) <= 2 * kernel_radius
+    assert integrator_radius <= kernel_radius
 
     # Define a precision for this experiment
     dtype = np.float32
@@ -81,14 +82,14 @@ def run_experiment(exp=None,
         exp_vol_gt = volume_est.downsample((img_size,) * 3)
 
     images = Image(old_solver.plan.p.images[0:num_imgs])
-    integrator = Local_Regular(l=l, sep_dist=sep_dist, dtype=dtype)
+    integrator = Local_Regular(l=l, radius=integrator_radius, dtype=dtype)
     kernel = Rescaled_Cosine_Kernel(radius=kernel_radius, dtype=dtype)
 
     solver = Refinement_Solver1(vol=volume_est,
                                 rots=rots_est,
                                 squared_noise_level=old_solver.plan.o.squared_noise_level,
                                 stop=1,
-                                stop_rots_gd=5,
+                                stop_rots_gd=stop_rots_gd,
                                 gd_step_size=gd_step_size,
                                 images=images,
                                 filter=old_solver.plan.p.filter,
@@ -102,10 +103,29 @@ def run_experiment(exp=None,
 
     solver.solve()
 
+    solver2 = Refinement_Solver1(vol=volume_est,
+                                rots=rots_gt,
+                                squared_noise_level=old_solver.plan.o.squared_noise_level,
+                                stop=1,
+                                stop_rots_gd=0,
+                                gd_step_size=gd_step_size,
+                                images=images,
+                                filter=old_solver.plan.p.filter,
+                                amplitude=old_solver.plan.p.amplitude,
+                                kernel=kernel,
+                                integrator=integrator,
+                                volume_reg_param=volume_reg_param,
+                                dtype=np.float32,
+                                seed=0,
+                                )
+    logger.info("Reconstruction from gt rotations")
+    solver2.solve()
+
     # Save result
     exp.save("solver_data_{}SNR_{}N".format(int(1 / snr), num_imgs),
              # Data
              ("solver", solver),
+             ("solver2", solver2),
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
              ("vol_init", volume_est),  # (img_size,)*3
              ("rots_gt", rots_gt),

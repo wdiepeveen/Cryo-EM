@@ -8,11 +8,11 @@ from projects.rkhs_lifting.src.manifolds.so3 import SO3
 class Local_Regular(SO3_Integrator):
     """Local regular "cubic" grid Integration"""
 
-    def __init__(self, quaternion=None, l=3, sep_dist=np.pi / 180, dtype=np.float32):
+    def __init__(self, quaternion=None, l=4, radius=np.pi / 180, dtype=np.float32):
         assert l > 1
         so3 = SO3()
         # Discretize tangent space
-        grid1D = sep_dist * np.linspace(-1., 1., l)
+        grid1D = radius/np.sqrt(2) * np.linspace(-1., 1., l)
         x, y, z = np.meshgrid(grid1D, grid1D, grid1D)
 
         tvectors = np.zeros((l, l, l, 4))
@@ -37,10 +37,12 @@ class Local_Regular(SO3_Integrator):
         quaternion_grid = (g1 * g2).ndarray
 
         # print(quaternion_grid.shape)
+        sep_dist = 2 * radius / (np.sqrt(2) * (l-1))
 
         super().__init__(quaternion_grid, sep_dist, 1 / np.sqrt(2) * sep_dist, np.sqrt(2) * sep_dist, dtype=dtype)
         self.l = l
+        self.radius = radius
 
     def update(self, quaternion=None):
         assert quaternion is not None
-        return Local_Regular(quaternion=quaternion, l=self.l, sep_dist=self.sep_dist, dtype=self.dtype)
+        return Local_Regular(quaternion=quaternion, l=self.l, radius=self.radius, dtype=self.dtype)

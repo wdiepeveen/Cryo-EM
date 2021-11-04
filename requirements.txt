@@ -14,3 +14,4 @@ repyducible~=0.1
 opymize~=0.1
 torch~=1.9.0
 pykeops~=1.5
+joblib~=1.0.0
