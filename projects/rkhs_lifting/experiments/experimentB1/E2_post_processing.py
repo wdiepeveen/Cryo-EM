@@ -8,6 +8,8 @@ from aspire.utils.coor_trans import (
     register_rotations,
 )
 
+from pymanopt.manifolds import Rotations
+
 from noise.noise import SnrNoiseAdder
 
 # from solvers.lifting.functions.rot_converters import mat2angle
@@ -54,32 +56,47 @@ def post_processing(exp=None,
     exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
     exp.save_mrc("data_vol_init", vol_init.asnumpy()[0])
 
-    # TODO get global rotation from gt rots and both est and init and see how far away we are (preferably in manifold
-    #  distance)
-
     # Get register rotations after performing global alignment before gradient descent
-    Q_mat, flag = register_rotations(rots_init, rots_gt)
-    regrot = get_aligned_rotations(rots_init, Q_mat, flag)
-    mse_reg_init = get_rots_mse(regrot, rots_gt)
+    Q_mat, flag = register_rotations(rots_init[:num_imgs], rots_gt[:num_imgs])
+    regrot = get_aligned_rotations(rots_init[:num_imgs], Q_mat, flag)
+    mse_reg_init = get_rots_mse(regrot, rots_gt[:num_imgs])
     logger.info(
         f"MSE deviation of the estimated initial rotations using register_rotations : {mse_reg_init}"
     )
 
     # Get register rotations after performing global alignment after gradient descent
-    Q_mat2, flag2 = register_rotations(rots_est, rots_gt)
+    Q_mat2, flag2 = register_rotations(rots_est, rots_gt[:num_imgs])
     regrot2 = get_aligned_rotations(rots_est, Q_mat2, flag2)
-    mse_reg_est = get_rots_mse(regrot2, rots_gt)
+    mse_reg_est = get_rots_mse(regrot2, rots_gt[:num_imgs])
     logger.info(
         f"MSE deviation of the estimated GD-refined rotations using register_rotations : {mse_reg_est}"
     )
 
     # Get register rotations after performing global alignment for reference rotations
-    Q_mat3, flag3 = register_rotations(rots_est_gt_rots, rots_gt)
+    Q_mat3, flag3 = register_rotations(rots_est_gt_rots, rots_gt[:num_imgs])
     regrot3 = get_aligned_rotations(rots_est_gt_rots, Q_mat3, flag3)
-    mse_reg_ref = get_rots_mse(regrot3, rots_gt)
+    mse_reg_ref = get_rots_mse(regrot3, rots_gt[:num_imgs])
     logger.info(
         f"MSE deviation of the estimated reference GT rotations using register_rotations : {mse_reg_ref}"
     )
+
+    # Histograms
+    rot_wise_mse_reg_init = [180/(np.pi*np.sqrt(2))*np.sqrt(get_rots_mse(regrot[i][None], rots_gt[i][None])) for i in range(num_imgs)]
+    rot_wise_mse_reg_est = [180/(np.pi*np.sqrt(2))*np.sqrt(get_rots_mse(regrot2[i][None], rots_gt[i][None])) for i in range(num_imgs)]
+    # Factor 2 corresponds to our choice of metric used throughout the work
+    num_bins = 100
+    range_ = (min(min(rot_wise_mse_reg_init),min(rot_wise_mse_reg_est)), max(max(rot_wise_mse_reg_init),max(rot_wise_mse_reg_est)))
+
+
+    plt.hist(rot_wise_mse_reg_init, bins=num_bins,range=range_)
+    plt.xlabel("Distance (degrees)")
+    exp.save_fig("rot_wise_mse_init" + postfix)
+    plt.show()
+
+    plt.hist(rot_wise_mse_reg_est, bins=num_bins,range=range_)
+    plt.xlabel("Distance (degrees)")
+    exp.save_fig("rot_wise_mse_est" + postfix)
+    plt.show()
 
     # Get noisy projecrtion image
     # noisy_image = sim.images(0, 1, enable_noise=True)

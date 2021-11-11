@@ -86,7 +86,7 @@ def run_experiment(exp=None,
     kernel = Rescaled_Cosine_Kernel(radius=kernel_radius, dtype=dtype)
 
     solver = Refinement_Solver1(vol=volume_est,
-                                rots=rots_est,
+                                rots=rots_est[0:num_imgs],
                                 squared_noise_level=old_solver.plan.o.squared_noise_level,
                                 stop=1,
                                 stop_rots_gd=stop_rots_gd,
@@ -104,20 +104,20 @@ def run_experiment(exp=None,
     solver.solve()
 
     solver2 = Refinement_Solver1(vol=volume_est,
-                                rots=rots_gt,
-                                squared_noise_level=old_solver.plan.o.squared_noise_level,
-                                stop=1,
-                                stop_rots_gd=0,
-                                gd_step_size=gd_step_size,
-                                images=images,
-                                filter=old_solver.plan.p.filter,
-                                amplitude=old_solver.plan.p.amplitude,
-                                kernel=kernel,
-                                integrator=integrator,
-                                volume_reg_param=volume_reg_param,
-                                dtype=np.float32,
-                                seed=0,
-                                )
+                                 rots=rots_gt[0:num_imgs],
+                                 squared_noise_level=old_solver.plan.o.squared_noise_level,
+                                 stop=1,
+                                 stop_rots_gd=0,
+                                 gd_step_size=gd_step_size,
+                                 images=images,
+                                 filter=old_solver.plan.p.filter,
+                                 amplitude=old_solver.plan.p.amplitude,
+                                 kernel=kernel,
+                                 integrator=integrator,
+                                 volume_reg_param=volume_reg_param,
+                                 dtype=np.float32,
+                                 seed=0,
+                                 )
     logger.info("Reconstruction from gt rotations")
     solver2.solve()
 
