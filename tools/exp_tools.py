@@ -39,7 +39,7 @@ class Exp:
         else:
             postfix = ""
 
-        self.results_folder = os.path.join("results", prefix + runid + postfix)
+        self.results_folder = os.path.join(os.path.dirname(__file__), "..", "results", prefix + runid + postfix)
         os.makedirs(self.results_folder)
 
         logger.info("Results folder is {}".format(self.results_folder))
