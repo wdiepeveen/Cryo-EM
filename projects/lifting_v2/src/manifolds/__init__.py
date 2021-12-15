@@ -59,7 +59,7 @@ class Manifold(object):
         self._mean(points, weights, out)
         return out
 
-    def _mean(self, points, weights, out, max_iter=200):
+    def _mean(self, points, weights, out, max_iter=20):
         nbatch, npointsets, npoints, nintdim = points.shape
         nweights = weights.shape[1]
 

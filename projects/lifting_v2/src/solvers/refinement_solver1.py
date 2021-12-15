@@ -54,7 +54,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         print("Solver has finished")
 
     def rots_step(self):
-        weights = np.clip(self.plan.coeffs.T, 0.0, 1.0)
+        weights = np.clip(self.plan.rots_coeffs.T, 0.0, 1.0)
         weights /= weights.sum(axis=1)[:, None]  # TODO check whether we are doing this over the right axis
 
         manifold = SO3()
@@ -76,10 +76,10 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.amplitude ** 2
 
-        for start in range(0, N, self.plan.o.rots_batch_size):
+        for start in range(0, N, self.plan.rots_batch_size):
             logger.info(
                 "Running through projections {}/{} = {}%".format(start, N, np.round(start / N * 100, 2)))
-            all_idx = np.arange(start, min(start + self.plan.o.rots_batch_size, N))
+            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
             num_idx = len(all_idx)
 
             weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
@@ -111,7 +111,7 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
         kernel_f = np.real(kernel_f)
 
         f_kernel = FourierKernel(kernel_f, centered=False)
-        f_kernel += self.plan.volume_reg_param * self.plan.o.squared_noise_level
+        f_kernel += self.plan.lam1 * self.plan.squared_noise_level
 
         f_kernel = FourierKernel(
             1.0 / f_kernel.kernel, centered=False

@@ -142,5 +142,6 @@ def run_experiment(exp=None,
              # ("relerror_tot", solver.relerror_tot)
              # ("squared_noise_level", squared_noise_level),
              # ("filter", solver.plan.p.filter),
-             # ("images", solver.plan.p.images)
+             ("images", solver.plan.images),
+             ("SNR",snr)
              )

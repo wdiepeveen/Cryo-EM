@@ -1,0 +1,33 @@
+2021-12-15 14:20:09,121 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-12-15 14:20:09,458 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-12-15 14:20:10,160 INFO Results folder is /Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/expB1_21-12-15_14-20-10_L65_N512_r1_k90_lamV10_lamD500
+2021-12-15 14:20:10,161 INFO Start Experiment
+2021-12-15 14:20:10,161 INFO This experiment illustrates orientation refinement using a lifting approach
+2021-12-15 14:20:10,314 INFO Computing 512 means of 14761 points in at most 20 steps...
+2021-12-15 14:20:40,045 INFO Compute adjoint forward mapping on the images
+2021-12-15 14:20:40,046 INFO Running through projections 0/512 = 0.0%
+2021-12-15 14:20:40,285 DEBUG Corresponding type is already complex complex64.
+2021-12-15 14:20:40,285 INFO Trying NFFT backend finufft
+2021-12-15 14:20:40,294 INFO NFFT backend finufft usable.
+2021-12-15 14:20:40,295 INFO Trying NFFT backend cufinufft
+2021-12-15 14:20:40,296 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2021-12-15 14:20:40,296 INFO Trying NFFT backend pynfft
+2021-12-15 14:20:40,297 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2021-12-15 14:20:40,297 INFO Selected NFFT backend = finufft.
+2021-12-15 14:20:40,355 DEBUG FinufftPlan adjusted eps=1.1920928955078125e-07 from requested 1e-08.
+2021-12-15 14:20:40,635 INFO Determined adjoint mappings. Shape = (65, 65, 65)
+2021-12-15 14:20:43,400 CRITICAL 'Refinement_Plan1' object has no attribute 'o'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/experiment.py", line 45, in <module>
+    data_filename=data_filename,
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/E1_run.py", line 76, in run_experiment
+    solver.solve()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/src/solvers/__init__.py", line 30, in solve
+    self.step_solver()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/src/solvers/refinement_solver1.py", line 51, in step_solver
+    self.volume_step()
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/src/solvers/refinement_solver1.py", line 79, in volume_step
+    for start in range(0, N, self.plan.o.rots_batch_size):
+
