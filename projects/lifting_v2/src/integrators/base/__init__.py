@@ -3,7 +3,6 @@ import logging
 import numpy as np
 import quaternionic
 
-from scipy.sparse import diags
 from scipy.spatial.transform import Rotation as R
 
 from projects.lifting_v2.src.manifolds.so3 import SO3

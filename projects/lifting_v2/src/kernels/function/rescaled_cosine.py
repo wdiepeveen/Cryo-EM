@@ -2,15 +2,14 @@ import numpy as np
 
 from pykeops.numpy import LazyTensor as LazyTensor_np
 
-from projects.lifting_v2.src.kernels import RKHS_Kernel
+from projects.lifting_v2.src.kernels import Kernel
 
 
-class Rescaled_Cosine_Kernel(RKHS_Kernel):
-    def __init__(self, quaternions=None, radius=np.pi / 10, dtype=np.float32):  # , kappa=None):
-        assert radius < np.pi
+class Rescaled_Cosine_Kernel(Kernel):
+    def __init__(self, radius=np.pi / 10, outer_quaternions=None, inner_quaternions=None, dtype=np.float32):  # , kappa=None):
+        assert radius <= np.pi
         super().__init__(dtype=dtype)
 
-        # Use separation distance between grid points to find suitable kappa
         self.width = int(np.floor(np.pi / radius))  # Then we have radius <= pi/kappa
 
         normalisation = 2 * np.pi * self.width * (self.width ** 2 - 1) / (
@@ -18,23 +17,31 @@ class Rescaled_Cosine_Kernel(RKHS_Kernel):
         assert normalisation > 0
         self.norm = np.sqrt(normalisation)
 
-        if quaternions is not None:
-            x_i = LazyTensor_np(quaternions[:, None, :])  # x_i.shape = (M, 1, 4)
-            y_j = LazyTensor_np(quaternions[None, :, :])  # y_j.shape = ( 1, M, 4)
-
+        def construct_kernel_matrix(q1, q2, width):
+            x_i = LazyTensor_np(q1[:, None, :])  # x_i.shape = (M, 1, 4)
+            y_j = LazyTensor_np(q2[None, :, :])  # y_j.shape = ( 1, M, 4)
             # We can now perform large-scale computations, without memory overflows:
             distance_ij = 2 * (x_i.normalize() * y_j.normalize()).sum(-1).clamp(-1, 1).abs().acos()
-            threshold_ij = (np.pi / self.width - distance_ij).step()
-            no_thresh_kernel_ij = (self.width / 2 * distance_ij).cos() ** 2  # **Symbolic** (M, N) matrix
+            threshold_ij = (np.pi / width - distance_ij).step()
+            no_thresh_kernel_ij = (width / 2 * distance_ij).cos() ** 2  # **Symbolic** (M, N) matrix
 
-            kernel_ij = normalisation * threshold_ij * no_thresh_kernel_ij  # Symbolic
+            return normalisation * threshold_ij * no_thresh_kernel_ij  # Symbolic
 
-            self.kernel_matrix = kernel_ij
+        if outer_quaternions is not None:
+            if inner_quaternions is None:
+                inner_quaternions = outer_quaternions
+
+            self.kernel_matrix = construct_kernel_matrix(inner_quaternions, outer_quaternions, self.width)
+            self.adjoint_kernel_matrix = construct_kernel_matrix(outer_quaternions, inner_quaternions, self.width)
         else:
             self.kernel_matrix = None
+            self.adjoint_kernel_matrix = None
 
     def matrix_mult(self, vector):
         return self.kernel_matrix @ vector
+
+    def adjoint_matrix_mult(self, vector):
+        return self.adjoint_kernel_matrix @ vector
 
     def gradient(self, free_quaternion=None, fixed_quaternion=None):
         dist = self.manifold.dist(free_quaternion, fixed_quaternion)[:, :, :, None]
