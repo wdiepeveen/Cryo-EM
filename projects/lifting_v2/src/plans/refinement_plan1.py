@@ -56,6 +56,7 @@ class Refinement_Plan1(Plan):
         self.quaternions = quaternions
 
         self.rots_coeffs = rots_coeffs
+        self.n = rots_coeffs.shape[0]
 
         self.rots_batch_size = rots_batch_size
 

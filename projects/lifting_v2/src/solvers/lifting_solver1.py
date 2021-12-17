@@ -26,8 +26,10 @@ class Lifting_Solver1(Joint_Volume_Rots_Solver):
                  amplitude=None,
                  integrator=None,
                  volume_reg_param=None,  # \lambda1
-                 rots_coeffs_reg_param=None,  # \lambda2
+                 rots_coeffs_reg_param=None,  # \lambda2 or (\lambda2_init, \lambda2_inf)
+                 rots_coeffs_reg_param_rate=1,
                  rots_coeffs_reg_scaling_param=66 / 100,  # p
+                 save_iterates=False,
                  dtype=np.float32,
                  seed=0,
                  ):  # TODO in next solver also add kernel smoothing
@@ -41,7 +43,9 @@ class Lifting_Solver1(Joint_Volume_Rots_Solver):
                              integrator=integrator,
                              volume_reg_param=volume_reg_param,
                              rots_reg_param=rots_coeffs_reg_param,
+                             rots_coeffs_reg_param_rate=rots_coeffs_reg_param_rate,
                              rots_coeffs_reg_scaling_param=rots_coeffs_reg_scaling_param,
+                             save_iterates=save_iterates,
                              dtype=dtype,
                              seed=seed)
 
@@ -51,6 +55,12 @@ class Lifting_Solver1(Joint_Volume_Rots_Solver):
         return self.iter == self.plan.max_iter  # TODO add || relerror/change is small
 
     def step_solver(self):
+        logger.info("Update regularisation parameter lam2")
+        self.plan.lam2 = self.plan.lam2_init * np.exp(self.plan.lam2_rate * (1 - self.iter)) + \
+                         self.plan.lam2_inf * (1 - np.exp(self.plan.lam2_rate * (1 - self.iter)))
+
+        print(self.plan.lam2)
+
         logger.info("Do rots update step")
         self.rots_density_step()
         # self.cost.append(self.plan.get_cost())
@@ -58,6 +68,10 @@ class Lifting_Solver1(Joint_Volume_Rots_Solver):
         logger.info("Do vol update step")
         self.volume_step()
         # self.cost.append(self.plan.get_cost())
+
+        if self.plan.save_iterates:
+            self.vol_iterates.append(self.plan.vol)
+            self.rots_coeffs_iterates.append(self.plan.rots_coeffs)
 
     def finalize_solver(self):
         print("Solver has finished")

@@ -14,8 +14,9 @@ os.chdir(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))  # TOD
 
 # Set data path
 # data_dir = os.path.join("results","expA1_21-12-15_14-12-25_L65_N512_r1_k90_lamV10_lamD500")
-data_dir = os.path.join("results","expA1_21-12-15_14-38-45_L65_N512_r2_k90_lamV10_lamD500")
-data_filename = "solver_data_2SNR_512N"
+# data_dir = os.path.join("results","expA1_21-12-15_14-38-45_L65_N512_r2_k90_lamV10_lamD500")
+data_dir = os.path.join("results","expA1_21-12-16_10-45-12_L65_N512_r2_k90_lamV10_lamD500")  # SNR=1/16
+data_filename = "solver_data_16SNR_512N"
 # data_path = os.path.join(data_dir, data_filename)
 
 # Set results folder if skip_preprocessing
@@ -30,7 +31,7 @@ volume_reg_param = 1e10
 # Directly start experiment
 exp = Exp()
 
-exp.begin(prefix="expB1", postfix="L65_N512_r1_k90_lamV10_lamD500")
+exp.begin(prefix="expB1", postfix="L65_N512_r2_k90_lamV10_lamD500")
 exp.dbglevel(4)
 
 # Experiment

@@ -484,7 +484,7 @@ widgetsnbextension==3.5.1
 zipp==3.4.0
 
 Exception Details (most recent call last)
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/experiment.py", line 53, in <module>
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/experiment.py", line 47, in <module>
     data_filename=data_filename,
     Exp = <class 'tools.exp_tools.Exp'>
     __annotations__ = {}
@@ -492,130 +492,33 @@ Exception Details (most recent call last)
     __cached__ = None
     __doc__ = None
     __file__ = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/experiment.py'
-    __loader__ = <_frozen_importlib_external.SourceFileLoader object at 0x7fe9920716d8>
+    __loader__ = <_frozen_importlib_external.SourceFileLoader object at 0x7fe52d8716d8>
     __name__ = '__main__'
     __package__ = None
     __spec__ = None
-    data_dir = 'results/expA1_21-12-15_14-12-25_L65_N512_r1_k90_lamV10_lamD500'
+    data_dir = 'results/expA1_21-12-16_10-45-12_L65_N512_r2_k90_lamV10_lamD500'
     data_filename = 'solver_data_2SNR_512N'
-    exp = <tools.exp_tools.Exp object at 0x7fe994917ac8>
+    exp = <tools.exp_tools.Exp object at 0x7fe530a17ac8>
     logger = <Logger __main__ (DEBUG)>
     logging = <module 'logging' from '/Users/wdiepeveen/anaconda3/envs/aspire_env/lib/python3.6/logging/__init__.py'>
     np = <module 'numpy' from '/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/numpy/__init__.py'>
     os = <module 'os' from '/Users/wdiepeveen/anaconda3/envs/aspire_env/lib/python3.6/os.py'>
-    post_processing = <function post_processing at 0x7fe99961b0d0>
-    results_folder = 'results/expA1_21-12-15_14-12-25_L65_N512_r1_k90_lamV10_lamD500'
-    run_experiment = <function run_experiment at 0x7fe99492c1e0>
+    post_processing = <function post_processing at 0x7fe534dd80d0>
+    run_experiment = <function run_experiment at 0x7fe530a2c1e0>
     skip_experiment = False
     volume_reg_param = 10000000000.0
 
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/E2_post_processing.py", line 50, in post_processing
-    snr = solver_data["SNR"]
-    data_dir = '/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/expB1_21-12-15_14-30-06_L65_N512_r1_k90_lamV10_lamD500'
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/E1_run.py", line 38, in run_experiment
+    solver_data = exp.open_pkl(data_dir, data_filename)
+    data_dir = 'results/expA1_21-12-16_10-45-12_L65_N512_r2_k90_lamV10_lamD500'
     data_filename = 'solver_data_2SNR_512N'
-    exp = <tools.exp_tools.Exp object at 0x7fe994917ac8>
-    num_imgs = 512
-    results_folder = None
-    rots_gt = array([[[ 0.8472018 ,  0.35635847,  0.39402747],
-        [ 0.3245176 ,  0.24010392, -0.91489804],
-        [-0.42063922,  0.90297216,  0.08777189]],
+    dtype = <class 'numpy.float32'>
+    exp = <tools.exp_tools.Exp object at 0x7fe530a17ac8>
+    volume_reg_param = 10000000000.0
 
-       [[ 0.50811654,  0.4332875 ,  0.74436516],
-        [-0.00507289,  0.8657368 , -0.50047386],
-        [-0.86127335,  0.25052297,  0.44209322]],
-
-       [[ 0.70046335,  0.15106355,  0.6975177 ],
-        [-0.6937326 , -0.08538228,  0.71515375],
-        [ 0.16758932, -0.9848298 ,  0.04499056]],
-
-       ...,
-
-       [[ 0.2852245 ,  0.7310058 , -0.61990124],
-        [ 0.0869106 , -0.6638287 , -0.74281764],
-        [-0.9545122 ,  0.15799381, -0.25287235]],
-
-       [[ 0.682833  ,  0.48879188, -0.54297477],
-        [ 0.48945773, -0.85783243, -0.15669908],
-        [-0.5423746 , -0.1587639 , -0.8249993 ]],
-
-       [[ 0.49022612, -0.65302056, -0.5772716 ],
-        [-0.05106302,  0.6396606 , -0.7669595 ],
-        [ 0.87009823,  0.4054608 ,  0.28023311]]], dtype=float32)
-    rots_init = array([[[ 0.8733623 ,  0.3062865 ,  0.3787174 ],
-        [ 0.30180895,  0.26997423, -0.9143442 ],
-        [-0.38229522,  0.912854  ,  0.1433453 ]],
-
-       [[ 0.58367354,  0.39079896,  0.7117593 ],
-        [ 0.01423306,  0.8715047 , -0.49018055],
-        [-0.81186366,  0.29623595,  0.50311196]],
-
-       [[ 0.69343305,  0.06760977,  0.717342  ],
-        [-0.71465755, -0.06221652,  0.696702  ],
-        [ 0.09173439, -0.99577004,  0.00517484]],
-
-       ...,
-
-       [[ 0.27701777,  0.70400393, -0.65394163],
-        [-0.04148289, -0.67117906, -0.74013364],
-        [-0.9599689 ,  0.23215757, -0.15672441]],
-
-       [[ 0.6538042 ,  0.5044536 , -0.56397396],
-        [ 0.5199274 , -0.84102255, -0.14952138],
-        [-0.54974145, -0.19546779, -0.81214327]],
-
-       [[ 0.5156749 , -0.7111015 , -0.47792685],
-        [-0.04980795,  0.5319905 , -0.8452841 ],
-        [ 0.85533535,  0.45969635,  0.23891565]]], dtype=float32)
-    solver = <projects.lifting_v2.src.solvers.refinement_solver1.Refinement_Solver1 object at 0x7fe99b40afd0>
-    solver_data = {'solver': <projects.lifting_v2.src.solvers.refinement_solver1.Refinement_Solver1 object at 0x7fe99b40afd0>, 'vol_gt': <aspire.volume.Volume object at 0x7fe99b438da0>, 'vol_init': <aspire.volume.Volume object at 0x7fe99b438f60>, 'rots_gt': array([[[ 0.8472018 ,  0.35635847,  0.39402747],
-        [ 0.3245176 ,  0.24010392, -0.91489804],
-        [-0.42063922,  0.90297216,  0.08777189]],
-
-       [[ 0.50811654,  0.4332875 ,  0.74436516],
-        [-0.00507289,  0.8657368 , -0.50047386],
-        [-0.86127335,  0.25052297,  0.44209322]],
-
-       [[ 0.70046335,  0.15106355,  0.6975177 ],
-        [-0.6937326 , -0.08538228,  0.71515375],
-        [ 0.16758932, -0.9848298 ,  0.04499056]],
-
-       ...,
-
-       [[ 0.2852245 ,  0.7310058 , -0.61990124],
-        [ 0.0869106 , -0.6638287 , -0.74281764],
-        [-0.9545122 ,  0.15799381, -0.25287235]],
-
-       [[ 0.682833  ,  0.48879188, -0.54297477],
-        [ 0.48945773, -0.85783243, -0.15669908],
-        [-0.5423746 , -0.1587639 , -0.8249993 ]],
-
-       [[ 0.49022612, -0.65302056, -0.5772716 ],
-        [-0.05106302,  0.6396606 , -0.7669595 ],
-        [ 0.87009823,  0.4054608 ,  0.28023311]]], dtype=float32), 'rots_init': array([[[ 0.8733623 ,  0.3062865 ,  0.3787174 ],
-        [ 0.30180895,  0.26997423, -0.9143442 ],
-        [-0.38229522,  0.912854  ,  0.1433453 ]],
-
-       [[ 0.58367354,  0.39079896,  0.7117593 ],
-        [ 0.01423306,  0.8715047 , -0.49018055],
-        [-0.81186366,  0.29623595,  0.50311196]],
-
-       [[ 0.69343305,  0.06760977,  0.717342  ],
-        [-0.71465755, -0.06221652,  0.696702  ],
-        [ 0.09173439, -0.99577004,  0.00517484]],
-
-       ...,
-
-       [[ 0.27701777,  0.70400393, -0.65394163],
-        [-0.04148289, -0.67117906, -0.74013364],
-        [-0.9599689 ,  0.23215757, -0.15672441]],
-
-       [[ 0.6538042 ,  0.5044536 , -0.56397396],
-        [ 0.5199274 , -0.84102255, -0.14952138],
-        [-0.54974145, -0.19546779, -0.81214327]],
-
-       [[ 0.5156749 , -0.7111015 , -0.47792685],
-        [-0.04980795,  0.5319905 , -0.8452841 ],
-        [ 0.85533535,  0.45969635,  0.23891565]]], dtype=float32)}
-    vol_gt = <aspire.volume.Volume object at 0x7fe99b438da0>
-    vol_init = <aspire.volume.Volume object at 0x7fe99b438f60>
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/exp_tools.py", line 107, in open_pkl
+    with open(os.path.join(dir, filename + ".pkl"), 'rb') as input:
+    dir = 'results/expA1_21-12-16_10-45-12_L65_N512_r2_k90_lamV10_lamD500'
+    filename = 'solver_data_2SNR_512N'
+    self = <tools.exp_tools.Exp object at 0x7fe530a17ac8>
 

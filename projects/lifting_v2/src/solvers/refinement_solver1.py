@@ -59,7 +59,15 @@ class Refinement_Solver1(Joint_Volume_Rots_Solver):
 
         manifold = SO3()
 
-        self.plan.quaternions = manifold.mean(self.plan.quaternions[None, None], weights[None])[0, 0]
+        quaternions = np.zeros((self.plan.N, 4))
+        batch_size = int(1e7/self.plan.n)
+        for start in range(0, self.plan.N, batch_size):
+            all_idx = np.arange(start, min(start + batch_size, self.plan.N))
+            selected_weights = weights[all_idx]
+            quaternions[all_idx, :] = manifold.mean(self.plan.quaternions[None, None], selected_weights[None])[0, 0]
+            logger.info("Computing means at {}%".format(int((all_idx[-1]+1)/self.plan.N*100)))
+
+        self.plan.quaternions = quaternions
 
     def volume_step(self):
         L = self.plan.L

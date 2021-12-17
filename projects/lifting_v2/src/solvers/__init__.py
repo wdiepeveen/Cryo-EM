@@ -5,6 +5,8 @@ class Joint_Volume_Rots_Solver:
         self.iter = 0
         self.cost = []
         self.plan = plan
+        self.vol_iterates = []
+        self.rots_coeffs_iterates = []
 
     def stop_solver(self):
         raise NotImplementedError(
@@ -27,6 +29,7 @@ class Joint_Volume_Rots_Solver:
         print("Start solver")
         while not self.stop_solver():
             self.iter += 1
+            print("========================= Iteration {} =========================".format(self.iter))
             self.step_solver()
             # print("=============== Iteration 1: Cost = {} ===============".format(self.cost[-1]))
 

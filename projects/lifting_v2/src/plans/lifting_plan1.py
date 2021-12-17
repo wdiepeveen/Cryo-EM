@@ -24,8 +24,10 @@ class Lifting_Plan1(Plan):
                  integrator=None,
                  volume_reg_param=None,
                  rots_reg_param=None,
+                 rots_coeffs_reg_param_rate=1,
                  rots_coeffs_reg_scaling_param=None,
                  rots_batch_size=8192,
+                 save_iterates=False,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -59,7 +61,17 @@ class Lifting_Plan1(Plan):
         self.nn = self.integrator.nn  # TODO add this function in kernel integrator
 
         self.lam1 = volume_reg_param
-        self.lam2 = rots_reg_param
+        if type(rots_reg_param) is tuple:
+            assert len(rots_reg_param)==2
+            self.lam2_init =rots_reg_param[0]
+            self.lam2_inf = rots_reg_param[1]
+            self.lam2 = self.lam2_init
+            self.lam2_rate = rots_coeffs_reg_param_rate
+        else:
+            self.lam2_init = rots_reg_param
+            self.lam2_inf = rots_reg_param
+            self.lam2 = rots_reg_param
+            self.lam2_rate = rots_coeffs_reg_param_rate
         self.p = rots_coeffs_reg_scaling_param
 
         # Initialize Options
@@ -89,6 +101,7 @@ class Lifting_Plan1(Plan):
         self.rots_batch_size = rots_batch_size
 
         self.max_iter = max_iter
+        self.save_iterates = save_iterates
 
     def get_cost(self):
         # Compute q's
