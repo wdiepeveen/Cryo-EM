@@ -59,8 +59,8 @@ def post_processing(exp=None,
 
     # clean_image = sim.images(0, 1, enable_noise=False)
     # exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
-    exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0])
-    exp.save_mrc("data_vol_init", vol_init.asnumpy()[0])
+    exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0].astype(np.float32))
+    exp.save_mrc("data_vol_init", vol_init.asnumpy()[0].astype(np.float32))
 
     # Get noisy projecrtion image
     exp.save_im("data_projection_noisy" + postfix, images.asnumpy()[0])
@@ -118,14 +118,16 @@ def post_processing(exp=None,
     num_its = len(cost)
 
     plt.figure()
-    plt.plot(np.arange(num_its) + 1, cost)
+    plt.plot(np.arange(num_its) , cost)
     plt.yscale('linear')
     exp.save_fig("result_cost" + postfix)
+    plt.show()
+    print("costs = {}".format(cost))
 
     # Save results
     for i in range(solver.plan.max_iter):
         vol = solver.vol_iterates[i]
-        exp.save_mrc("result_vol" + postfix + "_i{}".format(i+1), vol.asnumpy()[0])
+        exp.save_mrc("result_vol" + postfix + "_i{}".format(i+1), vol.asnumpy()[0].astype(np.float32))
     # exp.save_mrc("result_refined_vol" + postfix, refined_volume_est.asnumpy()[0])
 
     # Process Stage 2 data:
@@ -169,4 +171,4 @@ def post_processing(exp=None,
     plt.show()
 
     # Save results
-    exp.save_mrc("result_vol" + postfix, volume_est.asnumpy()[0])
+    exp.save_mrc("result_vol" + postfix, volume_est.asnumpy()[0].astype(np.float32))

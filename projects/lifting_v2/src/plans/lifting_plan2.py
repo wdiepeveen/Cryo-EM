@@ -88,47 +88,54 @@ class Lifting_Plan2(Plan):
         self.sigmas = squared_noise_level * np.ones((self.N,))
         self.tau = volume_reg_param
 
+        self.data_discrepancy = np.zeros((self.n, self.N))  # (\|Ag.u - f_i\|^2)_g,i
+
         self.rots_batch_size = rots_batch_size
 
         self.max_iter = max_iter
         self.save_iterates = save_iterates
 
-    # def get_cost(self):
-    #     # Compute q's
-    #     im = self.images.asnumpy()
-    #     qs = np.zeros((self.n, self.N), dtype=self.dtype)
-    #     logger.info("Construct qs with batch size {}".format(self.rots_batch_size))
-    #     q3 = np.sum(im ** 2, axis=(1, 2))[None, :]
-    #     for start in range(0, self.n, self.rots_batch_size):
-    #         logger.info("Running through projections {}/{} = {}%".format(start, self.n, np.round(start/self.n*100,2)))
-    #         rots_sampling_projections = self.forward(self.vol, start, self.rots_batch_size).asnumpy()
-    #
-    #         q1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
-    #         q2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-    #
-    #         all_idx = np.arange(start, min(start + self.rots_batch_size, self.n))
-    #         qs[all_idx, :] = (q1 + q2 + q3) / (2 * self.squared_noise_level * self.L ** 2)
-    #
-    #
-    #     rhos = self.integrator.coeffs_to_weights(self.rots_coeffs)
-    #     data_fidelity_penalty = np.sum(qs * rhos)
-    #
-    #     vol_l2_penalty = self.lam1 / (2 * self.L ** 3) * np.sum(self.vol.asnumpy() ** 2)  # TODO factor 2L instead of just L?
-    #
-    #     dens_l2_penalty = self.lam2 * self.n / 2 * np.sum(self.rots_coeffs ** 2)
-    #
-    #     cost = data_fidelity_penalty + vol_l2_penalty + dens_l2_penalty
-    #
-    #     logger.info(
-    #         "data penalty = {} | vol_reg penalty = {} | dens_reg1 penalty = {}".format(
-    #             data_fidelity_penalty,
-    #             vol_l2_penalty,
-    #             dens_l2_penalty)
-    #     )
-    #     return cost
+    def get_cost(self):
+        data_term = np.sum(1 / (2 * self.sigmas[None, :]) * self.data_discrepancy * self.rots_coeffs)
+        vol_reg_term = 1 / (2 * self.tau) * np.sum(self.vol.asnumpy() ** 2)   # / self.L ** 3
+        rot_reg_term = self.lambd / (2 * self.n ** self.eta) * np.sum(self.rots_coeffs ** 2)
+        sigmas_reg_term = 1/2 * np.sum(np.log(self.sigmas))
+        tau_reg_term = 1/2 * np.log(self.tau)
+
+        cost = data_term + vol_reg_term + rot_reg_term + sigmas_reg_term + tau_reg_term
+        # TODO split costs
+        return cost
 
     def get_solver_result(self):
         return self.vol
+
+    def data_discrepancy_update(self):
+        L = self.L
+        N = self.N
+        n = self.n
+        dtype = self.dtype
+
+        logger.info("Computing \|Ag.u - f_i\|^2")
+        im = self.images.asnumpy()
+        F = np.zeros((n, N), dtype=dtype)
+        F3 = np.sum(im ** 2, axis=(1, 2))[None, :]
+        # print("F3 = {}".format(F3[:, 0]))
+
+        for start in range(0, n, self.rots_batch_size):
+            logger.info(
+                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
+            rots_sampling_projections = self.forward(self.vol, start, self.rots_batch_size).asnumpy()
+
+            F1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
+            # print("F1 = {}".format(F1[:, 0]))
+            F2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
+            # print("F2 = {}".format(F2[:, 0]))
+
+            all_idx = np.arange(start, min(start + self.rots_batch_size, n))
+            F[all_idx, :] = (F1 + F2 + F3)  # / (L ** 2)  # 2 * self.plan.squared_noise_level missing now
+
+        self.data_discrepancy = F
+        # print("F = {}".format(F[:, 0]))
 
     def forward(self, vol, start, num):
         """
@@ -141,7 +148,9 @@ class Lifting_Plan2(Plan):
         """
         all_idx = np.arange(start, min(start + num, self.n))
         im = vol.project(0, self.integrator.rots[all_idx, :, :])
+        # im *= 1 / self.L  # Rescale for projection
         im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
+        # im *= 1 / (self.L ** 2)  # Rescale for FT
         # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
         im *= self.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
         # but might as well do one for every entry

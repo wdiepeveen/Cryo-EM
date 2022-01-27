@@ -43,6 +43,10 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
         super().__init__(plan=plan)
 
+    def initialize_solver(self):
+        # Update data discrepancy
+        logger.info("Initialize solver")
+
     def stop_solver(self):
         return self.iter == 1
 

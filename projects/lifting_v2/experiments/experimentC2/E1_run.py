@@ -45,7 +45,8 @@ def run_experiment(exp=None,
         raise RuntimeError("No data path provided")
 
     # Define a precision for this experiment
-    dtype = np.float32
+    # dtype = np.float32
+    dtype = np.float64
 
     # Specify the CTF parameters not used for this example
     # but necessary for initializing the simulation object
@@ -94,10 +95,12 @@ def run_experiment(exp=None,
     rots_gt = sim.rots
 
     # Estimate sigma
-    squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    print("sigma^2 = {}".format(squared_noise_level))
+    squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    print("sigma = {}".format(squared_noise_level))
     sigmas = squared_noise_level * np.ones((num_imgs,))
-    tau = np.sum(vol_init.asnumpy() ** 2) / (img_size ** 3)
+    # tau = 1e-9  # np.sum(vol_init.asnumpy() ** 2)  # / (img_size ** 3)
+    tau = np.sum(exp_vol_gt.asnumpy() ** 2)
+    print("tau = {}".format(tau))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 

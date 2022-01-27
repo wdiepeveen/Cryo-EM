@@ -35,6 +35,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                  save_iterates=False,
                  dtype=np.float32,
                  seed=0,
+                 debug=False,
                  ):  # TODO in next solver also add kernel smoothing
         plan = Lifting_Plan2(vol=vol,
                              rots_coeffs=rots_coeffs,
@@ -53,12 +54,18 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         super().__init__(plan=plan)
 
-        self.data_discrepancy = np.zeros((self.plan.n, self.plan.N))  # (\|Ag.u - f_i\|^2)_g,i
+        self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
 
         print("vol = {}".format(self.plan.vol.asnumpy()))
         print("beta = {}".format(self.plan.rots_coeffs))
         print("sigmas = {}".format(self.plan.sigmas))
         print("tau = {}".format(self.plan.tau))
+
+    def initialize_solver(self):
+        # Update data discrepancy
+        logger.info("Update data_discrepancies")
+        self.plan.data_discrepancy_update()
+        self.cost.append(self.plan.get_cost())
 
     def stop_solver(self):
         return self.iter == self.plan.max_iter  # TODO add || relerror/change is small
@@ -67,58 +74,34 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # Compute squared errors so we can use it for both weight update and sigma update
 
-        logger.info("Update data_discrepancies")
-        self.data_discrepancy_update()
-
         logger.info("Do rots update step")
         self.rots_density_step()
-
-        logger.info("Do sigma update step")
-        self.sigma_step()
-        print("sigmas = {}".format(self.plan.sigmas))
+        self.cost.append(self.plan.get_cost())
+        print("betas = {}".format(self.plan.rots_coeffs))
 
         logger.info("Do vol update step")
         self.volume_step()
+        self.cost.append(self.plan.get_cost())
         print("volume = {}".format(self.plan.vol.asnumpy()))
 
-        logger.info("Do tau update step")
-        self.tau_step()
-        print("tau = {}".format(self.plan.tau))
+        logger.info("Do sigma update step")
+        self.sigma_step()
+        self.cost.append(self.plan.get_cost())
+        print("sigmas = {}".format(self.plan.sigmas))
+
+        # logger.info("Do tau update step")
+        # self.tau_step()
+        # self.cost.append(self.plan.get_cost())
+        # print("tau = {}".format(self.plan.tau))
 
         if self.plan.save_iterates:
             self.vol_iterates.append(self.plan.vol)
             self.rots_coeffs_iterates.append(self.plan.rots_coeffs)
+            self.sigmas_iterates.append(self.plan.sigmas)
+            self.tau_iterates.append(self.plan.tau)
 
     def finalize_solver(self):
         print("Solver has finished")
-
-    def data_discrepancy_update(self):
-        L = self.plan.L
-        N = self.plan.N
-        n = self.plan.n
-        dtype = self.plan.dtype
-
-        logger.info("Computing \|Ag.u - f_i\|^2")
-        im = self.plan.images.asnumpy()
-        F = np.zeros((n, N), dtype=dtype)
-        F3 = np.sum(im ** 2, axis=(1, 2))[None, :]
-        print("F3 = {}".format(F3[:, 0]))
-
-        for start in range(0, n, self.plan.rots_batch_size):
-            logger.info(
-                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
-            rots_sampling_projections = self.plan.forward(self.plan.vol, start, self.plan.rots_batch_size).asnumpy()
-
-            F1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
-            print("F1 = {}".format(F1[:, 0]))
-            F2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
-            print("F2 = {}".format(F2[:, 0]))
-
-            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, n))
-            F[all_idx, :] = (F1 + F2 + F3) / (L ** 2)  # 2 * self.plan.squared_noise_level missing now
-
-        self.data_discrepancy = F
-        print("F = {}".format(F[:, 0]))
 
     def rots_density_step(self):
         n = self.plan.n
@@ -127,90 +110,13 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         dtype = self.plan.dtype
 
         self.plan.rots_coeffs = self.projection_simplex(
-            - (n ** eta) / lambd * self.data_discrepancy / (2 * self.plan.sigmas[None, :]), axis=0).astype(dtype)
+            - (n ** eta) / lambd * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]), axis=0).astype(dtype)
 
     def sigma_step(self):
-        self.plan.sigmas = np.einsum("gi,gi->i", self.data_discrepancy, self.plan.rots_coeffs)
+        self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
 
     def tau_step(self):
-        self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2) / (self.plan.L ** 3)
-
-    # def volume_step(  # TODO do everything in Fourier domain to avoid numerical instabilities?
-    #         self):  # TODO check whether the sigmas work well like this and whether scaling in tau is okay like this
-    #     L = self.plan.L
-    #     n = self.plan.n
-    #     dtype = self.plan.dtype
-    #
-    #     # rots_weights = self.plan.integrator.coeffs_to_integrand_weights(self.plan.rots_coeffs)
-    #
-    #     # compute adjoint forward map of images
-    #     logger.info("Compute adjoint forward mapping on the images")
-    #     src = self.plan.adjoint_forward(self.plan.images,
-    #                                     (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs)
-    #     print("src = {}".format(src))
-    #     print("src.shape = {}".format(src.shape))
-    #
-    #     # compute kernel in fourier domain
-    #     _2L = 2 * L
-    #     kernel = np.zeros((_2L, _2L, _2L), dtype=dtype)
-    #     sq_filters_f = self.plan.eval_filter_grid(power=2)
-    #     sq_filters_f *= self.plan.amplitude ** 2
-    #
-    #     summed_rots_weights = np.sum((self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs, axis=1)
-    #
-    #     for start in range(0, self.plan.n, self.plan.rots_batch_size):
-    #         logger.info(
-    #             "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
-    #         all_idx = np.arange(start, min(start + self.plan.rots_batch_size, n))
-    #
-    #         # print("summed densities = {}".format(summed_density))
-    #         summed_rots_weights_ = summed_rots_weights[all_idx]
-    #         weights = sq_filters_f[:, :, None] * summed_rots_weights_[None, None, :]
-    #
-    #         if L % 2 == 0:
-    #             weights[0, :, :] = 0
-    #             weights[:, 0, :] = 0
-    #
-    #         weights = m_flatten(weights)
-    #
-    #         pts_rot = rotated_grids(L, self.plan.integrator.rots[all_idx, :, :])
-    #         pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this? -> No, but was in Aspire. Might be needed for non radial kernels
-    #         pts_rot = m_reshape(pts_rot, (3, -1))
-    #
-    #         kernel += (
-    #                 1
-    #                 / (L ** 4)  # TODO check whether scaling is correct like this
-    #                 * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
-    #         )
-    #
-    #     print("kernel = {}".format(kernel))
-    #
-    #     # Ensure symmetric kernel
-    #     kernel[0, :, :] = 0
-    #     kernel[:, 0, :] = 0
-    #     kernel[:, :, 0] = 0
-    #
-    #     logger.info("Computing non-centered Fourier Transform")
-    #     kernel = mdim_ifftshift(kernel, range(0, 3))
-    #     # kernel_f = fft2(kernel, axes=(0, 1, 2))
-    #     kernel_f = fftn(kernel, axes=(0, 1, 2))
-    #     kernel_f = np.real(kernel_f)
-    #     kernel_f += 1.  # TODO check whether this works
-    #
-    #     f_kernel = FourierKernel(kernel_f, centered=False)
-    #     # f_kernel += 1.
-    #
-    #     # f_kernel = FourierKernel(
-    #     #     1.0 / f_kernel.kernel, centered=False
-    #     # )
-    #
-    #     # apply kernel
-    #     src_f = fftn(src, (_2L, _2L, _2L))
-    #     vol = np.real(ifftn(src_f/kernel_f)[:L,:L,:L]).astype(dtype)
-    #     # vol = np.real(f_kernel.convolve_volume(src.T)).astype(
-    #     #     dtype)  # TODO works, but still not entirely sure why we need to transpose here
-    #
-    #     self.plan.vol = Volume(vol)
+        self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)  # / (self.plan.L ** 3)  # TODO skip the scaling factors here?
 
     def volume_step(  # OLD version
             self):  # TODO check whether the sigmas work well like this and whether scaling in tau is okay like this
@@ -218,13 +124,12 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         n = self.plan.n
         dtype = self.plan.dtype
 
-        # rots_weights = self.plan.integrator.coeffs_to_integrand_weights(self.plan.rots_coeffs)
+        rots_weights = (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs
 
         # compute adjoint forward map of images
         logger.info("Compute adjoint forward mapping on the images")
-        src = self.plan.adjoint_forward(self.plan.images,
-                                        (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs)
-        print("src = {}".format(src))
+        src = self.plan.adjoint_forward(self.plan.images, rots_weights)
+        # print("src = {}".format(src))
 
         # compute kernel in fourier domain
         _2L = 2 * L
@@ -232,7 +137,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.amplitude ** 2
 
-        summed_rots_weights = np.sum((self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs, axis=1)
+        summed_rots_weights = np.sum(rots_weights, axis=1)
 
         for start in range(0, self.plan.n, self.plan.rots_batch_size):
             logger.info(
@@ -255,11 +160,12 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
             kernel += (
                     1
-                    / (L ** 4)  # TODO check whether scaling is correct like this
+                    / (L ** 6)  # TODO check whether scaling is correct like this
+                    # / (L ** 4)  # TODO check whether scaling is correct like this
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
 
-        print("kernel = {}".format(kernel))
+        # print("kernel = {}".format(kernel))
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0
@@ -273,17 +179,21 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         # kernel_f += 1.  # TODO check whether this works
 
         f_kernel = FourierKernel(kernel_f, centered=False)
-        f_kernel += 1.
+        f_kernel += 1  # TODO check here also the 1/L**n?
 
         f_kernel = FourierKernel(
             1.0 / f_kernel.kernel, centered=False
         )
 
         # apply kernel
-        vol = np.real(f_kernel.convolve_volume(src.T)).astype(
-            dtype)  # TODO works, but still not entirely sure why we need to transpose here
+        vol = np.real(f_kernel.convolve_volume(src.T)
+                      / (L**3)  # Compensation for the lack of scaling in the forward operator
+                      ).astype(dtype)  # TODO works, but still not entirely sure why we need to transpose here
 
         self.plan.vol = Volume(vol)
+
+        logger.info("Update data_discrepancies")
+        self.plan.data_discrepancy_update()
 
     def projection_simplex(self, V, z=1, axis=None):
         """
@@ -299,13 +209,13 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         # Author: Mathieu Blondel
         """
         if axis == 1:
-            print("len(V) = {}".format(len(V)))
+            # print("len(V) = {}".format(len(V)))
             n_features = V.shape[1]
             U = np.sort(V, axis=1)[:, ::-1]
-            print("U = {}".format(U[0]))
+            # print("U = {}".format(U[0]))
             z = np.ones(len(V)) * z
             cssv = np.cumsum(U, axis=1) - z[:, np.newaxis]
-            print("cssv = {}".format(cssv[1]))
+            # print("cssv = {}".format(cssv[1]))
             ind = np.arange(n_features) + 1
             cond = U - cssv / ind > 0
             rho = np.count_nonzero(cond, axis=1)
