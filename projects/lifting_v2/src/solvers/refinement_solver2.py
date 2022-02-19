@@ -66,6 +66,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
         quaternions = np.zeros((self.plan.N, 4))
         batch_size = int(1e7/self.plan.n)
+        # TODO don't use all rots, but only average over the ones that have a non-zero component somewhere
         for start in range(0, self.plan.N, batch_size):
             all_idx = np.arange(start, min(start + batch_size, self.plan.N))
             selected_weights = weights[all_idx]
@@ -110,7 +111,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
             kernel += (
                     1
-                    / (L ** 4)  # TODO check whether scaling is correct like this
+                    / (L ** 6)  # TODO check whether scaling is correct like this
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
 
@@ -132,7 +133,8 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
         )
 
         # apply kernel
-        vol = np.real(f_kernel.convolve_volume(src.T)).astype(
-            dtype)  # TODO works, but still not entirely sure why we need to transpose here
+        vol = np.real(f_kernel.convolve_volume(src.T)
+                      / (L ** 3)  # Compensation for the lack of scaling in the forward operator
+                      ).astype(dtype)
 
         self.plan.vol = Volume(vol)

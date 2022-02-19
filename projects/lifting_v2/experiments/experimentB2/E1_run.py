@@ -3,7 +3,6 @@ import numpy as np
 import mrcfile
 
 from scipy.ndimage import zoom
-from scipy.ndimage.filters import gaussian_filter
 
 from aspire.operators import RadialCTFFilter
 from aspire.source.simulation import Simulation
@@ -15,20 +14,20 @@ from tools.exp_tools import Exp
 from projects.lifting_v2.src.integrators.base.sd1821mrx import SD1821MRx
 from projects.lifting_v2.src.solvers.lifting_solver2 import Lifting_Solver2
 from projects.lifting_v2.src.solvers.refinement_solver2 import Refinement_Solver2
+from projects.lifting_v2.src.util.rots_container import RotsContainer
 
 logger = logging.getLogger(__name__)
 
 
 def run_experiment(exp=None,
                    max_iter=1,
-                   num_imgs=1024,
-                   snr=1.,
-                   img_size=65,
-                   mr_repeat=1,
-                   rots_reg_param=500,  # \lambda
+                   num_imgs=None,
+                   snr=None,
+                   img_size=None,
+                   mr_repeat=None,
+                   rots_reg_param=None,
                    rots_reg_scaling_param=66 / 100,  # eta
                    data_path=None,
-                   vol_smudge=2,
                    ):
     logger.info(
         "This experiment illustrates orientation refinement using a lifting approach"
@@ -76,8 +75,6 @@ def run_experiment(exp=None,
     else:
         exp_vol_gt = vol_gt.downsample((img_size,) * 3)
 
-    vol_init = Volume(gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
-
     # Create a simulation object with specified filters and the downsampled 3D map
     logger.info("Use downsampled map to creat simulation object.")
 
@@ -88,7 +85,12 @@ def run_experiment(exp=None,
     sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
 
     logger.info("Get true rotation angles generated randomly by the simulation object.")
-    rots_gt = sim.rots
+    rots_gt = RotsContainer(num_imgs, dtype=dtype)
+    rots_gt.rots = sim.rots
+
+
+    # TODO convert rots_gt into quats_gt
+    #  - get integrator and input rots. Then get quats out and carry on
 
     # Estimate sigma
     squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
@@ -100,7 +102,8 @@ def run_experiment(exp=None,
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
-    solver = Lifting_Solver2(vol=vol_init,
+    # TODO only update rots
+    solver = Lifting_Solver2(vol=exp_vol_gt,
                              squared_noise_level=squared_noise_level,
                              volume_reg_param=tau,
                              images=sim.images(0, np.inf),
@@ -111,13 +114,15 @@ def run_experiment(exp=None,
                              max_iter=max_iter,
                              save_iterates=True,
                              dtype=dtype,
+                             experiment="consistency"
                              )
 
     solver.solve()
 
     # Stage 2: Refinement
     rots_indices = np.argmax(solver.plan.rots_coeffs, axis=0)
-    rots_init = solver.plan.integrator.rots[rots_indices]
+    rots_init = RotsContainer(num_imgs, dtype=dtype)
+    rots_init.rots = solver.plan.integrator.rots[rots_indices]
 
     refinement_solver = Refinement_Solver2(quaternions=solver.plan.integrator.quaternions,
                                            rots_coeffs=solver.plan.rots_coeffs,
@@ -133,14 +138,12 @@ def run_experiment(exp=None,
     refinement_solver.solve()
 
     # Save result
-    # TODO only send save integrator objects that contain the rots. Not the rots themselves
-    exp.save("solver_data",
+    exp.save("solver_data_r{}".format(mr_repeat),
              # Data
              ("SNR", snr),
              ("solver", solver),
              ("refinement_solver", refinement_solver),
              ("vol_gt", exp_vol_gt),  # (img_size,)*3
-             ("vol_init", vol_init),
              ("rots_gt", rots_gt),
              ("rots_init", rots_init),
              )

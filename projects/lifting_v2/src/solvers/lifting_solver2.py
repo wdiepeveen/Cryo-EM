@@ -36,6 +36,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                  dtype=np.float32,
                  seed=0,
                  debug=False,
+                 experiment=None,
                  ):  # TODO in next solver also add kernel smoothing
         plan = Lifting_Plan2(vol=vol,
                              rots_coeffs=rots_coeffs,
@@ -55,11 +56,12 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         super().__init__(plan=plan)
 
         self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
+        self.experiment = experiment
 
-        print("vol = {}".format(self.plan.vol.asnumpy()))
-        print("beta = {}".format(self.plan.rots_coeffs))
-        print("sigmas = {}".format(self.plan.sigmas))
-        print("tau = {}".format(self.plan.tau))
+        # print("vol = {}".format(self.plan.vol.asnumpy()))
+        # print("beta = {}".format(self.plan.rots_coeffs))
+        # print("sigmas = {}".format(self.plan.sigmas))
+        # print("tau = {}".format(self.plan.tau))
 
     def initialize_solver(self):
         # Update data discrepancy
@@ -73,26 +75,31 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
     def step_solver(self):
 
         # Compute squared errors so we can use it for both weight update and sigma update
+        if self.experiment is None:
+            logger.info("Do rots update step")
+            self.rots_density_step()
+            self.cost.append(self.plan.get_cost())
+            # print("betas = {}".format(self.plan.rots_coeffs))
 
-        logger.info("Do rots update step")
-        self.rots_density_step()
-        self.cost.append(self.plan.get_cost())
-        print("betas = {}".format(self.plan.rots_coeffs))
+            logger.info("Do vol update step")
+            self.volume_step()
+            self.cost.append(self.plan.get_cost())
+            # print("volume = {}".format(self.plan.vol.asnumpy()))
 
-        logger.info("Do vol update step")
-        self.volume_step()
-        self.cost.append(self.plan.get_cost())
-        print("volume = {}".format(self.plan.vol.asnumpy()))
+            logger.info("Do sigma update step")
+            self.sigma_step()
+            self.cost.append(self.plan.get_cost())
+            # print("sigmas = {}".format(self.plan.sigmas))
 
-        logger.info("Do sigma update step")
-        self.sigma_step()
-        self.cost.append(self.plan.get_cost())
-        print("sigmas = {}".format(self.plan.sigmas))
-
-        # logger.info("Do tau update step")
-        # self.tau_step()
-        # self.cost.append(self.plan.get_cost())
-        # print("tau = {}".format(self.plan.tau))
+            # logger.info("Do tau update step")
+            # self.tau_step()
+            # self.cost.append(self.plan.get_cost())
+            # print("tau = {}".format(self.plan.tau))
+        elif self.experiment == "consistency":
+            logger.info("Do rots update step")
+            self.rots_density_step()
+            self.cost.append(self.plan.get_cost())
+            # print("betas = {}".format(self.plan.rots_coeffs))
 
         if self.plan.save_iterates:
             self.vol_iterates.append(self.plan.vol)
@@ -155,13 +162,13 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             weights = m_flatten(weights)
 
             pts_rot = rotated_grids(L, self.plan.integrator.rots[all_idx, :, :])
-            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this? -> No, but was in Aspire. Might be needed for non radial kernels
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
                     1
-                    / (L ** 6)  # TODO check whether scaling is correct like this
-                    # / (L ** 4)  # TODO check whether scaling is correct like this
+                    / (L ** 6)
+                    # / (L ** 4)
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
 
@@ -176,10 +183,9 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         kernel = mdim_ifftshift(kernel, range(0, 3))
         kernel_f = fft2(kernel, axes=(0, 1, 2))
         kernel_f = np.real(kernel_f)
-        # kernel_f += 1.  # TODO check whether this works
 
         f_kernel = FourierKernel(kernel_f, centered=False)
-        f_kernel += 1  # TODO check here also the 1/L**n?
+        f_kernel += 1
 
         f_kernel = FourierKernel(
             1.0 / f_kernel.kernel, centered=False
@@ -188,7 +194,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         # apply kernel
         vol = np.real(f_kernel.convolve_volume(src.T)
                       / (L**3)  # Compensation for the lack of scaling in the forward operator
-                      ).astype(dtype)  # TODO works, but still not entirely sure why we need to transpose here
+                      ).astype(dtype)
 
         self.plan.vol = Volume(vol)
 

@@ -1,0 +1,12 @@
+2021-12-15 14:14:08,456 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
+2021-12-15 14:14:08,791 DEBUG Loaded backend module://backend_interagg version unknown.
+2021-12-15 14:14:09,693 INFO Results folder is /Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/expB1_21-12-15_14-14-09_L65_N512_r1_k90_lamV10_lamD500
+2021-12-15 14:14:09,695 INFO Start Experiment
+2021-12-15 14:14:09,696 INFO This experiment illustrates orientation refinement using a lifting approach
+2021-12-15 14:14:15,362 CRITICAL 'SNR'
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/experiment.py", line 45, in <module>
+    data_filename=data_filename,
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/experiments/experimentB1/E1_run.py", line 43, in run_experiment
+    snr = solver_data["SNR"]
+
