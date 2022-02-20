@@ -88,10 +88,6 @@ def run_experiment(exp=None,
     rots_gt = RotsContainer(num_imgs, dtype=dtype)
     rots_gt.rots = sim.rots
 
-
-    # TODO convert rots_gt into quats_gt
-    #  - get integrator and input rots. Then get quats out and carry on
-
     # Estimate sigma
     squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
@@ -102,7 +98,6 @@ def run_experiment(exp=None,
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
-    # TODO only update rots
     solver = Lifting_Solver2(vol=exp_vol_gt,
                              squared_noise_level=squared_noise_level,
                              volume_reg_param=tau,

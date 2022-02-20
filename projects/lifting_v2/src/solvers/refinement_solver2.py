@@ -60,15 +60,24 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
     def rots_step(self):
         weights = np.clip(self.plan.rots_coeffs.T, 0.0, 1.0)
-        weights /= weights.sum(axis=1)[:, None]  # TODO check whether we are doing this over the right axis
+        weights /= weights.sum(axis=1)[:, None]
 
         manifold = SO3()
 
         quaternions = np.zeros((self.plan.N, 4))
+
+        # Compute number of quaternions we actually need
+        # summed_weights = np.sum(weights, axis=1)  # Is there a non-zero coefficient on this rot?
+        # nz_idx = summed_weights>0
+        # nz_quaternions = self.plan.quaternions[nz_idx]  # Bug here
+        # TODO Pick weights [note that we have already .T the weights]
+        # TODO compute new batch size
+
         batch_size = int(1e7/self.plan.n)
         # TODO don't use all rots, but only average over the ones that have a non-zero component somewhere
         for start in range(0, self.plan.N, batch_size):
             all_idx = np.arange(start, min(start + batch_size, self.plan.N))
+            # TODO compute again in subset all the quaternions we actually need
             selected_weights = weights[all_idx]
             quaternions[all_idx, :] = manifold.mean(self.plan.quaternions[None, None], selected_weights[None])[0, 0]
             logger.info("Computing means at {}%".format(int((all_idx[-1]+1)/self.plan.N*100)))

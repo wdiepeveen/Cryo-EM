@@ -91,10 +91,11 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             self.cost.append(self.plan.get_cost())
             # print("sigmas = {}".format(self.plan.sigmas))
 
-            # logger.info("Do tau update step")
+            # logger.info("Do tau update step")  # TODO 19-02-22 -> skip this
             # self.tau_step()
             # self.cost.append(self.plan.get_cost())
             # print("tau = {}".format(self.plan.tau))
+
         elif self.experiment == "consistency":
             logger.info("Do rots update step")
             self.rots_density_step()
@@ -123,10 +124,9 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
 
     def tau_step(self):
-        self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)  # / (self.plan.L ** 3)  # TODO skip the scaling factors here?
+        self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)
 
-    def volume_step(  # OLD version
-            self):  # TODO check whether the sigmas work well like this and whether scaling in tau is okay like this
+    def volume_step(self):  # TODO try to do same as rots projection, i.e., only use projections with non-zero coefficient
         L = self.plan.L
         n = self.plan.n
         dtype = self.plan.dtype
