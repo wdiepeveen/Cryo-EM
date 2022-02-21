@@ -71,8 +71,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
             N_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
             selected_weights = weights[N_idx]
             # Select columns with rots having non-zero coefficients
-            col_idx = (np.sum(selected_weights, axis=0) > 0.)
-            quat_idx = np.arange(0, self.plan.n)[col_idx]
+            quat_idx = np.arange(0, self.plan.n)[np.sum(selected_weights, axis=0) > 0.]
             # Compute means
             quaternions[N_idx, :] = manifold.mean(self.plan.quaternions[None, None, quat_idx], selected_weights[None, :, quat_idx])[0, 0]
             logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
@@ -96,7 +95,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
         for start in range(0, N, self.plan.rots_batch_size):
             logger.info(
-                "Running through projections {}/{} = {}%".format(start, N, np.round(start / N * 100, 2)))
+                "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
             num_idx = len(all_idx)
 

@@ -122,8 +122,10 @@ class Lifting_Plan2(Plan):
         # print("F3 = {}".format(F3[:, 0]))
 
         for start in range(0, n, self.rots_batch_size):
+            all_idx = np.arange(start, min(start + self.rots_batch_size, n))
             logger.info(
-                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
+                "Computing data fidelity at {}%".format(int((all_idx[-1] + 1) / n * 100)))
+
             rots_sampling_projections = self.forward(self.vol, start, self.rots_batch_size).asnumpy()
 
             F1 = np.sum(rots_sampling_projections ** 2, axis=(1, 2))[:, None]
@@ -131,7 +133,6 @@ class Lifting_Plan2(Plan):
             F2 = - 2 * np.einsum("ijk,gjk->gi", im, rots_sampling_projections)
             # print("F2 = {}".format(F2[:, 0]))
 
-            all_idx = np.arange(start, min(start + self.rots_batch_size, n))
             F[all_idx, :] = (F1 + F2 + F3)  # / (L ** 2)  # 2 * self.plan.squared_noise_level missing now
 
         self.data_discrepancy = F
@@ -157,25 +158,29 @@ class Lifting_Plan2(Plan):
 
         return im
 
-    def adjoint_forward(self, im, weights):
+    def adjoint_forward(self, im):
         """
         Apply adjoint mapping to set of images
         :param im: An Image instance to which we wish to apply the adjoint of the forward model.
         :param start: Start index of image to consider
         :return: An L-by-L-by-L volume containing the sum of the adjoint mappings applied to the start+num-1 images.
         """
-        res = np.zeros((self.L, self.L, self.L), dtype=self.dtype)
-        for start in range(0, self.n, self.rots_batch_size):
-            logger.info(
-                "Running through projections {}/{} = {}%".format(start, self.n, np.round(start / self.n * 100, 2)))
-            all_idx = np.arange(start, min(start + self.rots_batch_size, self.n))
+        quat_idx = np.arange(0, self.n)[np.sum(self.rots_coeffs, axis=1) > 0.]  # Is any of the rotations unused?
+        weights = (self.tau / self.sigmas[None, :]) * self.rots_coeffs
 
-            integrands = Image(np.einsum("gi,ikl->gkl", weights[all_idx, :], im.asnumpy()))
+        res = np.zeros((self.L, self.L, self.L), dtype=self.dtype)
+        for start in range(0, len(quat_idx), self.rots_batch_size):
+            all_idx = np.arange(start, min(start + self.rots_batch_size, len(quat_idx)))
+            logger.info(
+                "Computing adjoint forward mappings at {}%".format(int((all_idx[-1] + 1) / len(quat_idx) * 100)))
+
+            idx = quat_idx[all_idx]
+            integrands = Image(np.einsum("gi,ikl->gkl", weights[idx, :], im.asnumpy()))
             integrands *= self.amplitude
             # im = im.shift(-self.offsets[all_idx, :])
             integrands = self.eval_filter(integrands)
 
-            res += integrands.backproject(self.integrator.rots[all_idx, :, :])[0]
+            res += integrands.backproject(self.integrator.rots[idx, :, :])[0]
 
         logger.info(f"Determined adjoint mappings. Shape = {res.shape}")
         return res

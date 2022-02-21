@@ -143,11 +143,14 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         n = self.plan.n
         dtype = self.plan.dtype
 
-        rots_weights = (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs
+        # Check how many rotations with non-zero weights we have
+        quat_idx = np.arange(0, self.plan.n)[
+            np.sum(self.plan.rots_coeffs, axis=1) > 0.]  # Is any of the rotations unused?
+        logger.info("Number of non-zero weight rotations = {}".format(len(quat_idx)))
 
         # compute adjoint forward map of images
         logger.info("Compute adjoint forward mapping on the images")
-        src = self.plan.adjoint_forward(self.plan.images, rots_weights)
+        src = self.plan.adjoint_forward(self.plan.images)
         # print("src = {}".format(src))
 
         # compute kernel in fourier domain
@@ -156,15 +159,18 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.amplitude ** 2
 
+        rots_weights = (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs
+
         summed_rots_weights = np.sum(rots_weights, axis=1)
 
-        for start in range(0, self.plan.n, self.plan.rots_batch_size):
+        for start in range(0, len(quat_idx), self.plan.rots_batch_size):
+            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, len(quat_idx)))
             logger.info(
-                "Running through projections {}/{} = {}%".format(start, n, np.round(start / n * 100, 2)))
-            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, n))
+                "Computing kernel at {}%".format(int((all_idx[-1] + 1) / len(quat_idx) * 100)))
 
             # print("summed densities = {}".format(summed_density))
-            summed_rots_weights_ = summed_rots_weights[all_idx]
+            idx = quat_idx[all_idx]
+            summed_rots_weights_ = summed_rots_weights[idx]
             weights = sq_filters_f[:, :, None] * summed_rots_weights_[None, None, :]
 
             if L % 2 == 0:
@@ -173,18 +179,15 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
             weights = m_flatten(weights)
 
-            pts_rot = rotated_grids(L, self.plan.integrator.rots[all_idx, :, :])
+            pts_rot = rotated_grids(L, self.plan.integrator.rots[idx, :, :])
             # pts_rot = np.moveaxis(pts_rot, 1, 2)  # was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
                     1
                     / (L ** 6)
-                    # / (L ** 4)
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
-
-        # print("kernel = {}".format(kernel))
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0
