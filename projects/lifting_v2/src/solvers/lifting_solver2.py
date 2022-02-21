@@ -76,6 +76,10 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # Compute squared errors so we can use it for both weight update and sigma update
         if self.experiment is None:
+            logger.info("Do lambda update step")
+            self.lambda_step()
+            print("lambda = {}".format(self.plan.lambd))
+
             logger.info("Do rots update step")
             self.rots_density_step()
             self.cost.append(self.plan.get_cost())
@@ -110,6 +114,14 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
     def finalize_solver(self):
         print("Solver has finished")
+
+    def lambda_step(self):
+        # TODO write this step
+        # TODO check iter (if it is larger than some pre set [burn in number], we skip this step)
+        # TODO we need a [J0] and find J based on |X| and eta
+        # TODO Sort all indices and average them row/column wise so that we can pick a global lambda cut off properly
+        # self.plan.lambd = 4.
+        k = 3.
 
     def rots_density_step(self):
         n = self.plan.n

@@ -66,25 +66,20 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
         quaternions = np.zeros((self.plan.N, 4))
 
-        # Compute number of quaternions we actually need
-        # summed_weights = np.sum(weights, axis=1)  # Is there a non-zero coefficient on this rot?
-        # nz_idx = summed_weights>0
-        # nz_quaternions = self.plan.quaternions[nz_idx]  # Bug here
-        # TODO Pick weights [note that we have already .T the weights]
-        # TODO compute new batch size
-
-        batch_size = int(1e7/self.plan.n)
-        # TODO don't use all rots, but only average over the ones that have a non-zero component somewhere
-        for start in range(0, self.plan.N, batch_size):
-            all_idx = np.arange(start, min(start + batch_size, self.plan.N))
-            # TODO compute again in subset all the quaternions we actually need
-            selected_weights = weights[all_idx]
-            quaternions[all_idx, :] = manifold.mean(self.plan.quaternions[None, None], selected_weights[None])[0, 0]
-            logger.info("Computing means at {}%".format(int((all_idx[-1]+1)/self.plan.N*100)))
+        N_batch_size = 100
+        for start in range(0, self.plan.N, N_batch_size):
+            N_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
+            selected_weights = weights[N_idx]
+            # Select columns with rots having non-zero coefficients
+            col_idx = (np.sum(selected_weights, axis=0) > 0.)
+            quat_idx = np.arange(0, self.plan.n)[col_idx]
+            # Compute means
+            quaternions[N_idx, :] = manifold.mean(self.plan.quaternions[None, None, quat_idx], selected_weights[None, :, quat_idx])[0, 0]
+            logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
 
         self.plan.quaternions = quaternions
 
-    def volume_step(self):  # TODO change this so that it is coherent with lifting solver2
+    def volume_step(self):
         L = self.plan.L
         N = self.plan.N
         dtype = self.plan.dtype
@@ -105,7 +100,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
             num_idx = len(all_idx)
 
-            # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2) # TODO here times sigma
+            # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
             weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
 
             if L % 2 == 0:
@@ -115,12 +110,12 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
             weights = m_flatten(weights)
 
             pts_rot = rotated_grids(L, self.plan.rots[all_idx, :, :])
-            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # TODO do we need this? -> No, but was in Aspire. Might be needed for non radial kernels
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # We don't need this. It was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
                     1
-                    / (L ** 6)  # TODO check whether scaling is correct like this
+                    / (L ** 6)
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
 
