@@ -11,17 +11,16 @@ from aspire.utils.matlab_compat import m_flatten, m_reshape
 from aspire.volume import rotated_grids, Volume
 
 from projects.lifting_v2.src.manifolds.so3 import SO3
-from projects.lifting_v2.src.plans.lifting_plan2 import Lifting_Plan2
+from projects.lifting_v2.src.plans.lifting_plan3 import Lifting_Plan3
 from projects.lifting_v2.src.solvers import Joint_Volume_Rots_Solver
 
 logger = logging.getLogger(__name__)
 
 
-class Lifting_Solver2(Joint_Volume_Rots_Solver):
+class Lifting_Solver3(Joint_Volume_Rots_Solver):
     def __init__(self,
                  # variables to be optimised
                  vol=None,
-                 rots_coeffs=None,
                  squared_noise_level=None,  # sigma
                  volume_reg_param=None,  # tau
                  # data
@@ -40,9 +39,8 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                  seed=0,
                  debug=False,
                  experiment=None,
-                 ):  # TODO in next solver also add kernel smoothing
-        plan = Lifting_Plan2(vol=vol,
-                             rots_coeffs=rots_coeffs,
+                 ):
+        plan = Lifting_Plan3(vol=vol,
                              squared_noise_level=squared_noise_level,  # sigma
                              volume_reg_param=volume_reg_param,  # tau
                              images=images,
@@ -51,6 +49,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                              integrator=integrator,
                              rots_reg_param=rots_reg_param,
                              rots_reg_scaling_param=rots_reg_scaling_param,
+                             J0=J0,
                              max_iter=max_iter,
                              save_iterates=save_iterates,
                              dtype=dtype,
@@ -58,15 +57,11 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         super().__init__(plan=plan)
 
-        if J0 is not None:
-            self.J = min(int(J0 * self.plan.n ** ((2 - 3 * self.plan.eta) / 5)), self.plan.n-1)
-        else:
-            self.J = None
-
         self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
         self.experiment = experiment
 
         self.quaternions_iterates = []
+        self.rots_iterates = []
 
         # print("vol = {}".format(self.plan.vol.asnumpy()))
         # print("beta = {}".format(self.plan.rots_coeffs))
@@ -87,7 +82,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # Compute squared errors so we can use it for both weight update and sigma update
         if self.experiment is None:
-            if self.J is not None:
+            if self.plan.J is not None:
                 logger.info("Do lambda update step")
                 self.lambda_step()
                 print("lambda = {}".format(self.plan.lambd))
@@ -112,6 +107,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             self.vol_iterates.append(self.plan.vol)
             self.rots_coeffs_iterates.append(self.plan.rots_coeffs)
             self.quaternions_iterates.append(self.plan.quaternions)
+            self.rots_iterates.append(self.plan.rots)
             self.sigmas_iterates.append(self.plan.sigmas)
             self.tau_iterates.append(self.plan.tau)
 
@@ -121,9 +117,9 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
     def lambda_step(self):
         F = self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :])
         Fj = np.sort(F, axis=0)
-        FJ = Fj[0:self.J]
+        FJ = Fj[0:self.plan.J]
         summed_FJ = np.sum(FJ, axis=0)
-        lambdas = self.J * (self.plan.n ** self.plan.eta) * (Fj[self.J] - 1/self.J * summed_FJ)
+        lambdas = self.plan.J * (self.plan.n ** self.plan.eta) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
     def rots_step(self):
@@ -151,17 +147,11 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             # Select columns with rots having non-zero coefficients
             quat_idx = np.arange(0, self.plan.n)[np.sum(selected_weights, axis=0) > 0.]
             # Compute means
-            quaternions[N_idx, :] = \
-            manifold.mean(self.plan.quaternions[None, None, quat_idx], selected_weights[None, :, quat_idx])[0, 0]
+            quaternions[N_idx, :] = manifold.mean(self.plan.integrator.quaternions[None, None, quat_idx],
+                                                  selected_weights[None, :, quat_idx])[0, 0]
             logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
 
         self.plan.quaternions = quaternions
-
-    # def sigma_step(self):
-    #     self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
-    #
-    # def tau_step(self):
-    #     self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)
 
     def volume_step(self):
         L = self.plan.L
@@ -170,8 +160,13 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # compute adjoint forward map of images
         logger.info("Compute adjoint forward mapping on the images")
-        src = self.plan.adjoint_forward(
-            Image((self.plan.tau / self.plan.sigmas[:, None, None]) * self.plan.images.asnumpy()))
+        imgs = Image((self.plan.tau / self.plan.sigmas[:, None, None]) * self.plan.images.asnumpy())
+        src = np.zeros((L, L, L), dtype=self.plan.dtype)
+        for start in range(0, N, self.plan.rots_batch_size):
+            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
+            src += self.plan.adjoint_forward(Image(imgs[all_idx]), self.plan.rots[all_idx])
+            logger.info(
+                "Computing adjoint forward mappings at {}%".format(int((all_idx[-1] + 1) / N * 100)))
 
         # compute kernel in fourier domain
         _2L = 2 * L
@@ -180,10 +175,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         sq_filters_f *= self.plan.amplitude ** 2
 
         for start in range(0, N, self.plan.rots_batch_size):
-            logger.info(
-                "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
-            num_idx = len(all_idx)
 
             # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
             weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
@@ -203,6 +195,9 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                     / (L ** 6)
                     * anufft(weights, pts_rot, (_2L, _2L, _2L), real=True)
             )
+
+            logger.info(
+                "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0
@@ -227,9 +222,6 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                       ).astype(dtype)
 
         self.plan.vol = Volume(vol)
-
-        # logger.info("Update data_discrepancies")  # TODO needed if we use parameter update scheme for sigma and tau
-        # self.plan.data_discrepancy_update()
 
     def projection_simplex(self, V, z=1, axis=None):
         """

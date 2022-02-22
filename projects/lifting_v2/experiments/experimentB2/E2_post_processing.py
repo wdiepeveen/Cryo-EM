@@ -19,7 +19,7 @@ def post_processing(exp=None,
     )
 
     if results_folder is not None:
-        data_dir = results_folder # TODO fix as in run_file
+        data_dir = results_folder  # TODO fix as in run_file
     else:
         data_dir = exp.results_folder
 
