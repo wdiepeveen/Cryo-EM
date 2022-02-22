@@ -3,12 +3,14 @@ import logging
 
 from scipy.fftpack import fft2, fftn, ifftn
 
+from aspire.image import Image
 from aspire.nufft import anufft
 from aspire.reconstruction.kernel import FourierKernel
 from aspire.utils.fft import mdim_ifftshift
 from aspire.utils.matlab_compat import m_flatten, m_reshape
 from aspire.volume import rotated_grids, Volume
 
+from projects.lifting_v2.src.manifolds.so3 import SO3
 from projects.lifting_v2.src.plans.lifting_plan2 import Lifting_Plan2
 from projects.lifting_v2.src.solvers import Joint_Volume_Rots_Solver
 
@@ -64,21 +66,24 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
         self.experiment = experiment
 
+        self.quaternions_iterates = []
+
         # print("vol = {}".format(self.plan.vol.asnumpy()))
         # print("beta = {}".format(self.plan.rots_coeffs))
         # print("sigmas = {}".format(self.plan.sigmas))
         # print("tau = {}".format(self.plan.tau))
 
     def initialize_solver(self):
-        # Update data discrepancy
-        logger.info("Update data_discrepancies")
-        self.plan.data_discrepancy_update()
+        logger.info("Initialising Solver")
         # self.cost.append(self.plan.get_cost())
 
     def stop_solver(self):
-        return self.iter == self.plan.max_iter  # TODO add || relerror/change is small
+        return self.iter == self.plan.max_iter
 
     def step_solver(self):
+        # Update data discrepancy
+        logger.info("Update data_discrepancies")
+        self.plan.data_discrepancy_update()
 
         # Compute squared errors so we can use it for both weight update and sigma update
         if self.experiment is None:
@@ -88,7 +93,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
                 print("lambda = {}".format(self.plan.lambd))
 
             logger.info("Do rots update step")
-            self.rots_density_step()
+            self.rots_step()
             self.cost.append(self.plan.get_cost())
             # print("betas = {}".format(self.plan.rots_coeffs))
 
@@ -97,25 +102,16 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             self.cost.append(self.plan.get_cost())
             # print("volume = {}".format(self.plan.vol.asnumpy()))
 
-            # logger.info("Do sigma update step")
-            # self.sigma_step()
-            # self.cost.append(self.plan.get_cost())
-            # print("sigmas = {}".format(self.plan.sigmas))
-
-            # logger.info("Do tau update step")  # TODO 19-02-22 -> skip this
-            # self.tau_step()
-            # self.cost.append(self.plan.get_cost())
-            # print("tau = {}".format(self.plan.tau))
-
         elif self.experiment == "consistency":
             logger.info("Do rots update step")
-            self.rots_density_step()
+            self.rots_step()
             self.cost.append(self.plan.get_cost())
             # print("betas = {}".format(self.plan.rots_coeffs))
 
         if self.plan.save_iterates:
             self.vol_iterates.append(self.plan.vol)
             self.rots_coeffs_iterates.append(self.plan.rots_coeffs)
+            self.quaternions_iterates.append(self.plan.quaternions)
             self.sigmas_iterates.append(self.plan.sigmas)
             self.tau_iterates.append(self.plan.tau)
 
@@ -130,7 +126,8 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         lambdas = self.J * (self.plan.n ** self.plan.eta) * (Fj[self.J] - 1/self.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
-    def rots_density_step(self):
+    def rots_step(self):
+        # Stage 1: compute weights
         n = self.plan.n
         eta = self.plan.eta
         dtype = self.plan.dtype
@@ -139,26 +136,42 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
             - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
             axis=0).astype(dtype)
 
-    def sigma_step(self):
-        self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
+        # Stage 2: project measure onto SO(3)
+        weights = np.clip(self.plan.rots_coeffs.T, 0.0, 1.0)
+        weights /= weights.sum(axis=1)[:, None]
 
-    def tau_step(self):
-        self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)
+        manifold = SO3()
+
+        quaternions = np.zeros((self.plan.N, 4))
+
+        N_batch_size = 100
+        for start in range(0, self.plan.N, N_batch_size):
+            N_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
+            selected_weights = weights[N_idx]
+            # Select columns with rots having non-zero coefficients
+            quat_idx = np.arange(0, self.plan.n)[np.sum(selected_weights, axis=0) > 0.]
+            # Compute means
+            quaternions[N_idx, :] = \
+            manifold.mean(self.plan.quaternions[None, None, quat_idx], selected_weights[None, :, quat_idx])[0, 0]
+            logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
+
+        self.plan.quaternions = quaternions
+
+    # def sigma_step(self):
+    #     self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
+    #
+    # def tau_step(self):
+    #     self.plan.tau = np.sum(self.plan.vol.asnumpy() ** 2)
 
     def volume_step(self):
         L = self.plan.L
-        n = self.plan.n
+        N = self.plan.N
         dtype = self.plan.dtype
-
-        # Check how many rotations with non-zero weights we have
-        quat_idx = np.arange(0, self.plan.n)[
-            np.sum(self.plan.rots_coeffs, axis=1) > 0.]  # Is any of the rotations unused?
-        logger.info("Number of non-zero weight rotations = {}".format(len(quat_idx)))
 
         # compute adjoint forward map of images
         logger.info("Compute adjoint forward mapping on the images")
-        src = self.plan.adjoint_forward(self.plan.images)
-        # print("src = {}".format(src))
+        src = self.plan.adjoint_forward(
+            Image((self.plan.tau / self.plan.sigmas[:, None, None]) * self.plan.images.asnumpy()))
 
         # compute kernel in fourier domain
         _2L = 2 * L
@@ -166,19 +179,14 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         sq_filters_f = self.plan.eval_filter_grid(power=2)
         sq_filters_f *= self.plan.amplitude ** 2
 
-        rots_weights = (self.plan.tau / self.plan.sigmas[None, :]) * self.plan.rots_coeffs
-
-        summed_rots_weights = np.sum(rots_weights, axis=1)
-
-        for start in range(0, len(quat_idx), self.plan.rots_batch_size):
-            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, len(quat_idx)))
+        for start in range(0, N, self.plan.rots_batch_size):
             logger.info(
-                "Computing kernel at {}%".format(int((all_idx[-1] + 1) / len(quat_idx) * 100)))
+                "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
+            all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
+            num_idx = len(all_idx)
 
-            # print("summed densities = {}".format(summed_density))
-            idx = quat_idx[all_idx]
-            summed_rots_weights_ = summed_rots_weights[idx]
-            weights = sq_filters_f[:, :, None] * summed_rots_weights_[None, None, :]
+            # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
+            weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
 
             if L % 2 == 0:
                 weights[0, :, :] = 0
@@ -186,8 +194,8 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
             weights = m_flatten(weights)
 
-            pts_rot = rotated_grids(L, self.plan.integrator.rots[idx, :, :])
-            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # was in Aspire. Might be needed for non radial kernels
+            pts_rot = rotated_grids(L, self.plan.rots[all_idx, :, :])
+            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # We don't need this. It was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
@@ -215,13 +223,13 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # apply kernel
         vol = np.real(f_kernel.convolve_volume(src.T)
-                      / (L**3)  # Compensation for the lack of scaling in the forward operator
+                      / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
         self.plan.vol = Volume(vol)
 
-        logger.info("Update data_discrepancies")
-        self.plan.data_discrepancy_update()
+        # logger.info("Update data_discrepancies")  # TODO needed if we use parameter update scheme for sigma and tau
+        # self.plan.data_discrepancy_update()
 
     def projection_simplex(self, V, z=1, axis=None):
         """

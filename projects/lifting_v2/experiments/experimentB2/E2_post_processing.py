@@ -2,18 +2,6 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 
-from aspire.utils.coor_trans import (
-    get_aligned_rotations,
-    get_rots_mse,
-    register_rotations,
-)
-
-from pymanopt.manifolds import Rotations
-
-from noise.noise import SnrNoiseAdder
-
-# from solvers.lifting.functions.rot_converters import mat2angle
-
 logger = logging.getLogger(__name__)
 
 
@@ -103,8 +91,6 @@ def post_processing(exp=None,
     exp.save_fig("W2" + postfix)
     plt.show()
 
-    # TODO table of the mean W2 distance -> output in .txt file
-
     #  Histogram distance rots init and gt
     dist_init = solver.plan.integrator.manifold.dist(rots_init.quaternions[:, None, :],
                                                      rots_gt.quaternions[:, None, :]).squeeze()
@@ -124,6 +110,8 @@ def post_processing(exp=None,
     plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")  # TODO d() in x-label
     exp.save_fig("distance_est" + postfix)
     plt.show()
+
+    # TODO table of the mean distances (3x) -> output in .txt file
 
     # Plot cost
     num_its = len(cost)
