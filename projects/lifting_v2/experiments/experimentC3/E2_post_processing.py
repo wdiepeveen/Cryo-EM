@@ -118,6 +118,10 @@ def post_processing(exp=None,
 
     plt.figure()
     plt.plot(np.arange(1, solver.plan.max_iter+1), mean_dists)
+    plt.xlabel("iteration")
+    plt.ylabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
+    exp.save_fig("rots_error_progression" + postfix)
+    plt.show()
 
     # # Plot cost
     # num_its = len(cost)

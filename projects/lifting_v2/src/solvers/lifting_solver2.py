@@ -57,7 +57,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         super().__init__(plan=plan)
 
         if J0 is not None:
-            self.J = min(int(J0 * self.plan.n ** ((2 - 3 * self.plan.eta) / 5)), self.plan.n-1)
+            self.J = min(int(J0 * self.plan.n ** ((2 - 3 * self.plan.eta) / 5)), self.plan.n - 1)
         else:
             self.J = None
 
@@ -127,17 +127,29 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
         Fj = np.sort(F, axis=0)
         FJ = Fj[0:self.J]
         summed_FJ = np.sum(FJ, axis=0)
-        lambdas = self.J * (self.plan.n ** self.plan.eta) * (Fj[self.J] - 1/self.J * summed_FJ)
+        lambdas = self.J * (self.plan.n ** self.plan.eta) * (Fj[self.J] - 1 / self.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
     def rots_density_step(self):
         n = self.plan.n
+        N = self.plan.N
         eta = self.plan.eta
         dtype = self.plan.dtype
 
-        self.plan.rots_coeffs = self.projection_simplex(
-            - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
-            axis=0).astype(dtype)
+        rots_coeffs = np.zeros((n, N), dtype=dtype)
+
+        N_batch_size = 50
+        for start in range(0, N, N_batch_size):
+            all_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
+
+            rots_coeffs[:, all_idx] = self.projection_simplex(
+                - (n ** eta) / self.plan.lambd[None, all_idx] * self.plan.data_discrepancy[:, all_idx] / (
+                            2 * self.plan.sigmas[None, all_idx]), axis=0).astype(dtype)
+
+            logger.info(
+                "Projecting {} vectors onto {}-simplex at {}%".format(N, n, int((all_idx[-1] + 1) / N * 100)))
+
+        self.plan.rots_coeffs = rots_coeffs
 
     def sigma_step(self):
         self.plan.sigmas = np.sum(self.plan.data_discrepancy * self.plan.rots_coeffs, axis=0)
@@ -215,7 +227,7 @@ class Lifting_Solver2(Joint_Volume_Rots_Solver):
 
         # apply kernel
         vol = np.real(f_kernel.convolve_volume(src.T)
-                      / (L**3)  # Compensation for the lack of scaling in the forward operator
+                      / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
         self.plan.vol = Volume(vol)

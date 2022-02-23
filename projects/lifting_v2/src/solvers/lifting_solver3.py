@@ -125,31 +125,44 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
     def rots_step(self):
         # Stage 1: compute weights
         n = self.plan.n
+        N = self.plan.N
         eta = self.plan.eta
         dtype = self.plan.dtype
 
-        self.plan.rots_coeffs = self.projection_simplex(
-            - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
-            axis=0).astype(dtype)
+        # self.plan.rots_coeffs = self.projection_simplex(
+        #     - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
+        #     axis=0).astype(dtype)
+
+        N_batch_size = 50
+
+        rots_coeffs = np.zeros((n, N), dtype=dtype)
+        for start in range(0, N, N_batch_size):
+            all_idx = np.arange(start, min(start + N_batch_size, N))
+
+            rots_coeffs[:, all_idx] = self.projection_simplex(
+                - (n ** eta) / self.plan.lambd[None, all_idx] * self.plan.data_discrepancy[:, all_idx] / (
+                        2 * self.plan.sigmas[None, all_idx]), axis=0).astype(dtype)
+
+            logger.info(
+                "Projecting {} vectors onto {}-simplex at {}%".format(N, n, int((all_idx[-1] + 1) / N * 100)))
+
+        self.plan.rots_coeffs = rots_coeffs
 
         # Stage 2: project measure onto SO(3)
         weights = np.clip(self.plan.rots_coeffs.T, 0.0, 1.0)
         weights /= weights.sum(axis=1)[:, None]
 
         manifold = SO3()
-
-        quaternions = np.zeros((self.plan.N, 4))
-
-        N_batch_size = 100
-        for start in range(0, self.plan.N, N_batch_size):
-            N_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
+        quaternions = np.zeros((N, 4))
+        for start in range(0, N, N_batch_size):
+            N_idx = np.arange(start, min(start + N_batch_size, N))
             selected_weights = weights[N_idx]
             # Select columns with rots having non-zero coefficients
-            quat_idx = np.arange(0, self.plan.n)[np.sum(selected_weights, axis=0) > 0.]
+            quat_idx = np.arange(0, n)[np.sum(selected_weights, axis=0) > 0.]
             # Compute means
             quaternions[N_idx, :] = manifold.mean(self.plan.integrator.quaternions[None, None, quat_idx],
                                                   selected_weights[None, :, quat_idx])[0, 0]
-            logger.info("Computing {} means at {}%".format(self.plan.N, int((N_idx[-1] + 1) / self.plan.N * 100)))
+            logger.info("Computing {} means at {}%".format(N, int((N_idx[-1] + 1) / N * 100)))
 
         self.plan.quaternions = quaternions
 
