@@ -66,12 +66,13 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
 
         quaternions = np.zeros((self.plan.N, 4))
 
-        N_batch_size = 100
+        N_batch_size = 50
         for start in range(0, self.plan.N, N_batch_size):
             N_idx = np.arange(start, min(start + N_batch_size, self.plan.N))
             selected_weights = weights[N_idx]
             # Select columns with rots having non-zero coefficients
             quat_idx = np.arange(0, self.plan.n)[np.sum(selected_weights, axis=0) > 0.]
+            print(len(quat_idx))
             # Compute means
             quaternions[N_idx, :] = manifold.mean(self.plan.quaternions[None, None, quat_idx], selected_weights[None, :, quat_idx])[0, 0]
             logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
@@ -97,10 +98,10 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
             logger.info(
                 "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
-            num_idx = len(all_idx)
 
             # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
-            weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
+            weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, all_idx])
+            # weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
 
             if L % 2 == 0:
                 weights[0, :, :] = 0

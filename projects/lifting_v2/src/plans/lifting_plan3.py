@@ -166,7 +166,7 @@ class Lifting_Plan3(Plan):
             F[all_idx, :] = (F1 + F2 + F3)  # / (L ** 2)  # 2 * self.plan.squared_noise_level missing now
 
             logger.info(
-                "Computing data fidelity at {}%".format(int((all_idx[-1] + 1) / n * 100)))
+                "Computing data fidelity for {} rotations and {} images at {}%".format(n, N, int((all_idx[-1] + 1) / n * 100)))
 
         self.data_discrepancy = F
 
@@ -181,7 +181,7 @@ class Lifting_Plan3(Plan):
         """
         im = vol.project(0, rots)
         im = self.eval_filter(im)  # Here we only use 1 filter, but might as well do one for every entry
-        # im = im.shift(self.offsets[all_idx, :])  # TODO use this later on
+        # im = im.shift(self.offsets[all_idx, :])
         im *= self.amplitude  # [im.n, np.newaxis, np.newaxis]  # Here we only use 1 amplitude,
         # but might as well do one for every entry
 

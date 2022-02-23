@@ -149,7 +149,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             # Compute means
             quaternions[N_idx, :] = manifold.mean(self.plan.integrator.quaternions[None, None, quat_idx],
                                                   selected_weights[None, :, quat_idx])[0, 0]
-            logger.info("Computing means at {}%".format(int((N_idx[-1] + 1) / self.plan.N * 100)))
+            logger.info("Computing {} means at {}%".format(self.plan.N, int((N_idx[-1] + 1) / self.plan.N * 100)))
 
         self.plan.quaternions = quaternions
 
@@ -166,7 +166,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
             src += self.plan.adjoint_forward(Image(imgs[all_idx]), self.plan.rots[all_idx])
             logger.info(
-                "Computing adjoint forward mappings at {}%".format(int((all_idx[-1] + 1) / N * 100)))
+                "Computing adjoint forward mappings from {} rotations at {}%".format(N, int((all_idx[-1] + 1) / N * 100)))
 
         # compute kernel in fourier domain
         _2L = 2 * L
@@ -178,7 +178,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             all_idx = np.arange(start, min(start + self.plan.rots_batch_size, N))
 
             # weights = np.repeat(sq_filters_f[:, :, None], num_idx, axis=2)
-            weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
+            weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, all_idx])
+            # weights = sq_filters_f[:, :, None] * (self.plan.tau / self.plan.sigmas[None, None, :])
 
             if L % 2 == 0:
                 weights[0, :, :] = 0
@@ -197,7 +198,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             )
 
             logger.info(
-                "Computing kernel at {}%".format(np.round(start / N * 100, 2)))
+                "Computing kernel from {} rotations at {}%".format(N, int((all_idx[-1] + 1) / N * 100)))
 
         # Ensure symmetric kernel
         kernel[0, :, :] = 0

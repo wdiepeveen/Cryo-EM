@@ -115,7 +115,7 @@ def run_experiment(exp=None,
     solver.solve()
 
     # Save result
-    exp.save("solver_data",
+    exp.save("solver_data_r{}".format(mr_repeat),
              # Data
              ("SNR", snr),
              ("solver", solver),

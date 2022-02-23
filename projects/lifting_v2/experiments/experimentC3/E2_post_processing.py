@@ -38,6 +38,7 @@ def post_processing(exp=None,
     solver = solver_data["solver"]
     vol_gt = solver_data["vol_gt"]  # Volume 65L
     rots_gt = solver_data["rots_gt"]
+    vol_init = solver_data["vol_init"]  # Volume 65L
     snr = solver_data["SNR"]
     num_imgs = solver.plan.N
     # Load results
@@ -52,6 +53,7 @@ def post_processing(exp=None,
     # clean_image = sim.images(0, 1, enable_noise=False)
     # exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
     exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0].astype(np.float32))
+    exp.save_mrc("data_vol_init", vol_init.asnumpy()[0].astype(np.float32))
 
     # Get noisy projecrtion images
     images = solver.plan.images
@@ -87,6 +89,8 @@ def post_processing(exp=None,
 
         exp.save_fig("weights_on_angles" + postfix + "_i{}".format(i+1))
 
+        #  TODO Histogram Wasserstein distances
+
         #  Histograms distance rots ref and gt
 
         # Get register rotations after performing global alignment
@@ -113,7 +117,7 @@ def post_processing(exp=None,
         exp.save_mrc("result_vol" + postfix + "_i{}".format(i + 1), vol.asnumpy()[0].astype(np.float32))
 
     plt.figure()
-    plt.plot(np.arange(1, solver.plan.max_iter+1),mean_dists)
+    plt.plot(np.arange(1, solver.plan.max_iter+1), mean_dists)
 
     # # Plot cost
     # num_its = len(cost)
