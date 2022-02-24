@@ -76,6 +76,14 @@ def run_experiment(exp=None,
     else:
         exp_vol_gt = vol_gt.downsample((img_size,) * 3)
 
+    # vol_init_ = gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge)
+    # rescaling = np.sqrt(np.sum(exp_vol_gt.asnumpy() ** 2) / np.sum(vol_init_ ** 2))  # So that init has same norm as gt
+    # print("Volume rescaling factor = {}".format(rescaling))
+    # vol_init = Volume(rescaling * vol_init_)
+
+    # rescaling = 1e-3
+    # vol_init = Volume(rescaling * gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
+
     vol_init = Volume(gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
 
     # Create a simulation object with specified filters and the downsampled 3D map
@@ -95,6 +103,7 @@ def run_experiment(exp=None,
     squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
     tau = np.sum(exp_vol_gt.asnumpy() ** 2)
+
     print("tau = {}".format(tau))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)

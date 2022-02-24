@@ -120,6 +120,7 @@ def post_processing(exp=None,
     plt.plot(np.arange(1, solver.plan.max_iter+1), mean_dists)
     plt.xlabel("iteration")
     plt.ylabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
+    plt.ylim([0, hist_range])
     exp.save_fig("rots_error_progression" + postfix)
     plt.show()
 

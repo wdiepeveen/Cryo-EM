@@ -92,6 +92,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             self.cost.append(self.plan.get_cost())
             # print("betas = {}".format(self.plan.rots_coeffs))
 
+            # TODO update sigmas
+
             logger.info("Do vol update step")
             self.volume_step()
             self.cost.append(self.plan.get_cost())
@@ -133,11 +135,9 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         #     - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
         #     axis=0).astype(dtype)
 
-        N_batch_size = 50
-
         rots_coeffs = np.zeros((n, N), dtype=dtype)
-        for start in range(0, N, N_batch_size):
-            all_idx = np.arange(start, min(start + N_batch_size, N))
+        for start in range(0, N, self.plan.img_batch_size):
+            all_idx = np.arange(start, min(start + self.plan.img_batch_size, N))
 
             rots_coeffs[:, all_idx] = self.projection_simplex(
                 - (n ** eta) / self.plan.lambd[None, all_idx] * self.plan.data_discrepancy[:, all_idx] / (
@@ -154,8 +154,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
 
         manifold = SO3()
         quaternions = np.zeros((N, 4))
-        for start in range(0, N, N_batch_size):
-            N_idx = np.arange(start, min(start + N_batch_size, N))
+        for start in range(0, N, self.plan.img_batch_size):
+            N_idx = np.arange(start, min(start + self.plan.img_batch_size, N))
             selected_weights = weights[N_idx]
             # Select columns with rots having non-zero coefficients
             quat_idx = np.arange(0, n)[np.sum(selected_weights, axis=0) > 0.]
@@ -226,6 +226,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         f_kernel = FourierKernel(kernel_f, centered=False)
         f_kernel += 1
 
+        # TODO add second regularisaiton term
+
         f_kernel = FourierKernel(
             1.0 / f_kernel.kernel, centered=False
         )
@@ -235,7 +237,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
                       / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
-        self.plan.vol = Volume(vol)
+        self.plan.vol = Volume((1 - self.plan.theta) * vol + self.plan.theta * self.plan.vol.asnumpy()[0])
 
     def projection_simplex(self, V, z=1, axis=None):
         """

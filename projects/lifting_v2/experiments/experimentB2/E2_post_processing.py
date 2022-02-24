@@ -87,7 +87,7 @@ def post_processing(exp=None,
     # print("W2.shape = {}".format(W2.shape))
     plt.figure()
     plt.hist(180 / np.pi * W2, bins=num_bins, range=(0, hist_range))
-    plt.xlabel(r"$W_2(\mu_{\mathcal{X}}^*,\delta_{p^*})\; (\degree)$")  # TODO W_2 in x-label
+    plt.xlabel(r"$W_2(\mu_{\mathcal{X}}^*,\delta_{p^*})\; (\degree)$")
     exp.save_fig("W2" + postfix)
     plt.show()
 
@@ -97,7 +97,7 @@ def post_processing(exp=None,
     # print("dist_init.shape ={}".format(dist_init.shape))
     plt.figure()
     plt.hist(180 / np.pi * dist_init, bins=num_bins, range=(0, hist_range))
-    plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^0,p^*)\; (\degree)$")   # TODO d() in x-label
+    plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^0,p^*)\; (\degree)$")
     exp.save_fig("distance_init" + postfix)
     plt.show()
 
@@ -107,7 +107,7 @@ def post_processing(exp=None,
     # print("dist_est.shape = {}".format(dist_est.shape))
     plt.figure()
     plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_range))
-    plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")  # TODO d() in x-label
+    plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
     exp.save_fig("distance_est" + postfix)
     plt.show()
 

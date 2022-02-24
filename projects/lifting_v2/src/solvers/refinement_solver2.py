@@ -137,6 +137,7 @@ class Refinement_Solver2(Joint_Volume_Rots_Solver):
         )
 
         # apply kernel
+        logger.info("Convolve volume")
         vol = np.real(f_kernel.convolve_volume(src.T)
                       / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)

@@ -115,7 +115,6 @@ class Exp:
         # TODO also right away copy the file to results_folder
         return np.load(os.path.join(dir, filename + ".npy"))
 
-
     def save(self, filename, *args):
 
         if len(args) == 0:
@@ -147,14 +146,14 @@ class Exp:
             plt.savefig(os.path.join(self.results_folder, filename + ".eps"))
 
     def save_im(self, filename, im):
-        plt.imsave(os.path.join(self.results_folder,filename + ".png"), im)
+        plt.imsave(os.path.join(self.results_folder, filename + ".png"), im)
 
     def save_table(self, filename, values, headers=None, side_headers=None):
 
         rows, columns = values.shape
         if columns > 1:
             if side_headers is None:
-                begin_table = r"\begin{tabular}"+ "{}".format("{"+ "c|"*(columns-1) + "c" +"}") + "\n"
+                begin_table = r"\begin{tabular}" + "{}".format("{" + "c|" * (columns - 1) + "c" + "}") + "\n"
             else:
                 begin_table = r"\begin{tabular}" + "{}".format("{" + "c|" * columns + "c" + "}") + "\n"
         else:
@@ -180,12 +179,12 @@ class Exp:
 
         for row in range(rows):
             if side_headers is not None:
-                table_data += side_headers[row+1] + " & "
+                table_data += side_headers[row + 1] + " & "
             for col in range(columns):
 
-                table_data += "{}".format(values[row,col])
+                table_data += "{}".format(values[row, col])
                 if col == columns - 1:
-                    if row != rows-1:
+                    if row != rows - 1:
                         table_data += r" \\ \hline" + "\n"
                     else:
                         table_data += r" \\" + "\n"

@@ -32,10 +32,12 @@ class Lifting_Plan3(Plan):
                  rots_reg_param=None,  # lambda
                  rots_reg_scaling_param=66 / 100,  # eta
                  J0=None,
+                 vol_underrelaxation=0,
                  # solver options
                  max_iter=None,
                  save_iterates=False,
                  rots_batch_size=1024,
+                 img_batch_size=50,
                  dtype=np.float32,
                  seed=0,
                  ):
@@ -92,6 +94,8 @@ class Lifting_Plan3(Plan):
         self.sigmas = squared_noise_level * np.ones((self.N,))
         self.tau = volume_reg_param
 
+        self.theta = vol_underrelaxation
+
         if (rots_reg_param is not None) and (J0 is None):
             self.lambd = rots_reg_param * np.ones((self.N,))
             self.J = None
@@ -103,6 +107,7 @@ class Lifting_Plan3(Plan):
         self.data_discrepancy = np.zeros((self.n, self.N))  # (\|Ag.u - f_i\|^2)_g,i
 
         self.rots_batch_size = rots_batch_size
+        self.img_batch_size = img_batch_size
 
         self.max_iter = max_iter
         self.save_iterates = save_iterates
