@@ -92,8 +92,6 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
             self.cost.append(self.plan.get_cost())
             # print("betas = {}".format(self.plan.rots_coeffs))
 
-            # TODO update sigmas
-
             logger.info("Do vol update step")
             self.volume_step()
             self.cost.append(self.plan.get_cost())
