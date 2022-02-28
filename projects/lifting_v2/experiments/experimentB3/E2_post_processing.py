@@ -36,7 +36,6 @@ def post_processing(exp=None,
     images = solver_data["images"]
     num_imgs = images.asnumpy().shape[0]
 
-
     rots_gt = exp.open_npy(data_dir, "rots_gt")
     rots_init = exp.open_npy(data_dir, "rots_init")
     rots_est = exp.open_npy(data_dir, "rots_est")
@@ -45,7 +44,7 @@ def post_processing(exp=None,
 
     # Load results
 
-    integrator = SD1821MRx(repeat=mr_repeat)  #, dtype=dtype)
+    integrator = SD1821MRx(repeat=mr_repeat)  # , dtype=dtype)
 
     # Process Stage 1 data:
 
@@ -90,7 +89,16 @@ def post_processing(exp=None,
     manifold = SO3()
 
     #  Histogram Wasserstein distances
-    squared_dist = manifold.dist(integrator.quaternions[None, :, :], rots_gt[None, :, :]).squeeze() ** 2
+    squared_dist = np.zeros((integrator.n, num_imgs))
+    rots_batch_size = 1024
+    for start in range(0, integrator.n, rots_batch_size):
+        all_idx = np.arange(start, min(start + rots_batch_size, integrator.n))
+        squared_dist[all_idx] = manifold.dist(integrator.quaternions[None, all_idx, :],
+                                              rots_gt[None, :, :]).squeeze() ** 2
+
+        logger.info(
+            "Computing distance squared for {} rotations and {} images at {}%".format(integrator.n, num_imgs,
+                                                                                      int((all_idx[-1] + 1) / integrator.n * 100)))
 
     W2 = np.sqrt(np.sum(squared_dist * rots_coeffs, axis=0))
     # print("W2.shape = {}".format(W2.shape))

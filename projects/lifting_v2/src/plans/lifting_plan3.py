@@ -231,3 +231,13 @@ class Lifting_Plan3(Plan):
         h = np.reshape(filter_values, grid2d["x"].shape)
 
         return h
+
+    def construct_reg_kernel(self):
+        k=2
+        # use grid_3d from aspire.utils.coord_trans - also see aspire.volume.rotated_grids
+        # multiply by pi
+        # Compute function on these indices
+        # TODO checkout how we get (2L)**3 sized matrix from this
+        #  - see anufft for this?
+        #  - checkout documentation on FFT
+        # TODO We only have to compute this once and then save it -> then just add it in the solver
