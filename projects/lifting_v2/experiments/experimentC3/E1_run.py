@@ -102,18 +102,21 @@ def run_experiment(exp=None,
     rots_gt.rots = sim.rots
 
     # Estimate sigma
-    squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    squared_noise_level = np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    # squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
-    # tau = np.sum(exp_vol_gt.asnumpy() ** 2)
-    #
-    # print("tau = {}".format(tau))
+    tau = np.mean(exp_vol_gt.asnumpy() ** 2)
+    # tau_init = np.mean(vol_init.asnumpy() ** 2)
+
+    print("tau = {}".format(tau))
+    # print("tau = {}".format(tau_init))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
     solver = Lifting_Solver3(vol=vol_init,
                              squared_noise_level=squared_noise_level,
-                             volume_reg_param=tau1,
-                             volume_kernel_reg_param=tau2,
+                             volume_reg_param=tau,
+                             volume_kernel_reg_param=1e-1 * tau,
                              images=sim.images(0, np.inf),
                              filter=sim.unique_filters[0],
                              integrator=integrator,

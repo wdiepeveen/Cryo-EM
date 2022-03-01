@@ -226,7 +226,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         if self.plan.tau2 is not None:
             logger.info("Add ramp filter regularisation")
             # kernel_f += 1 / (L ** 6) * self.plan.tau / self.plan.tau2 * self.plan.vol_reg_kernel ** 20  # TODO get rid of 1/L6
-            kernel_f += self.plan.tau / self.plan.tau2 * self.plan.vol_reg_kernel ** 2
+            kernel_f += self.plan.tau / self.plan.tau2 * (self.plan.vol_reg_kernel ** 2)
+            # kernel_f += 1 / (L ** 4) * self.plan.tau / self.plan.tau2 * (self.plan.vol_reg_kernel ** 2)
             # TODO check what happens if we have the zero frequency in the top corner (so also no shift in constructor)
 
         f_kernel = FourierKernel(kernel_f, centered=False)
@@ -238,7 +239,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
 
         # apply kernel
         vol = np.real(f_kernel.convolve_volume(src.T)
-                      / (L ** 2)  # Compensation for the lack of scaling in the forward operator (according to ASPIRE)
+                      # / (L ** 2)  # Compensation for the lack of scaling in the forward operator (according to ASPIRE)
                       # / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
