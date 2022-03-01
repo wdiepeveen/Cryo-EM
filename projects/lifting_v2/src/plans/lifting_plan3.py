@@ -4,9 +4,10 @@ import logging
 import quaternionic
 
 from scipy.spatial.transform import Rotation as R
+from scipy.fft import ifftshift
 
 from aspire.image import Image
-from aspire.utils.coor_trans import grid_2d
+from aspire.utils.coor_trans import grid_2d, grid_3d
 from aspire.volume import Volume
 
 from projects.lifting_v2.src.plans import Plan
@@ -23,6 +24,7 @@ class Lifting_Plan3(Plan):
                  rots_coeffs=None,
                  squared_noise_level=None,  # sigma
                  volume_reg_param=None,  # tau
+                 volume_kernel_reg_param=None,  # tau2
                  # data
                  images=None,  # f_i
                  # parameters
@@ -91,8 +93,11 @@ class Lifting_Plan3(Plan):
         self.vol = vol
         self.rots_coeffs = rots_coeffs
         self._points = None
+
         self.sigmas = squared_noise_level * np.ones((self.N,))
         self.tau = volume_reg_param
+        self.tau2 = volume_kernel_reg_param
+        self.vol_reg_kernel = self.construct_vol_reg_kernel()
 
         self.theta = vol_underrelaxation
 
@@ -232,12 +237,10 @@ class Lifting_Plan3(Plan):
 
         return h
 
-    def construct_reg_kernel(self):
-        k=2
-        # use grid_3d from aspire.utils.coord_trans - also see aspire.volume.rotated_grids
-        # multiply by pi
-        # Compute function on these indices
-        # TODO checkout how we get (2L)**3 sized matrix from this
-        #  - see anufft for this?
-        #  - checkout documentation on FFT
-        # TODO We only have to compute this once and then save it -> then just add it in the solver
+    def construct_vol_reg_kernel(self):
+        grid3d = grid_3d(2 * self.L, shifted=True)
+        x = np.pi * grid3d["x"]
+        y = np.pi * grid3d["y"]
+        z = np.pi * grid3d["z"]
+        return ifftshift(np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype), axes=(0, 1, 2))
+        # return np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype)

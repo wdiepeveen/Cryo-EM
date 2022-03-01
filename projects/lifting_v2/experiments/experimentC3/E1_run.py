@@ -25,6 +25,8 @@ def run_experiment(exp=None,
                    snr=1.,
                    img_size=65,
                    mr_repeat=1,
+                   tau1=1,
+                   tau2=None,
                    J0 = 10,
                    rots_reg_scaling_param=66 / 100,  # eta
                    data_path=None,
@@ -102,15 +104,16 @@ def run_experiment(exp=None,
     # Estimate sigma
     squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
-    tau = np.sum(exp_vol_gt.asnumpy() ** 2)
-
-    print("tau = {}".format(tau))
+    # tau = np.sum(exp_vol_gt.asnumpy() ** 2)
+    #
+    # print("tau = {}".format(tau))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
     solver = Lifting_Solver3(vol=vol_init,
                              squared_noise_level=squared_noise_level,
-                             volume_reg_param=tau,
+                             volume_reg_param=tau1,
+                             volume_kernel_reg_param=tau2,
                              images=sim.images(0, np.inf),
                              filter=sim.unique_filters[0],
                              integrator=integrator,

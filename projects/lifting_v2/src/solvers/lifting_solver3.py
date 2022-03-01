@@ -23,6 +23,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
                  vol=None,
                  squared_noise_level=None,  # sigma
                  volume_reg_param=None,  # tau
+                 volume_kernel_reg_param=None,  # tau2
                  # data
                  images=None,  # f_i
                  # parameters
@@ -42,7 +43,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
                  ):
         plan = Lifting_Plan3(vol=vol,
                              squared_noise_level=squared_noise_level,  # sigma
-                             volume_reg_param=volume_reg_param,  # tau
+                             volume_reg_param=volume_reg_param,  # tau1
+                             volume_kernel_reg_param=volume_kernel_reg_param,  # tau2
                              images=images,
                              filter=filter,
                              amplitude=amplitude,
@@ -221,10 +223,14 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         kernel_f = fft2(kernel, axes=(0, 1, 2))
         kernel_f = np.real(kernel_f)
 
+        if self.plan.tau2 is not None:
+            logger.info("Add ramp filter regularisation")
+            # kernel_f += 1 / (L ** 6) * self.plan.tau / self.plan.tau2 * self.plan.vol_reg_kernel ** 20  # TODO get rid of 1/L6
+            kernel_f += self.plan.tau / self.plan.tau2 * self.plan.vol_reg_kernel ** 2
+            # TODO check what happens if we have the zero frequency in the top corner (so also no shift in constructor)
+
         f_kernel = FourierKernel(kernel_f, centered=False)
         f_kernel += 1
-
-        # TODO add second regularisaiton term
 
         f_kernel = FourierKernel(
             1.0 / f_kernel.kernel, centered=False
@@ -232,7 +238,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
 
         # apply kernel
         vol = np.real(f_kernel.convolve_volume(src.T)
-                      / (L ** 3)  # Compensation for the lack of scaling in the forward operator
+                      / (L ** 2)  # Compensation for the lack of scaling in the forward operator (according to ASPIRE)
+                      # / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
         self.plan.vol = Volume((1 - self.plan.theta) * vol + self.plan.theta * self.plan.vol.asnumpy()[0])
