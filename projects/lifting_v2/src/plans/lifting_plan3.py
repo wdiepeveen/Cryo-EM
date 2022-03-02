@@ -157,6 +157,7 @@ class Lifting_Plan3(Plan):
         return self.vol
 
     def data_discrepancy_update(self):
+        L = self.L
         N = self.N
         n = self.n
         dtype = self.dtype
@@ -178,7 +179,7 @@ class Lifting_Plan3(Plan):
             logger.info(
                 "Computing data fidelity for {} rotations and {} images at {}%".format(n, N, int((all_idx[-1] + 1) / n * 100)))
 
-        self.data_discrepancy = F
+        self.data_discrepancy = F / (L ** 2)
 
     def forward(self, vol, rots):
         """

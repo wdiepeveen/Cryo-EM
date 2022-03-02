@@ -13,7 +13,8 @@ def post_processing(exp=None,
                     # Density settings
                     # Histogram settings
                     num_bins=100,
-                    hist_range=50,
+                    hist_drange=50,
+                    hist_vrange=50,
                     # Results dir
                     results_folder=None,
                     ):
@@ -103,27 +104,36 @@ def post_processing(exp=None,
     W2 = np.sqrt(np.sum(squared_dist * rots_coeffs, axis=0))
     # print("W2.shape = {}".format(W2.shape))
     plt.figure()
-    plt.hist(180 / np.pi * W2, bins=num_bins, range=(0, hist_range))
+    plt.hist(180 / np.pi * W2, bins=num_bins, range=(0, hist_drange))
     # plt.xlabel(r"$W_2(\mu_{\mathcal{X}}^*,\delta_{p^*})\; (\degree)$")
-    exp.save_fig("W2" + postfix)
+    plt.xlabel(r"Error $(\degree)$")
+    plt.ylim(0, hist_vrange)
+    plt.ylabel("Frequency")
+    exp.save_fig("W2" + postfix, save_eps=True)
     plt.show()
 
     #  Histogram distance rots init and gt
     dist_init = manifold.dist(rots_init[:, None, :], rots_gt[:, None, :]).squeeze()
     # print("dist_init.shape ={}".format(dist_init.shape))
     plt.figure()
-    plt.hist(180 / np.pi * dist_init, bins=num_bins, range=(0, hist_range))
+    plt.hist(180 / np.pi * dist_init, bins=num_bins, range=(0, hist_drange))
     # plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^0,p^*)\; (\degree)$")
-    exp.save_fig("distance_init" + postfix)
+    plt.xlabel(r"Error $(\degree)$")
+    plt.ylim(0, hist_vrange)
+    plt.ylabel("Frequency")
+    exp.save_fig("distance_init" + postfix, save_eps=True)
     plt.show()
 
     #  Histogram distance rots ref and gt
     dist_est = manifold.dist(rots_est[:, None, :], rots_gt[:, None, :]).squeeze()
     # print("dist_est.shape = {}".format(dist_est.shape))
     plt.figure()
-    plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_range))
+    plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_drange))
     # plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
-    exp.save_fig("distance_est" + postfix)
+    plt.xlabel(r"Error $(\degree)$")
+    plt.ylim(0, hist_vrange)
+    plt.ylabel("Frequency")
+    exp.save_fig("distance_est" + postfix, save_eps=True)
     plt.show()
 
     # TODO table of the mean distances (3x) -> output in .txt file

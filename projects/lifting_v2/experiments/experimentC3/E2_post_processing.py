@@ -18,7 +18,8 @@ def post_processing(exp=None,
                     # Density settings
                     # Histogram settings
                     num_bins=100,
-                    hist_range=50,
+                    hist_drange=50,
+                    hist_vrange=200,
                     # Results dir
                     results_folder=None,
                     ):
@@ -62,6 +63,7 @@ def post_processing(exp=None,
     exp.save_im("data_projection_noisy_2" + postfix, images.asnumpy()[2])
 
     mean_dists = []
+    root_mean_squared_dists = []
     for i in range(solver.plan.max_iter):
         # Plot weights on Euler angles
         rots_coeffs = solver.rots_coeffs_iterates[i]
@@ -106,22 +108,33 @@ def post_processing(exp=None,
                                                         rots_gt.quaternions[:, None, :]).squeeze()
         # print("dist_est.shape = {}".format(dist_est.shape))
         plt.figure()
-        plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_range))
-        plt.xlabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
-        exp.save_fig("distance_est" + postfix + "_i{}".format(i+1))
+        plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_drange))
+        plt.xlabel(r"Error $(\degree)$")
+        plt.ylim(0, hist_vrange)
+        plt.ylabel("Frequency")
+        exp.save_fig("distance_est" + postfix + "_i{}".format(i+1), save_eps=True)
         plt.show()
 
         mean_dists.append(np.mean(180 / np.pi * dist_est))
+        root_mean_squared_dists.append(180 / np.pi * np.sqrt(np.mean(dist_est**2)))
 
         vol = solver.vol_iterates[i]
         exp.save_mrc("result_vol" + postfix + "_i{}".format(i + 1), vol.asnumpy()[0].astype(np.float32))
 
     plt.figure()
     plt.plot(np.arange(1, solver.plan.max_iter+1), mean_dists)
-    plt.xlabel("iteration")
-    plt.ylabel(r"$d_{\mathrm{SO}(3)}(p_{\mathcal{X}}^*,p^*)\; (\degree)$")
-    plt.ylim([0, hist_range])
-    exp.save_fig("rots_error_progression" + postfix)
+    plt.xlabel("Iteration")
+    plt.ylabel(r"Error $(\degree)$")
+    plt.ylim([0, hist_drange])
+    exp.save_fig("rots_error_progression" + postfix, save_eps=True)
+    plt.show()
+
+    plt.figure()
+    plt.plot(np.arange(1, solver.plan.max_iter + 1), root_mean_squared_dists)
+    plt.xlabel("Iteration")
+    plt.ylabel(r"Root Mean Squared Error $(\degree)$")
+    plt.ylim([0, hist_drange])
+    exp.save_fig("rots_RMSD_progression" + postfix, save_eps=True)
     plt.show()
 
     # # Plot cost
