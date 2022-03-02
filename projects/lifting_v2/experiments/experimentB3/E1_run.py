@@ -88,9 +88,10 @@ def run_experiment(exp=None,
     rots_gt.rots = sim.rots
 
     # Estimate sigma
-    squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    squared_noise_level = np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    # squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
-    tau = np.sum(exp_vol_gt.asnumpy() ** 2)
+    tau = np.mean(exp_vol_gt.asnumpy() ** 2)
     print("tau = {}".format(tau))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
