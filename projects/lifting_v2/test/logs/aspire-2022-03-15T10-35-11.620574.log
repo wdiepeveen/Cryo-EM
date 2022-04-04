@@ -1,0 +1,9 @@
+2022-03-15 10:35:21,956 CRITICAL Only cubed ndarrays are supported.
+Traceback:
+  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/test/T4_mrc_pad.py", line 17, in <module>
+    vol_gt = Volume(infile.data.astype(dtype))
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/volume/__init__.py", line 72, in __init__
+    "Only cubed ndarrays are supported.",
+  File "/Users/wdiepeveen/PycharmProjects/Cryo-EM/lib/python3.6/site-packages/aspire/utils/misc.py", line 23, in ensure
+    raise AssertionError(error_message)
+

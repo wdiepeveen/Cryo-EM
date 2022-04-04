@@ -23,7 +23,6 @@ def run_experiment(exp=None,
                    max_iter=1,
                    num_imgs=1024,
                    snr=1.,
-                   img_size=65,
                    mr_repeat=1,
                    tau1=1,
                    tau2=None,
@@ -62,21 +61,24 @@ def run_experiment(exp=None,
 
     # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
     # The downsampling should be done by the internal function of Volume object in future.
+
+    infile = mrcfile.open(data_path)
+    vol_gt = Volume(infile.data.astype(dtype))
+    img_size = vol_gt.shape[1]
+
     logger.info(
         f"Load 3D map and downsample 3D map to desired grids "
         f"of {img_size} x {img_size} x {img_size}."
     )
-    infile = mrcfile.open(data_path)
-    vol_gt = Volume(infile.data.astype(dtype))
 
-    # Up- or downsample data for experiment
-    if img_size >= vol_gt.shape[1]:
-        if img_size == vol_gt.shape[1]:
-            exp_vol_gt = vol_gt
-        else:
-            exp_vol_gt = Volume(zoom(vol_gt.asnumpy()[0], img_size / vol_gt.shape[1]))  # cubic spline interpolation
-    else:
-        exp_vol_gt = vol_gt.downsample((img_size,) * 3)
+    # # Up- or downsample data for experiment
+    # if img_size >= vol_gt.shape[1]:
+    #     if img_size == vol_gt.shape[1]:
+    #         exp_vol_gt = vol_gt
+    #     else:
+    #         exp_vol_gt = Volume(zoom(vol_gt.asnumpy()[0], img_size / vol_gt.shape[1]))  # cubic spline interpolation
+    # else:
+    #     exp_vol_gt = vol_gt.downsample((img_size,) * 3)
 
     # vol_init_ = gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge)
     # rescaling = np.sqrt(np.sum(exp_vol_gt.asnumpy() ** 2) / np.sum(vol_init_ ** 2))  # So that init has same norm as gt
@@ -86,14 +88,14 @@ def run_experiment(exp=None,
     # rescaling = 1e-3
     # vol_init = Volume(rescaling * gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
 
-    vol_init = Volume(gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
+    vol_init = Volume(gaussian_filter(vol_gt.asnumpy()[0], vol_smudge))
 
     # Create a simulation object with specified filters and the downsampled 3D map
     logger.info("Use downsampled map to creat simulation object.")
 
     offsets = np.zeros((num_imgs, 2)).astype(dtype)
     amplitudes = np.ones(num_imgs)
-    sim = Simulation(L=img_size, n=num_imgs, vols=exp_vol_gt,
+    sim = Simulation(L=img_size, n=num_imgs, vols=vol_gt,
                      offsets=offsets, unique_filters=filters, amplitudes=amplitudes, dtype=dtype)
     sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
 
@@ -105,18 +107,18 @@ def run_experiment(exp=None,
     squared_noise_level = np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     # squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
-    tau = np.mean(exp_vol_gt.asnumpy() ** 2)
-    # tau_init = np.mean(vol_init.asnumpy() ** 2)
+    tau = np.mean(vol_gt.asnumpy() ** 2)
+    tau_init = np.mean(vol_init.asnumpy() ** 2)
 
     print("tau = {}".format(tau))
-    # print("tau = {}".format(tau_init))
+    print("tau_init = {}".format(tau_init))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
     solver = Lifting_Solver3(vol=vol_init,
                              squared_noise_level=squared_noise_level,
-                             volume_reg_param=tau,
-                             volume_kernel_reg_param=1e-1 * tau,
+                             volume_reg_param=tau_init,
+                             volume_kernel_reg_param=tau_init,  # volume_kernel_reg_param=1e-1 * tau,
                              images=sim.images(0, np.inf),
                              filter=sim.unique_filters[0],
                              integrator=integrator,
@@ -134,7 +136,8 @@ def run_experiment(exp=None,
              # Data
              ("SNR", snr),
              ("solver", solver),
-             ("vol_gt", exp_vol_gt),  # (img_size,)*3
+             ("vol_gt", vol_gt),  # (img_size,)*3
+             ("voxel_size", infile.voxel_size),
              ("vol_init", vol_init),
              ("rots_gt", rots_gt),
              )

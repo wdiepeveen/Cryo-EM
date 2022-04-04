@@ -136,4 +136,12 @@ def post_processing(exp=None,
     exp.save_fig("distance_est" + postfix, save_eps=True)
     plt.show()
 
+    root_mean_squared_Wdists = 180 / np.pi * np.sqrt(np.mean(W2 ** 2))
+    root_mean_squared_g0dists = 180 / np.pi * np.sqrt(np.mean(dist_init ** 2))
+    root_mean_squared_gdists = 180 / np.pi * np.sqrt(np.mean(dist_est ** 2))
+
+    table_entries = np.array([root_mean_squared_Wdists, root_mean_squared_g0dists, root_mean_squared_gdists])
+
+    exp.save_table("dists" + postfix, table_entries[None])
+
     # TODO table of the mean distances (3x) -> output in .txt file

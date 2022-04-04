@@ -130,10 +130,12 @@ class Exp:
         with open(fn, 'wb') as output:  # Overwrites any existing file.
             pickle.dump(s, output, pickle.HIGHEST_PROTOCOL)
 
-    def save_mrc(self, filename, volume):
+    def save_mrc(self, filename, volume, voxel_size=None):
 
         with mrcfile.new(os.path.join(self.results_folder, filename + ".mrc"), overwrite=True) as mrc:
             mrc.set_data(volume)
+            if voxel_size is not None:
+                mrc.voxel_size = voxel_size
 
     def save_npy(self, filename, data):
         np.save(os.path.join(self.results_folder, filename + ".npy"), data)
@@ -146,7 +148,7 @@ class Exp:
             plt.savefig(os.path.join(self.results_folder, filename + ".eps"))
 
     def save_im(self, filename, im):
-        plt.imsave(os.path.join(self.results_folder, filename + ".png"), im)
+        plt.imsave(os.path.join(self.results_folder, filename + ".png"), im, cmap=plt.gray())
 
     def save_table(self, filename, values, headers=None, side_headers=None):
 
