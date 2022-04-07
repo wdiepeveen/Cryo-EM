@@ -21,37 +21,40 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
     def __init__(self,
                  # variables to be optimised
                  vol=None,
-                 squared_noise_level=None,  # sigma
-                 volume_reg_param=None,  # tau
-                 volume_kernel_reg_param=None,  # tau2
                  # data
                  images=None,  # f_i
                  # parameters
+                 pixel_size=5,
                  filter=None,
                  amplitude=None,
+                 squared_noise_level=None,  # sigma
+                 volume_reg_param=None,  # tau
+                 volume_kernel_reg_param=None,  # tau2
                  integrator=None,
-                 rots_reg_param=None,  # lambda
                  rots_reg_scaling_param=66 / 100,  # eta
                  J0=None,
+                 rots_reg_param_range=None,
                  # solver options
                  max_iter=None,
                  save_iterates=False,
                  dtype=np.float32,
                  seed=0,
                  debug=False,
-                 experiment=None,
+                 # experiment=None,
                  ):
         plan = Lifting_Plan3(vol=vol,
                              squared_noise_level=squared_noise_level,  # sigma
                              volume_reg_param=volume_reg_param,  # tau1
                              volume_kernel_reg_param=volume_kernel_reg_param,  # tau2
                              images=images,
+                             pixel_size=pixel_size,
                              filter=filter,
                              amplitude=amplitude,
                              integrator=integrator,
-                             rots_reg_param=rots_reg_param,
+                             # rots_reg_param=rots_reg_param,
                              rots_reg_scaling_param=rots_reg_scaling_param,
                              J0=J0,
+                             rots_reg_param_range=rots_reg_param_range,
                              max_iter=max_iter,
                              save_iterates=save_iterates,
                              dtype=dtype,
@@ -60,7 +63,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         super().__init__(plan=plan)
 
         self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
-        self.experiment = experiment
+        # self.experiment = experiment
 
         self.quaternions_iterates = []
         self.rots_iterates = []
@@ -83,27 +86,27 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         self.plan.data_discrepancy_update()
 
         # Compute squared errors so we can use it for both weight update and sigma update
-        if self.experiment is None:
-            if self.plan.J is not None:
-                logger.info("Do lambda update step")
-                self.lambda_step()
-                print("lambda = {}".format(self.plan.lambd))
+        # if self.experiment is None:
+        if self.plan.J is not None:
+            logger.info("Do lambda update step")
+            self.lambda_step()
+        print("lambda = {}".format(self.plan.lambd))
 
-            logger.info("Do rots update step")
-            self.rots_step()
-            self.cost.append(self.plan.get_cost())
-            # print("betas = {}".format(self.plan.rots_coeffs))
+        logger.info("Do rots update step")
+        self.rots_step()
+        self.cost.append(self.plan.get_cost())
+        # print("betas = {}".format(self.plan.rots_coeffs))
 
-            logger.info("Do vol update step")
-            self.volume_step()
-            self.cost.append(self.plan.get_cost())
-            # print("volume = {}".format(self.plan.vol.asnumpy()))
+        logger.info("Do vol update step")
+        self.volume_step()
+        self.cost.append(self.plan.get_cost())
+        # print("volume = {}".format(self.plan.vol.asnumpy()))
 
-        elif self.experiment == "consistency":
-            logger.info("Do rots update step")
-            self.rots_step()
-            self.cost.append(self.plan.get_cost())
-            # print("betas = {}".format(self.plan.rots_coeffs))
+        # elif self.experiment == "consistency":
+        #     logger.info("Do rots update step")
+        #     self.rots_step()
+        #     self.cost.append(self.plan.get_cost())
+        #     # print("betas = {}".format(self.plan.rots_coeffs))
 
         if self.plan.save_iterates:
             self.vol_iterates.append(self.plan.vol)
@@ -121,7 +124,8 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         Fj = np.sort(F, axis=0)
         FJ = Fj[0:self.plan.J]
         summed_FJ = np.sum(FJ, axis=0)
-        lambdas = self.plan.J * (self.plan.n ** self.plan.eta) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
+        lambdas = 1/2 * self.plan.J0 ** (5/3) * (self.plan.n/self.plan.J) ** (2/3) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
+        # lambdas = self.plan.J * (self.plan.n ** self.plan.eta) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
     def rots_step(self):
@@ -243,7 +247,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
                       # / (L ** 3)  # Compensation for the lack of scaling in the forward operator
                       ).astype(dtype)
 
-        self.plan.vol = Volume((1 - self.plan.theta) * vol + self.plan.theta * self.plan.vol.asnumpy()[0])
+        self.plan.vol = Volume(vol)
 
     def projection_simplex(self, V, z=1, axis=None):
         """

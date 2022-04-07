@@ -22,19 +22,20 @@ class Lifting_Plan3(Plan):
                  # variables to be optimised
                  vol=None,
                  rots_coeffs=None,
-                 squared_noise_level=None,  # sigma
-                 volume_reg_param=None,  # tau
-                 volume_kernel_reg_param=None,  # tau2
                  # data
                  images=None,  # f_i
                  # parameters
+                 pixel_size=5,
                  filter=None,
                  amplitude=None,
+                 squared_noise_level=None,  # sigma
+                 volume_reg_param=None,  # tau
+                 volume_kernel_reg_param=None,  # tau2
                  integrator=None,
-                 rots_reg_param=None,  # lambda
+                 # rots_reg_param=None,  # lambda
                  rots_reg_scaling_param=66 / 100,  # eta
                  J0=None,
-                 vol_underrelaxation=0,
+                 rots_reg_param_range=None,
                  # solver options
                  max_iter=None,
                  save_iterates=False,
@@ -57,6 +58,7 @@ class Lifting_Plan3(Plan):
 
         self.L = images.shape[1]
         self.N = images.shape[0]
+        self.pixel_size = pixel_size
 
         self.seed = seed
 
@@ -70,6 +72,12 @@ class Lifting_Plan3(Plan):
         self.integrator = integrator
         self.n = self.integrator.n
         self.eta = rots_reg_scaling_param
+        self.J0 = J0
+        if J0 is not None:
+            self.J = min(int(J0 * self.n ** ((2 - 3 * self.eta) / 5)), self.n - 1)
+        else:
+            self.J = None
+        print("J = {}".format(self.J))
 
         # Initialize Options
 
@@ -99,15 +107,14 @@ class Lifting_Plan3(Plan):
         self.tau2 = volume_kernel_reg_param
         self.vol_reg_kernel = self.construct_vol_reg_kernel()
 
-        self.theta = vol_underrelaxation
 
-        if (rots_reg_param is not None) and (J0 is None):
-            self.lambd = rots_reg_param * np.ones((self.N,))
-            self.J = None
-        else:
-            assert J0 is not None
-            self.lambd = None
-            self.J = min(int(J0 * self.n ** ((2 - 3 * self.eta) / 5)), self.n - 1)
+        # if (rots_reg_param is not None) and (J0 is None):
+        #     self.lambd = rots_reg_param * np.ones((self.N,))
+        #     self.J = None
+        # else:
+        #     assert J0 is not None
+        #     self.lambd = None
+        #     self.J = min(int(J0 * self.n ** ((2 - 3 * self.eta) / 5)), self.n - 1)
 
         self.data_discrepancy = np.zeros((self.n, self.N))  # (\|Ag.u - f_i\|^2)_g,i
 
@@ -240,8 +247,9 @@ class Lifting_Plan3(Plan):
 
     def construct_vol_reg_kernel(self):
         grid3d = grid_3d(2 * self.L, shifted=True)
-        x = np.pi * grid3d["x"]
-        y = np.pi * grid3d["y"]
-        z = np.pi * grid3d["z"]
+        x = 1 / (2 * self.pixel_size) * grid3d["x"]  # TODO 6-3-22 -> Check whether this makes sense
+        y = 1 / (2 * self.pixel_size) * grid3d["y"]
+        z = 1 / (2 * self.pixel_size) * grid3d["z"]
+        # z = np.pi * grid3d["z"]  # TODO Used to be similar to this
         return ifftshift(np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype), axes=(0, 1, 2))
         # return np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype)

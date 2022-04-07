@@ -3,6 +3,7 @@ import numpy as np
 import mrcfile
 
 from scipy.ndimage import zoom
+from scipy.ndimage.filters import gaussian_filter
 
 from aspire.operators import RadialCTFFilter
 from aspire.source.simulation import Simulation
@@ -19,14 +20,14 @@ logger = logging.getLogger(__name__)
 
 
 def run_experiment(exp=None,
-                   max_iter=1,
-                   num_imgs=None,
-                   snr=None,
-                   img_size=None,
-                   mr_repeat=None,
+                   num_imgs=1024,
+                   snr=1.,
+                   mr_repeat=1,
                    rots_reg_param=None,
-                   rots_reg_scaling_param=66 / 100,  # eta
+                   eta_range=None,
+                   # rots_reg_scaling_param=66 / 100,  # eta
                    data_path=None,
+                   vol_smudge=0,
                    ):
     logger.info(
         "This experiment illustrates orientation refinement using a lifting approach"
@@ -42,9 +43,22 @@ def run_experiment(exp=None,
     # dtype = np.float32
     dtype = np.float64
 
+    # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
+    # The downsampling should be done by the internal function of Volume object in future.
+
+    infile = mrcfile.open(data_path)
+    vol_gt = Volume(infile.data.astype(dtype))
+    img_size = vol_gt.shape[1]
+
+    logger.info(
+        f"Load 3D map and downsample 3D map to desired grids "
+        f"of {img_size} x {img_size} x {img_size}."
+    )
+
     # Specify the CTF parameters not used for this example
     # but necessary for initializing the simulation object
-    pixel_size = 5  # Pixel size of the images (in angstroms)
+    pixel_size = infile.voxel_size.tolist()[0]  # Pixel size of the images (in angstroms)
+    # pixel_size = 5  # Pixel size of the images (in angstroms)
     voltage = 200  # Voltage (in KV)
     defocus = 1.5e4  # Minimum defocus value (in angstroms)
     Cs = 2.0  # Spherical aberration
@@ -56,30 +70,17 @@ def run_experiment(exp=None,
         RadialCTFFilter(pixel_size, voltage, defocus=defocus, Cs=Cs, alpha=alpha)
     ]
 
-    # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
-    # The downsampling should be done by the internal function of Volume object in future.
-    logger.info(
-        f"Load 3D map and downsample 3D map to desired grids "
-        f"of {img_size} x {img_size} x {img_size}."
-    )
-    infile = mrcfile.open(data_path)
-    vol_gt = Volume(infile.data.astype(dtype))
-
-    # Up- or downsample data for experiment
-    if img_size >= vol_gt.shape[1]:
-        if img_size == vol_gt.shape[1]:
-            exp_vol_gt = vol_gt
-        else:
-            exp_vol_gt = Volume(zoom(vol_gt.asnumpy()[0], img_size / vol_gt.shape[1]))  # cubic spline interpolation
-    else:
-        exp_vol_gt = vol_gt.downsample((img_size,) * 3)
+    vol_init = vol_gt
+    if vol_smudge > 0:
+        logger.info("Smudging volume")
+        vol_init = Volume(gaussian_filter(vol_gt.asnumpy()[0], vol_smudge))
 
     # Create a simulation object with specified filters and the downsampled 3D map
     logger.info("Use downsampled map to creat simulation object.")
 
     offsets = np.zeros((num_imgs, 2)).astype(dtype)
     amplitudes = np.ones(num_imgs)
-    sim = Simulation(L=img_size, n=num_imgs, vols=exp_vol_gt,
+    sim = Simulation(L=img_size, n=num_imgs, vols=vol_gt,
                      offsets=offsets, unique_filters=filters, amplitudes=amplitudes, dtype=dtype)
     sim.noise_adder = SnrNoiseAdder(seed=sim.seed, snr=snr)
 
@@ -89,44 +90,56 @@ def run_experiment(exp=None,
 
     # Estimate sigma
     squared_noise_level = np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    # squared_noise_level = 1 / (1 + snr) * np.sum(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
+    # squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
     print("sigma = {}".format(squared_noise_level))
-    tau = np.mean(exp_vol_gt.asnumpy() ** 2)
+    tau = np.mean(vol_gt.asnumpy() ** 2)
+    tau_init = np.mean(vol_gt.asnumpy()[0] ** 2)
+
     print("tau = {}".format(tau))
+    print("tau_init = {}".format(tau_init))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 
-    solver = Lifting_Solver3(vol=exp_vol_gt,
+    solver = Lifting_Solver3(vol=vol_init,
                              squared_noise_level=squared_noise_level,
                              volume_reg_param=tau,
                              images=sim.images(0, np.inf),
                              filter=sim.unique_filters[0],
                              integrator=integrator,
-                             rots_reg_param=rots_reg_param,
-                             rots_reg_scaling_param=rots_reg_scaling_param,
-                             max_iter=max_iter,
+                             # rots_reg_scaling_param=rots_reg_scaling_param,
+                             max_iter=1,
                              save_iterates=True,
                              dtype=dtype,
-                             experiment="consistency"
                              )
 
-    solver.solve()
+    solver.plan.lambd = rots_reg_param * np.ones(num_imgs)
+    solver.plan.data_discrepancy_update()
+
+    # TODO rather than solve the whole thing, why not just update several parameters and only do steps of the solver
+    for eta in eta_range:
+        print("eta = {}".format(eta))
+        solver.plan.eta = eta
+        solver.rots_step()
+
+        # Save result
+        exp.save_npy("rots_est_eta{}".format(int(eta * 100)), solver.plan.quaternions)
+        exp.save_npy("rots_coeffs_eta{}".format(int(eta * 100)), solver.plan.rots_coeffs)
+
+    # solver.solve()
 
     # Stage 2: Refinement
+    exp.save_npy("rots_gt", rots_gt.quaternions)
+    # Note that the rot with highest coefficient is invariant under gamma and eta
     rots_indices = np.argmax(solver.plan.rots_coeffs, axis=0)
     rots_init = RotsContainer(num_imgs, dtype=dtype)
     rots_init.rots = solver.plan.integrator.rots[rots_indices]
-
-    # Save result
-    exp.save_npy("rots_gt", rots_gt.quaternions)
     exp.save_npy("rots_init", rots_init.quaternions)
-    exp.save_npy("rots_est", solver.plan.quaternions)
-
-    exp.save_npy("rots_coeffs", solver.plan.rots_coeffs)
 
     exp.save("solver_data_r{}".format(mr_repeat),
              # Data
-             ("vol_gt", exp_vol_gt),  # (img_size,)*3
+             ("vol_gt", vol_gt),  # (img_size,)*3
+             ("voxel_size", infile.voxel_size),
+             ("vol_init", vol_init),
              ("SNR", snr),
              ("images", solver.plan.images),
              )

@@ -24,8 +24,6 @@ def run_experiment(exp=None,
                    num_imgs=1024,
                    snr=1.,
                    mr_repeat=1,
-                   tau1=1,
-                   tau2=None,
                    J0 = 10,
                    rots_reg_scaling_param=66 / 100,  # eta
                    data_path=None,
@@ -45,20 +43,6 @@ def run_experiment(exp=None,
     # dtype = np.float32
     dtype = np.float64
 
-    # Specify the CTF parameters not used for this example
-    # but necessary for initializing the simulation object
-    pixel_size = 5  # Pixel size of the images (in angstroms)
-    voltage = 200  # Voltage (in KV)
-    defocus = 1.5e4  # Minimum defocus value (in angstroms)
-    Cs = 2.0  # Spherical aberration
-    alpha = 0.1  # Amplitude contrast
-
-    logger.info("Initialize simulation object and CTF filters.")
-    # Create CTF filters
-    filters = [
-        RadialCTFFilter(pixel_size, voltage, defocus=defocus, Cs=Cs, alpha=alpha)
-    ]
-
     # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
     # The downsampling should be done by the internal function of Volume object in future.
 
@@ -71,22 +55,20 @@ def run_experiment(exp=None,
         f"of {img_size} x {img_size} x {img_size}."
     )
 
-    # # Up- or downsample data for experiment
-    # if img_size >= vol_gt.shape[1]:
-    #     if img_size == vol_gt.shape[1]:
-    #         exp_vol_gt = vol_gt
-    #     else:
-    #         exp_vol_gt = Volume(zoom(vol_gt.asnumpy()[0], img_size / vol_gt.shape[1]))  # cubic spline interpolation
-    # else:
-    #     exp_vol_gt = vol_gt.downsample((img_size,) * 3)
+    # Specify the CTF parameters not used for this example
+    # but necessary for initializing the simulation object
+    pixel_size = infile.voxel_size.tolist()[0]  # Pixel size of the images (in angstroms)
+    # pixel_size = 5  # Pixel size of the images (in angstroms)
+    voltage = 200  # Voltage (in KV)
+    defocus = 1.5e4  # Minimum defocus value (in angstroms)
+    Cs = 2.0  # Spherical aberration
+    alpha = 0.1  # Amplitude contrast
 
-    # vol_init_ = gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge)
-    # rescaling = np.sqrt(np.sum(exp_vol_gt.asnumpy() ** 2) / np.sum(vol_init_ ** 2))  # So that init has same norm as gt
-    # print("Volume rescaling factor = {}".format(rescaling))
-    # vol_init = Volume(rescaling * vol_init_)
-
-    # rescaling = 1e-3
-    # vol_init = Volume(rescaling * gaussian_filter(exp_vol_gt.asnumpy()[0], vol_smudge))
+    logger.info("Initialize simulation object and CTF filters.")
+    # Create CTF filters
+    filters = [
+        RadialCTFFilter(pixel_size, voltage, defocus=defocus, Cs=Cs, alpha=alpha)
+    ]
 
     vol_init = Volume(gaussian_filter(vol_gt.asnumpy()[0], vol_smudge))
 
