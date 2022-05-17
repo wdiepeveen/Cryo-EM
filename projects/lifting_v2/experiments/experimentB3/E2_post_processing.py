@@ -181,6 +181,15 @@ def post_processing(exp=None,
     exp.save_table("W2_r{}".format(mr_repeat), np.array(W2dists_table)[None])
     exp.save_table("g_r{}".format(mr_repeat), np.array(gdists_table)[None])
 
+
+    # TODO check ratio's of different etas
+
+    scaling_theory = integrator.n ** ((eta_range[-1] - np.array(eta_range[0:-1]))/5)
+    scaling_practice = np.array(W2dists_table)[::2][0:-1]/np.array(W2dists_table)[-2]
+
+    exp.save_table("scaling_theory_r{}".format(mr_repeat), np.round(scaling_theory,3)[None])
+    exp.save_table("scaling_practice_r{}".format(mr_repeat), np.round(scaling_practice, 3)[None])
+
     # table_entries = np.array(
     #     [np.round(mean_J,3), np.round(std_J,3), np.round(mean_Wdists,3), np.round(std_Wdists,3), np.round(mean_g0dists,3), np.round(std_g0dists,3), np.round(mean_gdists,3), np.round(std_gdists,3)])
     #

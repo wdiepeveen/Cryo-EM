@@ -18,8 +18,12 @@ def post_processing(exp=None,
                     # Density settings
                     # Histogram settings
                     num_bins=100,
-                    hist_drange=50,
-                    hist_vrange=200,
+                    hist_drange=20,
+                    hist_dvrange=200,
+                    hist_dticks=11,
+                    hist_Jrange=20,
+                    hist_Jvrange=400,
+                    hist_Jticks=11,
                     # Results dir
                     results_folder=None,
                     ):
@@ -63,7 +67,17 @@ def post_processing(exp=None,
     exp.save_im("data_projection_noisy_1" + postfix, images.asnumpy()[1])
     exp.save_im("data_projection_noisy_2" + postfix, images.asnumpy()[2])
 
+    n = solver.plan.n
+    J0 = solver.plan.J0
+    eta = solver.plan.eta
+    LB_J = 3 ** (-3/5) * J0 * n ** ((2 - 3*eta)/5)
+    UB_J = J0 * n ** ((2 - 3*eta)/5)
+
+    mean_J_table = []
+    std_J_table = []
+
     mean_dists = []
+    std_dists = []
     root_mean_squared_dists = []
     for i in range(solver.plan.max_iter):
         # Plot weights on Euler angles
@@ -92,7 +106,23 @@ def post_processing(exp=None,
 
         exp.save_fig("weights_on_angles" + postfix + "_i{}".format(i+1))
 
-        #  TODO Histogram Wasserstein distances
+        # Histogram number of non-zero coeffs
+        J = np.count_nonzero(rots_coeffs, axis=0)
+        plt.figure()
+        plt.hist(J, bins=num_bins, range=(0, hist_Jrange))
+        plt.xlabel("Number of non-zero coefficients")
+        plt.ylim(0, hist_Jvrange)
+        plt.ylabel("Frequency")
+        plt.xticks(np.linspace(0, hist_Jrange, hist_Jticks))
+        exp.save_fig("J" + postfix + "_i{}".format(i + 1), save_eps=True)
+        plt.show()
+
+        mean_J = np.mean(J)
+        std_J = np.std(J)
+        mean_J_table.append(np.round(mean_J, 3))  # append mean
+        std_J_table.append(np.round(std_J, 3))  # append std
+        print("Predicted number of non-zero coefficients is between {} and {}".format(LB_J, UB_J))
+        print("On average {} non-zero coefficients | std = {}".format(mean_J, std_J))
 
         #  Histograms distance rots ref and gt
 
@@ -111,12 +141,17 @@ def post_processing(exp=None,
         plt.figure()
         plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_drange))
         plt.xlabel(r"Error $(\degree)$")
-        plt.ylim(0, hist_vrange)
+        plt.ylim(0, hist_dvrange)
         plt.ylabel("Frequency")
+        plt.xticks(np.linspace(0, hist_drange, hist_dticks))
         exp.save_fig("distance_est" + postfix + "_i{}".format(i+1), save_eps=True)
         plt.show()
 
         mean_dists.append(np.mean(180 / np.pi * dist_est))
+        std_dists.append(np.std(180 / np.pi * dist_est))
+
+        print("On average distance is {} degrees | std = {}".format(np.mean(180 / np.pi * dist_est), np.std(180 / np.pi * dist_est)))
+
         root_mean_squared_dists.append(180 / np.pi * np.sqrt(np.mean(dist_est**2)))
 
         vol = solver.vol_iterates[i]
@@ -125,6 +160,7 @@ def post_processing(exp=None,
 
     plt.figure()
     plt.plot(np.arange(1, solver.plan.max_iter+1), mean_dists)
+    plt.fill_between(np.arange(1, solver.plan.max_iter+1), np.array(mean_dists) - np.array(std_dists), np.array(mean_dists) + np.array(std_dists), alpha=0.5, edgecolor='#CC4F1B', facecolor='#FF9848')
     plt.xlabel("Iteration")
     plt.ylabel(r"Error $(\degree)$")
     plt.ylim([0, hist_drange])
@@ -132,12 +168,23 @@ def post_processing(exp=None,
     plt.show()
 
     plt.figure()
-    plt.plot(np.arange(1, solver.plan.max_iter + 1), root_mean_squared_dists)
+    plt.plot(np.arange(1, solver.plan.max_iter + 1), mean_J_table)
+    plt.fill_between(np.arange(1, solver.plan.max_iter + 1), np.array(mean_J_table) - np.array(std_J_table),
+                     np.array(mean_J_table) + np.array(std_J_table),
+                     alpha=0.5, edgecolor='#CC4F1B', facecolor='#FF9848')
     plt.xlabel("Iteration")
-    plt.ylabel(r"Root Mean Squared Error $(\degree)$")
+    plt.ylabel("# Non-zero coefficients")
     plt.ylim([0, hist_drange])
-    exp.save_fig("rots_RMSD_progression" + postfix, save_eps=True)
+    exp.save_fig("J_progression" + postfix, save_eps=True)
     plt.show()
+
+    # plt.figure()
+    # plt.plot(np.arange(1, solver.plan.max_iter + 1), root_mean_squared_dists)
+    # plt.xlabel("Iteration")
+    # plt.ylabel(r"Root Mean Squared Error $(\degree)$")
+    # plt.ylim([0, hist_drange])
+    # exp.save_fig("rots_RMSD_progression" + postfix, save_eps=True)
+    # plt.show()
 
     # # Plot cost
     # num_its = len(cost)
