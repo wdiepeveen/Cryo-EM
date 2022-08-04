@@ -36,6 +36,9 @@ def post_processing(exp=None,
     else:
         data_dir = exp.results_folder
 
+    plt.rcParams.update({'font.size': 18})
+    plt.rcParams.update({'figure.autolayout': True})
+
     # Get all results in correct format to postprocess
 
     solver_data = exp.open_pkl(data_dir, "solver_data_r{}".format(mr_repeat))
@@ -111,9 +114,10 @@ def post_processing(exp=None,
         plt.figure()
         plt.hist(J, bins=num_bins, range=(0, hist_Jrange))
         plt.xlabel("Number of non-zero coefficients")
-        plt.ylim(0, hist_Jvrange)
         plt.ylabel("Frequency")
         plt.xticks(np.linspace(0, hist_Jrange, hist_Jticks))
+        plt.autoscale()
+        plt.ylim(0, hist_Jvrange)
         exp.save_fig("J" + postfix + "_i{}".format(i + 1), save_eps=True)
         plt.show()
 
@@ -141,9 +145,10 @@ def post_processing(exp=None,
         plt.figure()
         plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_drange))
         plt.xlabel(r"Error $(\degree)$")
-        plt.ylim(0, hist_dvrange)
         plt.ylabel("Frequency")
         plt.xticks(np.linspace(0, hist_drange, hist_dticks))
+        plt.autoscale()
+        plt.ylim(0, hist_dvrange)
         exp.save_fig("distance_est" + postfix + "_i{}".format(i+1), save_eps=True)
         plt.show()
 
