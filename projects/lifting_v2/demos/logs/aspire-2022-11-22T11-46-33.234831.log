@@ -1,0 +1,43 @@
+2022-11-22 11:46:34,080 INFO Results folder is /Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/Demo_SNR16_N2048_lambd30_r3_22-11-22_11-46-34
+2022-11-22 11:46:34,109 INFO Load 3D map and downsample 3D map to desired grids of 91 x 91 x 91.
+2022-11-22 11:46:34,110 INFO Initialize simulation object and CTF filters.
+2022-11-22 11:46:34,112 INFO Use downsampled map to creat simulation object.
+2022-11-22 11:46:34,142 INFO Get true rotation angles generated randomly by the simulation object.
+2022-11-22 11:46:35,556 DEBUG Corresponding type is already real float64.
+2022-11-22 11:46:35,556 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:46:35,560 INFO Trying NFFT backend finufft
+2022-11-22 11:46:35,569 INFO NFFT backend finufft usable.
+2022-11-22 11:46:35,570 INFO Trying NFFT backend cufinufft
+2022-11-22 11:46:35,572 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2022-11-22 11:46:35,573 INFO Trying NFFT backend pynfft
+2022-11-22 11:46:35,574 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2022-11-22 11:46:35,575 INFO Selected NFFT backend = finufft.
+2022-11-22 11:46:49,854 INFO Applying forward transformations in pipeline
+2022-11-22 11:46:49,855 INFO All forward transformations applied
+2022-11-22 11:46:49,856 INFO Loaded 2048 images
+2022-11-22 11:46:51,497 DEBUG Corresponding type is already real float64.
+2022-11-22 11:46:51,497 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:47:05,882 INFO Applying forward transformations in pipeline
+2022-11-22 11:47:05,883 INFO All forward transformations applied
+2022-11-22 11:47:05,884 INFO Loaded 2048 images
+2022-11-22 11:47:05,885 INFO Initializing density
+2022-11-22 11:47:27,899 DEBUG Corresponding type is already real float64.
+2022-11-22 11:47:27,899 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:48:27,807 DEBUG Corresponding type is already real float64.
+2022-11-22 11:48:27,807 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:48:39,999 DEBUG Corresponding type is already real float64.
+2022-11-22 11:48:39,999 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:56:11,959 DEBUG Corresponding type is already real float64.
+2022-11-22 11:56:11,959 DEBUG nufft passed real_type for signal, converting
+2022-11-22 11:56:57,229 DEBUG Corresponding type is already real float64.
+2022-11-22 11:56:57,229 DEBUG nufft passed real_type for signal, converting
+2022-11-22 12:02:58,173 DEBUG Corresponding type is already real float64.
+2022-11-22 12:02:58,173 DEBUG nufft passed real_type for signal, converting
+2022-11-22 12:03:22,103 DEBUG Corresponding type is already real float64.
+2022-11-22 12:03:22,103 DEBUG nufft passed real_type for signal, converting
+2022-11-22 12:04:08,165 DEBUG Corresponding type is already real float64.
+2022-11-22 12:04:08,165 DEBUG nufft passed real_type for signal, converting
+2022-11-22 12:05:14,110 DEBUG Corresponding type is already real float64.
+2022-11-22 12:05:14,110 DEBUG nufft passed real_type for signal, converting

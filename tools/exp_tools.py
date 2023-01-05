@@ -137,6 +137,13 @@ class Exp:
             if voxel_size is not None:
                 mrc.voxel_size = voxel_size
 
+    def save_mrcs(self, filename, volume, voxel_size=None):
+
+        with mrcfile.new(os.path.join(self.results_folder, filename + ".mrcs"), overwrite=True) as mrc:
+            mrc.set_data(volume)
+            if voxel_size is not None:
+                mrc.voxel_size = voxel_size
+
     def save_npy(self, filename, data):
         np.save(os.path.join(self.results_folder, filename + ".npy"), data)
 
