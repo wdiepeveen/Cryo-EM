@@ -1,0 +1,25 @@
+2023-01-10 16:31:44,375 INFO Results folder is /Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/RELION_comparison_23-01-10_16-31-44
+2023-01-10 16:32:21,780 INFO Compute adjoint forward mapping on the images
+2023-01-10 16:32:24,156 DEBUG Corresponding type is already complex complex128.
+2023-01-10 16:32:24,156 INFO Trying NFFT backend finufft
+2023-01-10 16:32:24,195 INFO NFFT backend finufft usable.
+2023-01-10 16:32:24,195 INFO Trying NFFT backend cufinufft
+2023-01-10 16:32:24,196 INFO NFFT backend cufinufft not usable:
+	No module named 'pycuda'
+2023-01-10 16:32:24,196 INFO Trying NFFT backend pynfft
+2023-01-10 16:32:24,196 INFO NFFT backend pynfft not usable:
+	No module named 'pynfft'
+2023-01-10 16:32:24,197 INFO Selected NFFT backend = finufft.
+2023-01-10 16:32:27,001 INFO Determined adjoint mappings. Shape = (91, 91, 91)
+2023-01-10 16:32:27,020 INFO Computing adjoint forward mappings from 2048 rotations at 50%
+2023-01-10 16:32:28,714 DEBUG Corresponding type is already complex complex128.
+2023-01-10 16:32:31,337 INFO Determined adjoint mappings. Shape = (91, 91, 91)
+2023-01-10 16:32:31,353 INFO Computing adjoint forward mappings from 2048 rotations at 100%
+2023-01-10 16:32:32,324 DEBUG Corresponding type is already real float64.
+2023-01-10 16:32:32,324 DEBUG anufft passed real_type for signal, converting
+2023-01-10 16:32:38,595 INFO Computing kernel from 2048 rotations at 50%
+2023-01-10 16:32:39,453 DEBUG Corresponding type is already real float64.
+2023-01-10 16:32:39,453 DEBUG anufft passed real_type for signal, converting
+2023-01-10 16:32:45,880 INFO Computing kernel from 2048 rotations at 100%
+2023-01-10 16:32:45,880 INFO Computing non-centered Fourier Transform
+2023-01-10 16:32:46,061 INFO Add ramp filter regularisation

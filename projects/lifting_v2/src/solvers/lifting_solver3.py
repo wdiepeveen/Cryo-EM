@@ -124,7 +124,7 @@ class Lifting_Solver3(Joint_Volume_Rots_Solver):
         Fj = np.sort(F, axis=0)
         FJ = Fj[0:self.plan.J]
         summed_FJ = np.sum(FJ, axis=0)
-        lambdas = 1/2 * self.plan.J0 ** (5/3) * (self.plan.n/self.plan.J) ** (2/3) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
+        lambdas = 1/2 * self.plan.J0 * self.plan.n ** ((2 + 2 * self.plan.eta)/5) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
         # lambdas = self.plan.J * (self.plan.n ** self.plan.eta) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
