@@ -1,5 +1,0 @@
-2022-03-15 10:38:23,630 CRITICAL pad() missing 1 required positional argument: 'mode'
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/test/T4_mrc_pad.py", line 21, in <module>
-    padded_vol = np.pad(vol,[(0,0), ])
-

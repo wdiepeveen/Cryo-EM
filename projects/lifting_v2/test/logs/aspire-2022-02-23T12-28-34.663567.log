@@ -1,8 +1,0 @@
-2022-02-23 12:28:45,177 CRITICAL 'tuple' object cannot be interpreted as an integer
-Traceback:
-  File "/Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/projects/lifting_v2/test/T2_B2_r3_debug.py", line 46, in <module>
-    matrix = np.random.rand((n,N))
-  File "mtrand.pyx", line 1362, in mtrand.RandomState.rand
-  File "mtrand.pyx", line 861, in mtrand.RandomState.random_sample
-  File "mtrand.pyx", line 167, in mtrand.cont0_array
-

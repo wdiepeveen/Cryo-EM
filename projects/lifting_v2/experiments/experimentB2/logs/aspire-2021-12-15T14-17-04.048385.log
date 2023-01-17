@@ -1,6 +1,0 @@
-2021-12-15 14:17:04,362 DEBUG Using fontManager instance from /Users/wdiepeveen/.matplotlib/fontlist-v330.json
-2021-12-15 14:17:04,680 DEBUG Loaded backend module://backend_interagg version unknown.
-2021-12-15 14:17:05,397 INFO Results folder is /Users/wdiepeveen/Documents/PhD/Projects/2 - Cryo-EM/src/src/Cryo-EM/tools/../results/expB1_21-12-15_14-17-05_L65_N512_r1_k90_lamV10_lamD500
-2021-12-15 14:17:05,398 INFO Start Experiment
-2021-12-15 14:17:05,398 INFO This experiment illustrates orientation refinement using a lifting approach
-2021-12-15 14:17:05,545 INFO Computing 512 means of 14761 points in at most 200 steps...
