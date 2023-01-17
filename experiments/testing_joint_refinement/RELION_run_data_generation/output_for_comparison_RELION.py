@@ -13,7 +13,7 @@ exp.begin(prefix="RELION_run")
 
 results_dir = "results"
 results_folder = "expC3_22-04-06_23-59-48_SNR16_N2048_J15_r2_s10_i10"  # spike protein
-results_path = os.path.join("../../projects/lifting_v2", "..", "..", results_dir, results_folder)
+results_path = os.path.join("..", "..", "..", results_dir, results_folder)
 
 solver_data = exp.open_pkl(results_path, "solver_data_r2")
 
