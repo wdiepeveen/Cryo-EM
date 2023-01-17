@@ -42,9 +42,7 @@ def run_experiment(exp=None,
     # dtype = np.float32
     dtype = np.float64
 
-    # Load the map file of a 70S Ribosome and downsample the 3D map to desired resolution.
-    # The downsampling should be done by the internal function of Volume object in future.
-
+    # Load the map file
     infile = mrcfile.open(data_path)
     vol_gt = Volume(infile.data.astype(dtype))
     img_size = vol_gt.shape[1]
@@ -57,7 +55,6 @@ def run_experiment(exp=None,
     # Specify the CTF parameters not used for this example
     # but necessary for initializing the simulation object
     pixel_size = infile.voxel_size.tolist()[0]  # Pixel size of the images (in angstroms)
-    # pixel_size = 5  # Pixel size of the images (in angstroms)
     voltage = 200  # Voltage (in KV)
     defocus = 1.5e4  # Minimum defocus value (in angstroms)
     Cs = 2.0  # Spherical aberration
@@ -86,13 +83,8 @@ def run_experiment(exp=None,
 
     # Estimate sigma
     squared_noise_level = np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    # squared_noise_level = 1 / (1 + snr) * np.mean(np.var(sim.images(0, np.inf).asnumpy(), axis=(1, 2)))
-    print("sigma = {}".format(squared_noise_level))
     tau = np.mean(vol_gt.asnumpy() ** 2)
     tau_init = np.mean(vol_init.asnumpy() ** 2)
-
-    print("tau = {}".format(tau))
-    print("tau_init = {}".format(tau_init))
 
     integrator = SD1821MRx(repeat=mr_repeat, dtype=dtype)
 

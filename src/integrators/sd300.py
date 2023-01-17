@@ -10,7 +10,6 @@ class SD300(SO3_Integrator):
     def __init__(self, dtype=np.float32):
 
         # Read quaternions from text file
-        # data_dir = os.path.join("data", "points")
         data_dir = os.path.join(os.path.dirname(__file__), "..", "..", "data", "points")
         filename = "sdr011_00600.txt"
         filepath = os.path.join(data_dir, filename)

@@ -32,7 +32,6 @@ class Lifting_Plan(Plan):
                  volume_reg_param=None,  # tau
                  volume_kernel_reg_param=None,  # tau2
                  integrator=None,
-                 # rots_reg_param=None,  # lambda
                  rots_reg_scaling_param=66 / 100,  # eta
                  J0=None,
                  rots_reg_param_range=None,
@@ -106,15 +105,6 @@ class Lifting_Plan(Plan):
         self.tau = volume_reg_param
         self.tau2 = volume_kernel_reg_param
         self.vol_reg_kernel = self.construct_vol_reg_kernel()
-
-
-        # if (rots_reg_param is not None) and (J0 is None):
-        #     self.lambd = rots_reg_param * np.ones((self.N,))
-        #     self.J = None
-        # else:
-        #     assert J0 is not None
-        #     self.lambd = None
-        #     self.J = min(int(J0 * self.n ** ((2 - 3 * self.eta) / 5)), self.n - 1)
 
         self.data_discrepancy = np.zeros((self.n, self.N))  # (\|Ag.u - f_i\|^2)_g,i
 
@@ -252,4 +242,3 @@ class Lifting_Plan(Plan):
         z = 1 / (2 * self.pixel_size) * grid3d["z"]
         # z = np.pi * grid3d["z"]
         return ifftshift(np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype), axes=(0, 1, 2))
-        # return np.sqrt(x ** 2 + y ** 2 + z ** 2).astype(self.dtype)

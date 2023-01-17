@@ -15,6 +15,5 @@ class Refined_SD(SO3_Integrator):
         assert issubclass(type(base_integrator), SO3_Integrator)
 
         refiner = Midpoint_Refinement(quats=base_integrator.quaternions, h=resolution)
-        # refined_integrator = SO3_Integrator(refiner.verts, dtype=dtype)
 
         super().__init__(refiner.verts, dtype=dtype)

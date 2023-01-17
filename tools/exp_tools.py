@@ -72,7 +72,6 @@ class Exp:
 
         self.reset_timer()
 
-    # TODO exp_comment
     # function exp_comment(onwhat::String = "")
     # 	global io
     # 	global results_prefix
@@ -103,16 +102,13 @@ class Exp:
         self.debug_timer_start = time.time()
 
     def open_pkl(self, dir, filename):
-        # TODO also right away copy the file to results_folder
         with open(os.path.join(dir, filename + ".pkl"), 'rb') as input:
             return pickle.load(input)
 
     def open_mrc(self, dir, filename):
-        # TODO also right away copy the file to results_folder
         return mrcfile.open(os.path.join(dir, filename + ".mrc"))
 
     def open_npy(self, dir, filename):
-        # TODO also right away copy the file to results_folder
         return np.load(os.path.join(dir, filename + ".npy"))
 
     def save(self, filename, *args):

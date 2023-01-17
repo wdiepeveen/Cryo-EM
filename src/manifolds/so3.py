@@ -13,7 +13,7 @@ class SO3(Manifold):
         p = quaternionic.array(np.ascontiguousarray(plocation)).normalized
         q = quaternionic.array(np.ascontiguousarray(qfrom)).normalized
 
-        pq = np.clip(np.einsum('ilm,ikm->ikl', q.ndarray, p.ndarray), -1.0, 1.0)  # TODO check what was actually going on here
+        pq = np.clip(np.einsum('ilm,ikm->ikl', q.ndarray, p.ndarray), -1.0, 1.0)
         sign_pq = np.sign(pq[:,:,:,None])
         sign_pq[sign_pq == 0] = 1
 
@@ -26,7 +26,7 @@ class SO3(Manifold):
     def _exp(self, plocation, vfrom, out):
         """ exp_p(v) = sign(w) * p exp(p^{-1} v) """
         p = quaternionic.array(np.ascontiguousarray(plocation)).normalized
-        v = quaternionic.array(np.ascontiguousarray(vfrom))  # TODO project onto tangent space
+        v = quaternionic.array(np.ascontiguousarray(vfrom))
 
         pinvv = np.reciprocal(p)[:,:,None,:] * v[:,None,:,:]/2
         pinvv = 0.5 * (pinvv - np.conj(pinvv))
@@ -40,6 +40,5 @@ class SO3(Manifold):
     def _dist(self, x, y, out):
         x = quaternionic.array(np.ascontiguousarray(x)).normalized.ndarray
         y = quaternionic.array(np.ascontiguousarray(y)).normalized.ndarray
-        # print("Enter _dist | shapes x,y = ({}, {})".format(x.shape,y.shape))
         np.einsum('ikm,ilm->ikl', x, y, out=out)
-        out[:] = 2 * np.arccos(np.abs(np.clip(out, -1.0, 1.0)))  #2 * np.arccos(np.abs(np.clip(out, -1.0, 1.0)))
+        out[:] = 2 * np.arccos(np.abs(np.clip(out, -1.0, 1.0)))

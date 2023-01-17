@@ -62,7 +62,7 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
 
         super().__init__(plan=plan)
 
-        self.debug = debug  # TODO setup debug routine that asserts that the cost goes down every part of the iteration
+        self.debug = debug
         # self.experiment = experiment
 
         self.quaternions_iterates = []
@@ -70,7 +70,6 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
 
     def initialize_solver(self):
         logger.info("Initialising Solver")
-        # self.cost.append(self.plan.get_cost())
 
     def stop_solver(self):
         return self.iter == self.plan.max_iter
@@ -90,12 +89,10 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
         logger.info("Do rots update step")
         self.rots_step()
         self.cost.append(self.plan.get_cost())
-        # print("betas = {}".format(self.plan.rots_coeffs))
 
         logger.info("Do vol update step")
         self.volume_step()
         self.cost.append(self.plan.get_cost())
-        # print("volume = {}".format(self.plan.vol.asnumpy()))
 
         if self.plan.save_iterates:
             self.vol_iterates.append(self.plan.vol)
@@ -115,7 +112,6 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
         summed_FJ = np.sum(FJ, axis=0)
         lambdas = 1 / 2 * self.plan.J0 * self.plan.n ** ((2 + 2 * self.plan.eta) / 5) * (
                     Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
-        # lambdas = self.plan.J * (self.plan.n ** self.plan.eta) * (Fj[self.plan.J] - 1 / self.plan.J * summed_FJ)
         self.plan.lambd = lambdas + 1e-16
 
     def rots_step(self):
@@ -124,10 +120,6 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
         N = self.plan.N
         eta = self.plan.eta
         dtype = self.plan.dtype
-
-        # self.plan.rots_coeffs = self.projection_simplex(
-        #     - (n ** eta) / self.plan.lambd[None, :] * self.plan.data_discrepancy / (2 * self.plan.sigmas[None, :]),
-        #     axis=0).astype(dtype)
 
         rots_coeffs = np.zeros((n, N), dtype=dtype)
         for start in range(0, N, self.plan.img_batch_size):
@@ -196,7 +188,6 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
             weights = m_flatten(weights)
 
             pts_rot = rotated_grids(L, self.plan.rots[all_idx, :, :])
-            # pts_rot = np.moveaxis(pts_rot, 1, 2)  # We don't need this. It was in Aspire. Might be needed for non radial kernels
             pts_rot = m_reshape(pts_rot, (3, -1))
 
             kernel += (
@@ -230,10 +221,7 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
         )
 
         # apply kernel
-        vol = np.real(f_kernel.convolve_volume(src.T)
-                      # / (L ** 2)  # Compensation for the lack of scaling in the forward operator (according to ASPIRE)
-                      # / (L ** 3)  # Compensation for the lack of scaling in the forward operator
-                      ).astype(dtype)
+        vol = np.real(f_kernel.convolve_volume(src.T)).astype(dtype)
 
         self.plan.vol = Volume(vol)
 
@@ -251,13 +239,10 @@ class Lifting_Solver(Joint_Volume_Rots_Solver):
         # Author: Mathieu Blondel
         """
         if axis == 1:
-            # print("len(V) = {}".format(len(V)))
             n_features = V.shape[1]
             U = np.sort(V, axis=1)[:, ::-1]
-            # print("U = {}".format(U[0]))
             z = np.ones(len(V)) * z
             cssv = np.cumsum(U, axis=1) - z[:, np.newaxis]
-            # print("cssv = {}".format(cssv[1]))
             ind = np.arange(n_features) + 1
             cond = U - cssv / ind > 0
             rho = np.count_nonzero(cond, axis=1)

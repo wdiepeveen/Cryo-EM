@@ -23,7 +23,6 @@ class SnrNoiseAdder(Xform):
         self.seed = seed
         noise_filter = noise_filter or ZeroFilter()
         self.noise_filter = noise_filter
-        # TODO check whether this goes alright now that we skipped the powerfilter in this class
         # self.noise_filter = PowerFilter(noise_filter, power=0.5)
         self.snr = snr
 

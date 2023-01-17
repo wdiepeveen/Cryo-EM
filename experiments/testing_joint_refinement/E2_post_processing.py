@@ -33,7 +33,7 @@ def post_processing(exp=None,
     )
 
     if results_folder is not None:
-        data_dir = results_folder  # TODO fix as in run_file
+        data_dir = results_folder
     else:
         data_dir = exp.results_folder
 
@@ -51,17 +51,10 @@ def post_processing(exp=None,
     vol_init = solver_data["vol_init"]  # Volume 65L
     snr = solver_data["SNR"]
     num_imgs = solver.plan.N
-    # Load results
-    # cost = solver.cost
-    # volume_est = solver.plan.vol
-    # rots_est = solver.plan.rots
 
     # Process Stage 1 data:
-
     postfix = "_SNR{}_N{}_r{}".format(int(1 / snr), num_imgs, mr_repeat)
 
-    # clean_image = sim.images(0, 1, enable_noise=False)
-    # exp.save_im("data_projection_clean", clean_image.asnumpy()[0])
     exp.save_mrc("data_vol_orig", vol_gt.asnumpy()[0].astype(np.float32), voxel_size=voxel_size)
     exp.save_mrc("data_vol_init", vol_init.asnumpy()[0].astype(np.float32), voxel_size=voxel_size)
 
@@ -142,7 +135,6 @@ def post_processing(exp=None,
 
         dist_est = solver.plan.integrator.manifold.dist(regrot.quaternions[:, None, :],
                                                         rots_gt.quaternions[:, None, :]).squeeze()
-        # print("dist_est.shape = {}".format(dist_est.shape))
         plt.figure()
         plt.hist(180 / np.pi * dist_est, bins=num_bins, range=(0, hist_drange))
         plt.xlabel(r"Error $(\degree)$")
@@ -195,12 +187,9 @@ def post_processing(exp=None,
             # RELION_rots_, RELION_trans_ = exp.open_pkl(RELION_path, "Large_set_run_it050_data_pose")
         RELION_rots_, RELION_trans_ = exp.open_pkl(RELION_folder, filename)
         rots_RELION = RotsContainer(num_imgs, dtype=solver.plan.dtype)
-        # We have to transpose as we are using g rather than g^-1 in RELION
+        # We have to do a coordinate transformation as we are not using the same convention as RELION
         trans_mat = np.array([[1, 0, 0], [0, 0, 1], [0, 1, 0]])
         rots_RELION.rots = np.einsum("ik,Nkl,jl->Nij", trans_mat, RELION_rots_, trans_mat)
-        # rots_RELION.rots = np.einsum("ik,Nkl,jl->Nij",trans_mat, RELION_rots_.transpose(0,2,1), trans_mat)
-        # rots_RELION.rots = RELION_rots_.transpose(0,2,1)
-        # rots_RELION.rots = RELION_rots_
 
         # save rots in container
         # Get register rotations after performing global alignment
@@ -221,14 +210,6 @@ def post_processing(exp=None,
                                                                        rots_gt.quaternions[:, None, :]).squeeze()
         dist_est = solver.plan.integrator.manifold.dist(regrot.quaternions[:, None, :],
                                                         rots_gt.quaternions[:, None, :]).squeeze()
-        print(non_registered_dist_est)
-        print(dist_est)
-
-        # plt.figure()
-        # plt.hist(180 / np.pi * non_registered_dist_est, bins=100)
-        # plt.xlabel(r"Error $(\degree)$")
-        # plt.ylabel("Frequency")
-        # plt.show()
 
         plt.figure()
         plt.hist(180 / np.pi * dist_est, bins=100)
@@ -242,8 +223,6 @@ def post_processing(exp=None,
 
         # angle plots
         angle_error = rots_gt.angles - rots_RELION.angles
-        print(rots_gt.angles)
-        # print(angle_error)
         # alpha
         plt.figure()
         plt.hist((((angle_error[:, 0] + np.pi) % (2 * np.pi)) - np.pi) / np.pi * 180, bins=100)
@@ -279,11 +258,9 @@ def post_processing(exp=None,
     Q_mat, flag = register_rotations(solver.rots_iterates[-1], rots_gt.rots)
     regrot = RotsContainer(num_imgs, dtype=solver.plan.dtype)
     regrot.rots = get_aligned_rotations(solver.rots_iterates[-1], Q_mat, flag)
-    mse_reg_est = get_rots_mse(regrot.rots, rots_gt.rots)
 
     dist_est = solver.plan.integrator.manifold.dist(regrot.quaternions[:, None, :],
                                                     rots_gt.quaternions[:, None, :]).squeeze()
-    # print("dist_est.shape = {}".format(dist_est.shape))
     plt.figure()
     plt.hist(180 / np.pi * dist_est, bins=100)
     plt.xlabel(r"Error $(\degree)$")
@@ -296,8 +273,6 @@ def post_processing(exp=None,
 
     # angle plots
     ESL_angle_error = rots_gt.angles - solver.plan.angles
-    # print(rots_gt.angles)
-    # print(angle_error)
     # alpha
     plt.figure()
     plt.hist((((ESL_angle_error[:, 0] + np.pi) % (2 * np.pi)) - np.pi) / np.pi * 180, bins=100)
