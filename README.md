@@ -19,7 +19,7 @@ The recommended (and tested) setup is based on MacOS 11.4 running Python 3.6. In
     # Clone source code and install
     git clone https://github.com/wdiepeveen/Cryo-EM.git
     cd "Cryo-EM"
-    pip install .
+    pip install -r requirements.txt
 
 
 Reproducing the experiments in [1]
