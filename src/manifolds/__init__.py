@@ -88,11 +88,11 @@ class Manifold(object):
             self.log(out_flat, points_flat, out=tpoints_flat)
             np.einsum('ikm,ilkmt->ilkt', weights, tpoints, out=tmean)
             tmean *= w_sum_inv[:,None,:,None]
-            max_grad_norm = np.max(np.sqrt(np.sum(tmean **2, axis=-1)))
+            grad_norm = np.sqrt(np.sum(tmean **2, axis=-1))
             if _iter == 0:
-                ref_grad_norm = max_grad_norm
+                ref_grad_norm = grad_norm
             out_flat2[:] = self.exp(out_flat2, tmean_flat2)
-            if max_grad_norm / ref_grad_norm < tol:
+            if ((grad_norm / ref_grad_norm) < tol).all():
                 logging.info("GD solver converged after {} iterations".format(_iter))
                 break
 
