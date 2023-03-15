@@ -4,7 +4,7 @@ Ellipsoidal Support Lifting for Cryo-EM joint 3D map reconstruction and rotation
 Regularized global optimisation over Riemannian manifolds
 
         [1] W. Diepeveen, J. Lellmann, O. Öktem, C-B. Schönlieb.  
-        Regularizing orientation estimation in Cryo-EM 3D map refinement through measure-based lifting over Riemannian manifolds
+        Regularising orientation estimation in Cryo-EM 3D map refinement through measure-based lifting over Riemannian manifolds
         arXiv preprint arXiv:2209.03045. 2022 Sep 7.
 
 Setup
@@ -19,7 +19,7 @@ The recommended (and tested) setup is based on MacOS 11.4 running Python 3.6. In
     # Clone source code and install
     git clone https://github.com/wdiepeveen/Cryo-EM.git
     cd "Cryo-EM"
-    pip install .
+    pip install -r requirements.txt
 
 
 Reproducing the experiments in [1]
