@@ -59,7 +59,7 @@ class Manifold(object):
         self._mean(points, weights, out)
         return out
 
-    def _mean(self, points, weights, out, max_iter=20):
+    def _mean(self, points, weights, out, max_iter=200, tol=1e-5):
         nbatch, npointsets, npoints, nintdim = points.shape
         nweights = weights.shape[1]
 
@@ -83,11 +83,18 @@ class Manifold(object):
         points_flat = points.reshape((nbatch*npointsets, npoints, nintdim))
 
         w_sum_inv = 1.0/np.einsum('ikl->ik', weights)
+        ref_grad_norm = 1.
         for _iter in range(max_iter):
             self.log(out_flat, points_flat, out=tpoints_flat)
             np.einsum('ikm,ilkmt->ilkt', weights, tpoints, out=tmean)
             tmean *= w_sum_inv[:,None,:,None]
+            max_grad_norm = np.max(np.sqrt(np.sum(tmean **2, axis=-1)))
+            if _iter == 0:
+                ref_grad_norm = max_grad_norm
             out_flat2[:] = self.exp(out_flat2, tmean_flat2)
+            if max_grad_norm / ref_grad_norm < tol:
+                logging.info("GD solver converged after {} iterations".format(_iter))
+                break
 
     @broadcast_io(1,0)
     def dist(self, x, y, out=None):
